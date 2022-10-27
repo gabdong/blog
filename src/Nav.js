@@ -1,7 +1,5 @@
 function Nav() {
-    return (
-        <nav></nav>
-    );
+  return <nav></nav>;
 }
 
 export default Nav;
