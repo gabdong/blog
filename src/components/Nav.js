@@ -1,5 +1,5 @@
 function Nav() {
-  return <nav></nav>;
+  return <nav id="nav"></nav>;
 }
 
 export default Nav;
