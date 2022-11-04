@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "SUIT-Regular";
+    src: url("./font/SUIT-Regular.woff2");
+}
+@font-face {
+    font-family: "SUIT-Bold";
+    src: url("./font/SUIT-Bold.woff2");
+}
+@font-face {
+    font-family: "SUIT-Light";
+    src: url("./font/SUIT-Light.woff2");
+}
+@font-face {
+    font-family: "SUIT-Medium";
+    src: url("./font/SUIT-Medium.woff2");
+}
+
+.test {
+    font-family: 'SUIT-Bold';
+}
