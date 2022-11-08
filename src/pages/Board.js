@@ -1,5 +1,9 @@
 function Board() {
-    return <div></div>;
+  return (
+    <div>
+      <h2>Board</h2>
+    </div>
+  );
 }
 
 export default Board;
