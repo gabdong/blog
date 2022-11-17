@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function NavBtn({ text, link }) {
   return (
     <h2>
-      <Link to={`/${link}`}>{text}</Link>
+      <NavLink to={`${link}`}>{text}</NavLink>
     </h2>
   );
 }

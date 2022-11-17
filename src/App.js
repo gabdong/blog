@@ -9,15 +9,13 @@ function App() {
   return (
     <div>
       <Header />
-      <div>
-        <Router basename={process.env.PUBLIC_URL}>
-          <Nav />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/board" element={<Board />} />
-          </Routes>
-        </Router>
-      </div>
+      <Router basename={process.env.PUBLIC_URL}>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/board" element={<Board />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
