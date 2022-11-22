@@ -1,10 +1,11 @@
-import NavBtn from "./NavBtn";
+import { NavLink } from "react-router-dom";
 
 function Nav() {
   return (
     <nav id="nav">
-      <NavBtn text="home" link="/" />
-      <NavBtn text="test2" link="/board" />
+      <NavLink to="/">
+        <button>Home</button>
+      </NavLink>
     </nav>
   );
 }

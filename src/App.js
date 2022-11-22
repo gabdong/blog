@@ -1,21 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Nav from "./components/Nav/Nav";
-import Header from "./components/Header";
-import Home from "./pages/Home";
-import Board from "./pages/Board";
+import Header from "./components/Header/Header";
+import Pages from "./pages/Pages";
 
 function App() {
   return (
-    <div>
+    <div className="disFlex flexColumn" id="wrapper">
       <Header />
-      <Router basename={process.env.PUBLIC_URL}>
-        <Nav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/board" element={<Board />} />
-        </Routes>
-      </Router>
+      <div className="disFlex">
+        <Router basename={process.env.PUBLIC_URL}>
+          <Nav />
+          <Pages />
+        </Router>
+      </div>
     </div>
   );
 }

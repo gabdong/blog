@@ -62,10 +62,29 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    outline: none;
+}
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+.disFlex {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: flex;
+}
+.flexColumn {
+    -webkit-box-orient: vertical;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 .header {
     width: 100%;
