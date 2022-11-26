@@ -63,16 +63,17 @@ table {
 	border-spacing: 0;
 }
 button {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-    outline: none;
+    all: unset;
+    cursor: pointer;
 }
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+#root {
+    max-width: 1600px;
+    margin: 0 auto;
 }
 .disFlex {
     display: -webkit-flex;
@@ -86,10 +87,18 @@ button {
     -ms-flex-direction: column;
     flex-direction: column;
 }
-.header {
-    width: 100%;
-    padding: 14px 20px;
+.alignItemsCenter {
+    -webkit-box-align: center;
+    -moz-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
-.logo {
-    font-family: "SUIT-Bold";
+.spaceBetween {
+    -webkit-box-pack: justify;
+    -moz-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.gap10 {
+    gap: 10px;
 }
