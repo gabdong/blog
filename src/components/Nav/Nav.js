@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import NavBtn from "./NavBtn";
 
 const NavSt = styled.nav`
   width: 200px;
@@ -7,9 +7,7 @@ const NavSt = styled.nav`
 function Nav() {
   return (
     <NavSt id="nav">
-      <NavLink to="/">
-        <button>Home</button>
-      </NavLink>
+      <NavBtn path="/" text="home" />
     </NavSt>
   );
 }
