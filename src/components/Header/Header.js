@@ -17,11 +17,11 @@ const HeaderBtnWrap = styled.div`
 `;
 const HeaderBtn = styled.button`
   font-family: "SUIT-Medium";
-  font-size: 16px;
+  font-size: 1rem;
 `;
 const Logo = styled.h1`
   font-family: "SUIT-Bold";
-  font-size: 22px;
+  font-size: 1.3125rem;
 `;
 
 function Header() {

@@ -4,13 +4,13 @@ import NavBtn from "./NavBtn";
 const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   width: 200px;
 `;
 function Nav() {
   return (
     <NavSt id="nav">
-      <NavBtn path="/" text="home" />
+      <NavBtn path="/" text="Home" />
       <NavBtn path="/board" text="Board" />
     </NavSt>
   );
