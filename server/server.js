@@ -1,13 +1,13 @@
-import express from 'express'; 
-import path from 'path';
+const express = require("express");
+const path = require("path");
 
-const app   = express();
-const PORT  = process.env.port || 3000;
+const app = express();
+const PORT = process.env.port || 3000;
 
-app.get('/', (req, res) => {
-    res.send('hello world');
+app.get("/", (req, res) => {
+  res.send("hello world");
 });
 
 app.listen(PORT, () => {
-    console.log(`server on PORT:${PORT}`);
+  console.log(`server on PORT:${PORT}`);
 });
