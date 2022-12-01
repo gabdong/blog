@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import Home from "./Home";
-import Board from "./Board";
+import Home from "./Home.js";
+import Board from "./Board.js";
 
 const PagesSt = styled.div`
   flex: 1;

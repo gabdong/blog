@@ -1,9 +1,9 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
 import "./App.css";
-import Nav from "./components/Nav/Nav";
-import Header from "./components/Header/Header";
-import Pages from "./pages/Pages";
+import Nav from "./components/Nav/Nav.js";
+import Header from "./components/Header/Header.js";
+import Pages from "./pages/Pages.js";
 
 const Wrapper = styled.div`
   display: flex;

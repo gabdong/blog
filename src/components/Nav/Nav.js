@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NavBtn from "./NavBtn";
+import NavBtn from "./NavBtn.js";
 
 const NavSt = styled.nav`
   display: flex;
