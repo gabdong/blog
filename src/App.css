@@ -1,3 +1,6 @@
+:root {
+    --primary-color: #1950f8;
+}
 @font-face {
     font-family: "SUIT-Regular";
     src: url("./assets/font/SUIT-Regular.woff2");
