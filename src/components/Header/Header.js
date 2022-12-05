@@ -25,7 +25,7 @@ const HeaderBtn = styled.button`
 const Logo = styled.h1`
   font-family: "SUIT-Bold";
   font-size: 1.3125rem;
-  transition: 0.3s;
+  transition: var(--transition);
   cursor: pointer;
   &:hover {
     color: var(--primary-color);
