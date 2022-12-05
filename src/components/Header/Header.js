@@ -1,6 +1,8 @@
 import { FaSearch as Search } from "react-icons/fa";
 import {Link} from 'react-router-dom';
+import { useState } from "react";
 import styled from "styled-components";
+import LogIn from "../LogIn/LogIn";
 
 const HeaderSt = styled.header`
   display: flex;
@@ -23,20 +25,37 @@ const HeaderBtn = styled.button`
 const Logo = styled.h1`
   font-family: "SUIT-Bold";
   font-size: 1.3125rem;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    color: var(--primary-color);
+  }
 `;
 
 function Header() {
+  const [logInView, setLogInView] = useState(false);
+  const logInWrapHandler = (e) => {
+    e.preventDefault();
+
+    setLogInView(!logInView);
+  };
+
   return (
     <HeaderSt id="header">
+      {/* //g Logo */}
       <Link to="/">
         <Logo>Gabdong</Logo>
       </Link>
       <HeaderBtnWrap>
+        {/* //g Search Btn */}
         <HeaderBtn>
           <Search />
         </HeaderBtn>
-        <HeaderBtn>로그인</HeaderBtn>
+        {/* //g LogIn Btn */}
+        <HeaderBtn onClick={logInWrapHandler}>로그인</HeaderBtn>
       </HeaderBtnWrap>
+      {/* //g logInWrap */}
+      {logInView ? <LogIn handler={logInWrapHandler}></LogIn> : null}
     </HeaderSt>
   );
 }
