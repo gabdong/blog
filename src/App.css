@@ -67,6 +67,9 @@ button {
     all: unset;
     cursor: pointer;
 }
+a {
+    all: unset;
+}
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

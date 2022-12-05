@@ -1,4 +1,5 @@
 import { FaSearch as Search } from "react-icons/fa";
+import {Link} from 'react-router-dom';
 import styled from "styled-components";
 
 const HeaderSt = styled.header`
@@ -27,7 +28,9 @@ const Logo = styled.h1`
 function Header() {
   return (
     <HeaderSt id="header">
-      <Logo>Gabdong</Logo>
+      <Link to="/">
+        <Logo>Gabdong</Logo>
+      </Link>
       <HeaderBtnWrap>
         <HeaderBtn>
           <Search />

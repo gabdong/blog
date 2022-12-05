@@ -11,19 +11,19 @@ const Wrapper = styled.div`
 `;
 const Main = styled.main`
   display: flex;
-  padding-top: 80px;
+  padding-top: 40px;
 `;
 
 function App() {
   return (
     <Wrapper id="wrapper">
-      <Header />
-      <Main>
-        <Router basename={process.env.PUBLIC_URL}>
+      <Router basename={process.env.PUBLIC_URL}>
+        <Header />
+        <Main>
           <Nav />
           <Pages />
-        </Router>
-      </Main>
+        </Main>
+      </Router>
     </Wrapper>
   );
 }
