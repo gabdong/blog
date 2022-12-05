@@ -26,6 +26,7 @@ function LogIn({ handler }) {
   return (
     <LogInWrap onClick={handler}>
       <LogInOverlay />
+      <LogInContent />
     </LogInWrap>
   );
 }
