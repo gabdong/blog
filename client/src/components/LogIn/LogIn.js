@@ -29,8 +29,8 @@ const LogInContent = styled.div`
 
 function LogIn({ handler }) {
   return (
-    <LogInWrap onClick={handler}>
-      <LogInOverlay />
+    <LogInWrap>
+      <LogInOverlay onClick={handler} />
       <LogInContent />
     </LogInWrap>
   );
