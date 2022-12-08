@@ -2,6 +2,8 @@
     --primary-color: #1950f8;
 
     --transition: 0.2s;
+
+    --border-radius: 4px;
 }
 @font-face {
     font-family: "SUIT-Regular";
@@ -76,9 +78,9 @@ a {
     all: unset;
 }
 * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
 }
 #root {
     max-width: 90%;
