@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Button from '../Button/Button';
 
 const LogInWrap = styled.article`
   display: flex;
@@ -33,11 +34,12 @@ const LogInContent = styled.div`
 const LogInForm = styled.form`
   display: flex;
   flex-direction: column;
-  align-item: center;
+  align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
   height: 100%;
+  color: #000000;
 `;
 //TODO input component 분리
 const LogInInput = styled.input`
@@ -46,8 +48,6 @@ const LogInInput = styled.input`
   padding: 8px 12px;
   border: 2px solid #ddd;
   border-radius: var(--border-radius);
-  font-family: "SUIT-Medium";
-  color: #000000;
   cursor: pointer;
   transition: var(--transition);
 
@@ -57,6 +57,10 @@ const LogInInput = styled.input`
     border: 2px solid var(--primary-color);
   }
 `;
+const LogInTitle = styled.h2`
+  align-self: flex-start;
+  margin-bottom: 30px;
+`;
 
 function LogIn({ handler }) {
   return (
@@ -64,8 +68,12 @@ function LogIn({ handler }) {
       <LogInOverlay onClick={handler} />
       <LogInContent>
         <LogInForm>
-          <LogInInput placeholder="Username" />
-          <LogInInput type="password" placeholder="Password" />
+          <LogInTitle className="headline">
+            Sign In
+          </LogInTitle>
+          <LogInInput className="normalText" placeholder="Username" />
+          <LogInInput className="normalText" type="password" placeholder="Password" />
+          <Button text="Log In" classname="mt10"/>
         </LogInForm>
       </LogInContent>
     </LogInWrap>

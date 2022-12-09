@@ -19,12 +19,12 @@ const HeaderBtnWrap = styled.div`
   gap: 12px;
 `;
 const HeaderBtn = styled.button`
-  font-family: "SUIT-Medium";
   font-size: 1rem;
 `;
 const Logo = styled.h1`
   font-family: "SUIT-Bold";
-  font-size: 1.3125rem;
+  font-size: 21px;
+  letter-spacing: 0.15px;
   transition: var(--transition);
   cursor: pointer;
   &:hover {
@@ -44,15 +44,15 @@ function Header() {
     <HeaderSt id="header">
       {/* //g Logo */}
       <Link to="/">
-        <Logo>Gabdong</Logo>
+        <Logo id="logo">Gabdong</Logo>
       </Link>
       <HeaderBtnWrap>
         {/* //g Search Btn */}
-        <HeaderBtn>
+        <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
         {/* //g LogIn Btn */}
-        <HeaderBtn onClick={logInWrapHandler}>로그인</HeaderBtn>
+        <HeaderBtn className="buttonText" onClick={logInWrapHandler}>로그인</HeaderBtn>
       </HeaderBtnWrap>
       {/* //g logInWrap */}
       {logInView ? <LogIn handler={logInWrapHandler}></LogIn> : null}
