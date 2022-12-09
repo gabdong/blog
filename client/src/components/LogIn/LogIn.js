@@ -3,28 +3,37 @@ import { useState } from "react";
 import Button from "../Button/Button";
 
 function LogIn({ handler }) {
-  const [id, setId] = useState('');
-  const [pw, setPw] = useState('');
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
   const logInReq = (e, id, pw) => {
     e.preventDefault();
 
     console.log(id);
     console.log(pw);
-  }
+  };
 
   return (
     <LogInWrap>
       <LogInOverlay onClick={handler} />
       <LogInContent>
-        <LogInForm onSubmit={(e) => {
+        <LogInForm
+          onSubmit={(e) => {
             logInReq(e, id, pw);
-          }}>
-          <LogInTitle className="headline">
-            Sign In
-          </LogInTitle>
-          <LogInInput className="normalText" placeholder="Username" onChange={(e) => setId(e.target.value)}/>
-          <LogInInput className="normalText" type="password" placeholder="Password" onChange={(e) => setPw(e.target.value)}/>
-          <Button text="Log In" classname="mt10"/>
+          }}
+        >
+          <LogInTitle className="headline">Sign In</LogInTitle>
+          <LogInInput
+            className="normalText"
+            placeholder="Username"
+            onChange={(e) => setId(e.target.value)}
+          />
+          <LogInInput
+            className="normalText"
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPw(e.target.value)}
+          />
+          <Button text="Log In" classname="mt10" />
         </LogInForm>
       </LogInContent>
     </LogInWrap>
