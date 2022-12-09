@@ -1,5 +1,35 @@
 import styled from "styled-components";
-import Button from '../Button/Button';
+import { useState } from "react";
+import Button from "../Button/Button";
+
+function LogIn({ handler }) {
+  const [id, setId] = useState('');
+  const [pw, setPw] = useState('');
+  const logInReq = (e, id, pw) => {
+    e.preventDefault();
+
+    console.log(id);
+    console.log(pw);
+  }
+
+  return (
+    <LogInWrap>
+      <LogInOverlay onClick={handler} />
+      <LogInContent>
+        <LogInForm onSubmit={(e) => {
+            logInReq(e, id, pw);
+          }}>
+          <LogInTitle className="headline">
+            Sign In
+          </LogInTitle>
+          <LogInInput className="normalText" placeholder="Username" onChange={(e) => setId(e.target.value)}/>
+          <LogInInput className="normalText" type="password" placeholder="Password" onChange={(e) => setPw(e.target.value)}/>
+          <Button text="Log In" classname="mt10"/>
+        </LogInForm>
+      </LogInContent>
+    </LogInWrap>
+  );
+}
 
 const LogInWrap = styled.article`
   display: flex;
@@ -23,10 +53,10 @@ const LogInOverlay = styled.div`
 `;
 const LogInContent = styled.div`
   width: 400px;
-  max-width: 90%;
   height: 300px;
-  padding: 20px;
-  background: #fff;
+  max-width: 90%;
+  padding: 0 20px;
+  background: #ffffff;
   border-radius: var(--border-radius);
   position: relative;
   z-index: 1;
@@ -59,25 +89,7 @@ const LogInInput = styled.input`
 `;
 const LogInTitle = styled.h2`
   align-self: flex-start;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 `;
-
-function LogIn({ handler }) {
-  return (
-    <LogInWrap>
-      <LogInOverlay onClick={handler} />
-      <LogInContent>
-        <LogInForm>
-          <LogInTitle className="headline">
-            Sign In
-          </LogInTitle>
-          <LogInInput className="normalText" placeholder="Username" />
-          <LogInInput className="normalText" type="password" placeholder="Password" />
-          <Button text="Log In" classname="mt10"/>
-        </LogInForm>
-      </LogInContent>
-    </LogInWrap>
-  );
-}
 
 export default LogIn;
