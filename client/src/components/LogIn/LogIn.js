@@ -1,15 +1,23 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+// import { logInUser } from "../../redux/logInUser/action";
+import { logInUser } from "../../redux/user";
 import Button from "../Button/Button";
 
 function LogIn({ handler }) {
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
+  const [password, setPassword] = useState("");
   const logInReq = (e, id, pw) => {
     e.preventDefault();
 
     console.log(id);
     console.log(pw);
+
+    const body = { id, password };
+
+    dispatch(logInUser(body));
   };
 
   return (
@@ -18,7 +26,7 @@ function LogIn({ handler }) {
       <LogInContent>
         <LogInForm
           onSubmit={(e) => {
-            logInReq(e, id, pw);
+            logInReq(e, id, password);
           }}
         >
           <LogInTitle className="headline">Sign In</LogInTitle>
@@ -31,7 +39,7 @@ function LogIn({ handler }) {
             className="normalText"
             type="password"
             placeholder="Password"
-            onChange={(e) => setPw(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button text="Log In" classname="mt10" />
         </LogInForm>
