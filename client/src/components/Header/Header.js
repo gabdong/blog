@@ -1,8 +1,8 @@
 import { FaSearch as Search } from "react-icons/fa";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
-import LogIn from "../LogIn/LogIn";
+import Login from "../Login/Login";
 
 const HeaderSt = styled.header`
   display: flex;
@@ -33,11 +33,11 @@ const Logo = styled.h1`
 `;
 
 function Header() {
-  const [logInView, setLogInView] = useState(false);
-  const logInWrapHandler = (e) => {
+  const [loginView, setloginView] = useState(false);
+  const loginWrapHandler = (e) => {
     e.preventDefault();
 
-    setLogInView(!logInView);
+    setloginView(!loginView);
   };
 
   return (
@@ -51,11 +51,13 @@ function Header() {
         <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
-        {/* //g LogIn Btn */}
-        <HeaderBtn className="buttonText" onClick={logInWrapHandler}>로그인</HeaderBtn>
+        {/* //g login Btn */}
+        <HeaderBtn className="buttonText" onClick={loginWrapHandler}>
+          로그인
+        </HeaderBtn>
       </HeaderBtnWrap>
-      {/* //g logInWrap */}
-      {logInView ? <LogIn handler={logInWrapHandler}></LogIn> : null}
+      {/* //g loginWrap */}
+      {loginView ? <Login handler={loginWrapHandler}></Login> : null}
     </HeaderSt>
   );
 }

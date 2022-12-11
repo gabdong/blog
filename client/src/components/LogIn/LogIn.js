@@ -1,54 +1,50 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { logInUser } from "../../redux/logInUser/action";
-import { logInUser } from "../../redux/user";
+import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
 
-function LogIn({ handler }) {
+function Login({ handler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const logInReq = (e, id, pw) => {
+  const loginReq = (e, id, password) => {
     e.preventDefault();
-
-    console.log(id);
-    console.log(pw);
 
     const body = { id, password };
 
-    dispatch(logInUser(body));
+    dispatch(loginUser(body));
   };
 
   return (
-    <LogInWrap>
-      <LogInOverlay onClick={handler} />
-      <LogInContent>
-        <LogInForm
+    <LoginWrap>
+      <LoginOverlay onClick={handler} />
+      <LoginContent>
+        <LoginForm
           onSubmit={(e) => {
-            logInReq(e, id, password);
+            loginReq(e, id, password);
           }}
         >
-          <LogInTitle className="headline">Sign In</LogInTitle>
-          <LogInInput
+          <LoginTitle className="headline">Sign In</LoginTitle>
+          <LoginInput
             className="normalText"
             placeholder="Username"
             onChange={(e) => setId(e.target.value)}
           />
-          <LogInInput
+          <LoginInput
             className="normalText"
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button text="Log In" classname="mt10" />
-        </LogInForm>
-      </LogInContent>
-    </LogInWrap>
+        </LoginForm>
+      </LoginContent>
+    </LoginWrap>
   );
 }
 
-const LogInWrap = styled.article`
+const LoginWrap = styled.article`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +56,7 @@ const LogInWrap = styled.article`
   top: 0;
   z-index: 1;
 `;
-const LogInOverlay = styled.div`
+const LoginOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, var(--primary-color-d), transparent);
@@ -68,7 +64,7 @@ const LogInOverlay = styled.div`
   left: 0;
   top: 0;
 `;
-const LogInContent = styled.div`
+const LoginContent = styled.div`
   width: 400px;
   height: 300px;
   max-width: 90%;
@@ -78,7 +74,7 @@ const LogInContent = styled.div`
   position: relative;
   z-index: 1;
 `;
-const LogInForm = styled.form`
+const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +85,7 @@ const LogInForm = styled.form`
   color: #000000;
 `;
 //TODO input component 분리
-const LogInInput = styled.input`
+const LoginInput = styled.input`
   all: unset;
   width: 100%;
   padding: 8px 12px;
@@ -104,9 +100,9 @@ const LogInInput = styled.input`
     border: 2px solid var(--primary-color);
   }
 `;
-const LogInTitle = styled.h2`
+const LoginTitle = styled.h2`
   align-self: flex-start;
   margin-bottom: 24px;
 `;
 
-export default LogIn;
+export default Login;
