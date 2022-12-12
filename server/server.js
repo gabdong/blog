@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 const app = express();
 const api = require("./routes/index.js");
 const PORT = process.env.port || 9411;
 
+app.use(cors());
 app.use("/api", api);
 
 app.use(express.static(path.join(__dirname, "../client/build")));

@@ -6,8 +6,12 @@ export const LOGIN_USER = "user/LOGIN_USER";
 //g ACTION
 export const loginUser = (sendData) => {
   const request = axios
-    .post("/apis/users/login", sendData)
-    .then((response) => response.data);
+    .post("/api/test", sendData)
+    .then((response) => {
+      console.log(response.data);
+
+      return response.data;
+    });
 
   return {
     type: LOGIN_USER,

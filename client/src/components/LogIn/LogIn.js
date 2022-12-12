@@ -27,12 +27,12 @@ function Login({ handler }) {
         >
           <LoginTitle className="headline">Sign In</LoginTitle>
           <LoginInput
-            className="normalText"
+            className="inputText"
             placeholder="Username"
             onChange={(e) => setId(e.target.value)}
           />
           <LoginInput
-            className="normalText"
+            className="inputText"
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
@@ -86,7 +86,6 @@ const LoginForm = styled.form`
 `;
 //TODO input component 분리
 const LoginInput = styled.input`
-  all: unset;
   width: 100%;
   padding: 8px 12px;
   border: 2px solid #ddd;

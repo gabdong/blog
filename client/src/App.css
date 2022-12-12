@@ -90,6 +90,9 @@ a {
     margin: 0 auto;
     background: #000000;
 }
+input {
+    all: unset;
+}
 h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Regular';
 }
@@ -121,6 +124,11 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .normalText {
     font-family: 'SUIT-Regular';
     font-size: 14px;
+}
+.inputText {
+    font-family: 'SUIT-Medium';
+    font-size: 16px;
+    letter-spacing: 0.1px;
 }
 
 .m0 { margin: 0px; }
