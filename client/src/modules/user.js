@@ -6,7 +6,7 @@ export const LOGIN_USER = "user/LOGIN_USER";
 //g ACTION
 export const loginUser = (sendData) => {
   const request = axios
-    .post("/api/user/test", sendData)
+    .post("/api/user/login", sendData)
     .then((response) => {
       console.log(response.data);
 
