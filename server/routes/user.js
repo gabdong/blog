@@ -10,6 +10,7 @@ router.post("/login", (req, res) => {
     const {id, password} = req.body;
 
     db.query(`SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`, (err, data) => {
+        console.log(data);
       res.send(data);
     });
 });
