@@ -4,15 +4,18 @@ const bodyParser = require("body-parser");
 const db = require("../config/db");
 
 router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.urlencoded({ extended: true }));
 
 router.post("/login", (req, res) => {
-    const {id, password} = req.body;
+  const { id, password } = req.body;
 
-    db.query(`SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`, (err, data) => {
-        console.log(data);
+  db.query(
+    `SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`,
+    (err, data) => {
+      console.log(data);
       res.send(data);
-    });
+    }
+  );
 });
-  
+
 module.exports = router;
