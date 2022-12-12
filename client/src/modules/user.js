@@ -5,17 +5,14 @@ export const LOGIN_USER = "user/LOGIN_USER";
 
 //g ACTION
 export const loginUser = (sendData) => {
-  const request = axios
-    .post("/api/user/login", sendData)
-    .then((response) => {
-      console.log(response.data);
-
-      return response.data;
-    });
+  const req = axios.post("/api/user/login", sendData).then((res) => {
+    console.log(res);
+    return res.data;
+  });
 
   return {
     type: LOGIN_USER,
-    payload: request,
+    payload: req,
   };
 };
 
