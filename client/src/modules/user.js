@@ -2,6 +2,7 @@ import axios from "axios";
 
 //g TYPE
 export const LOGIN_USER = "user/LOGIN_USER";
+export const SET_USER = "user/SET_USER";
 
 //g ACTION
 export const loginUser = (sendData) => {
@@ -16,13 +17,29 @@ export const loginUser = (sendData) => {
   };
 };
 
+export const setUser = () => {
+
+}
+
+//g INITIAL STATE
+const initialState = {
+  user: {
+    idx: 0,
+    name: ''
+  }
+};
+
 //g REDUCER
-function userReducer(state = {}, action) {
+function userReducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER:
       return {
         ...state,
         loginSuccess: action.payload,
+      };
+    case SET_USER:
+      return {
+
       };
     default:
       return state;

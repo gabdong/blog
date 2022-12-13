@@ -13,6 +13,12 @@ function Login({ handler }) {
 
     const body = { id, password };
 
+    if (!id) {
+      return alert('ID를 입력해주세요.');
+    } else if (!password) {
+      return alert('Password를 입력해주세요.');
+    }
+
     dispatch(loginUser(body));
   };
 
@@ -28,13 +34,15 @@ function Login({ handler }) {
           <LoginTitle className="headline">Sign In</LoginTitle>
           <LoginInput
             className="inputText"
-            placeholder="Username"
+            placeholder="Username" 
+            value={id}
             onChange={(e) => setId(e.target.value)}
           />
           <LoginInput
             className="inputText"
             type="password"
-            placeholder="Password"
+            placeholder="Password" 
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button text="Log In" classname="mt10" />
