@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
@@ -8,6 +8,7 @@ function Login({ handler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const user = useSelector(state => state.user);
   const loginReq = (e, id, password) => {
     e.preventDefault();
 
@@ -21,9 +22,9 @@ function Login({ handler }) {
 
     dispatch(loginUser(body));
   };
-  const userInfo = useSelector((state) => state.user);
-  console.log(userInfo);
-  console.log("hi");
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <LoginWrap>
