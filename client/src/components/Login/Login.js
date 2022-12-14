@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
 
@@ -14,13 +14,16 @@ function Login({ handler }) {
     const body = { id, password };
 
     if (!id) {
-      return alert('ID를 입력해주세요.');
+      return alert("ID를 입력해주세요.");
     } else if (!password) {
-      return alert('Password를 입력해주세요.');
+      return alert("Password를 입력해주세요.");
     }
 
     dispatch(loginUser(body));
   };
+  const userInfo = useSelector((state) => state.user);
+  console.log(userInfo);
+  console.log("hi");
 
   return (
     <LoginWrap>
@@ -34,14 +37,14 @@ function Login({ handler }) {
           <LoginTitle className="headline">Sign In</LoginTitle>
           <LoginInput
             className="inputText"
-            placeholder="Username" 
+            placeholder="Username"
             value={id}
             onChange={(e) => setId(e.target.value)}
           />
           <LoginInput
             className="inputText"
             type="password"
-            placeholder="Password" 
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

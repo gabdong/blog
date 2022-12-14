@@ -5,41 +5,34 @@ export const LOGIN_USER = "user/LOGIN_USER";
 export const SET_USER = "user/SET_USER";
 
 //g ACTION
-export const loginUser = (sendData) => {
-  const req = axios.post("/api/user/login", sendData).then((res) => {
-    console.log(res);
-    return res.data;
-  });
+export const loginUser = async (data) => {
+  const req = axios.post("/api/user/login", data).then((res) => res.data);
+  const userInfo = await req;
+
+  userInfo[0].isLogin = true;
 
   return {
     type: LOGIN_USER,
-    payload: req,
+    payload: userInfo[0],
   };
 };
 
-export const setUser = () => {
-
-}
-
 //g INITIAL STATE
-const initialState = {
-  user: {
-    idx: 0,
-    name: ''
-  }
+const INITIAL_STATE = {
+  idx: 0,
+  name: "",
+  isLogin: null,
 };
 
 //g REDUCER
-function userReducer(state = initialState, action) {
+function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case LOGIN_USER:
       return {
         ...state,
-        loginSuccess: action.payload,
-      };
-    case SET_USER:
-      return {
-
+        idx: action.payload.idx,
+        name: action.payload.name,
+        isLogin: action.payload.isLogin,
       };
     default:
       return state;
