@@ -8,7 +8,7 @@ function Login({ handler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
   const loginReq = (e, id, password) => {
     e.preventDefault();
 
@@ -22,9 +22,8 @@ function Login({ handler }) {
 
     dispatch(loginUser(body));
   };
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+
+  console.log(user);
 
   return (
     <LoginWrap>

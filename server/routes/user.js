@@ -12,7 +12,6 @@ router.post("/login", (req, res) => {
   db.query(
     `SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`,
     (err, data) => {
-      console.log(data);
       res.send(data);
     }
   );
