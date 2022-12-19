@@ -1,27 +1,28 @@
 import axios from "axios";
 
-//g TYPE
-export const LOGIN_USER = "user/LOGIN_USER";
-export const SET_USER = "user/SET_USER";
-
-//g ACTION
-export const loginUser = async (data) => {
-  const req = axios.post("/api/user/login", data).then((res) => res.data);
-  const userInfo = await req;
-
-  userInfo[0].isLogin = true;
-
-  return {
-    type: LOGIN_USER,
-    payload: userInfo[0],
-  };
-};
-
 //g INITIAL STATE
 const INITIAL_STATE = {
   idx: 0,
   name: "",
   isLogin: null,
+  msg: "",
+};
+
+//g TYPE
+export const LOGIN_USER = "user/LOGIN_USER";
+export const SET_USER = "user/SET_USER";
+
+//g ACTION
+export const loginUser = async (dataToSubmit) => {
+  const req = await axios
+    .post("/api/user/login", dataToSubmit)
+    .then((res) => res.data)
+    .catch((e) => INITIAL_STATE); //TODO error handling
+
+  return {
+    type: LOGIN_USER,
+    payload: req,
+  };
 };
 
 //g REDUCER

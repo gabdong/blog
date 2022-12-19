@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
@@ -9,6 +9,12 @@ function Login({ handler }) {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const user = useSelector((state) => state.user);
+  const idHandler = (e) => {
+    setId(e.target.value);
+  };
+  const passwordHandler = (e) => {
+    setPassword(e.target.value);
+  };
   const loginReq = (e, id, password) => {
     e.preventDefault();
 
@@ -20,10 +26,14 @@ function Login({ handler }) {
       return alert("Password를 입력해주세요.");
     }
 
-    dispatch(loginUser(body));
+    dispatch(loginUser(body))
+      .catch((e) => {
+        console.log("hi");
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
-
-  console.log(user);
 
   return (
     <LoginWrap>
@@ -34,19 +44,19 @@ function Login({ handler }) {
             loginReq(e, id, password);
           }}
         >
-          <LoginTitle className="headline">Sign In</LoginTitle>
-          <LoginInput
+          <h2 className="headline">Sign In</h2>
+          <input
             className="inputText"
             placeholder="Username"
             value={id}
-            onChange={(e) => setId(e.target.value)}
+            onChange={idHandler}
           />
-          <LoginInput
+          <input
             className="inputText"
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={passwordHandler}
           />
           <Button text="Log In" classname="mt10" />
         </LoginForm>
@@ -94,25 +104,26 @@ const LoginForm = styled.form`
   width: 100%;
   height: 100%;
   color: #000000;
-`;
-//TODO input component 분리
-const LoginInput = styled.input`
-  width: 100%;
-  padding: 8px 12px;
-  border: 2px solid #ddd;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
 
-  &:active,
-  &:focus,
-  &:hover {
-    border: 2px solid var(--primary-color);
+  input {
+    width: 100%;
+    padding: 8px 0px;
+    border: none;
+    border-bottom: 2px solid #ddd;
+    cursor: pointer;
+    transition: var(--transition);
+
+    &:active,
+    &:focus,
+    &:hover {
+      border-bottom: 2px solid var(--primary-color);
+    }
   }
-`;
-const LoginTitle = styled.h2`
-  align-self: flex-start;
-  margin-bottom: 24px;
+
+  h2 {
+    align-self: flex-start;
+    margin-bottom: 24px;
+  }
 `;
 
 export default Login;
