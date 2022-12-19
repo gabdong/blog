@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
 
@@ -8,7 +9,7 @@ function Login({ handler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const idHandler = (e) => {
     setId(e.target.value);
   };
@@ -26,13 +27,7 @@ function Login({ handler }) {
       return alert("Password를 입력해주세요.");
     }
 
-    dispatch(loginUser(body))
-      .catch((e) => {
-        console.log("hi");
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    dispatch(loginUser(body));
   };
 
   return (

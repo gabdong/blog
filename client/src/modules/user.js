@@ -16,8 +16,14 @@ export const SET_USER = "user/SET_USER";
 export const loginUser = async (dataToSubmit) => {
   const req = await axios
     .post("/api/user/login", dataToSubmit)
-    .then((res) => res.data)
-    .catch((e) => INITIAL_STATE); //TODO error handling
+    .then((res) => {
+      console.log('success');
+      return res.data;
+    })
+    .catch((e) => {
+      console.log('error');
+      return INITIAL_STATE;
+    }); //TODO error handling
 
   return {
     type: LOGIN_USER,
