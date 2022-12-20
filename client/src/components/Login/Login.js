@@ -1,6 +1,6 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
@@ -9,14 +9,15 @@ function Login({ handler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  // const user = useSelector((state) => state.user);
+
   const idHandler = (e) => {
     setId(e.target.value);
   };
   const passwordHandler = (e) => {
     setPassword(e.target.value);
   };
-  const loginReq = (e, id, password) => {
+  const loginFn = async (e, id, password) => {
+    e.stopPropagation();
     e.preventDefault();
 
     const body = { id, password };
@@ -26,9 +27,20 @@ function Login({ handler }) {
     } else if (!password) {
       return alert("Password를 입력해주세요.");
     }
+  
+    try {
+      const res = await axios.post("/api/user/login", body);
+      
+      handler(e);
 
-    dispatch(loginUser(body));
+      dispatch(loginUser(res.data));
+    } catch (err) {
+      const msg = err.response.data;
+
+      return alert(msg);
+    }
   };
+
 
   return (
     <LoginWrap>
@@ -36,7 +48,7 @@ function Login({ handler }) {
       <LoginContent>
         <LoginForm
           onSubmit={(e) => {
-            loginReq(e, id, password);
+            loginFn(e, id, password);
           }}
         >
           <h2 className="headline">Sign In</h2>

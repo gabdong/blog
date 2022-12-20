@@ -1,35 +1,31 @@
-import axios from "axios";
 
 //g INITIAL STATE
 const INITIAL_STATE = {
   idx: 0,
   name: "",
-  isLogin: null,
-  msg: "",
+  isLogin: false,
 };
 
 //g TYPE
 export const LOGIN_USER = "user/LOGIN_USER";
-export const SET_USER = "user/SET_USER";
+export const LOGOUT_USER = "user/LOGOUT_USER";
 
 //g ACTION
-export const loginUser = async (dataToSubmit) => {
-  const req = await axios
-    .post("/api/user/login", dataToSubmit)
-    .then((res) => {
-      console.log('success');
-      return res.data;
-    })
-    .catch((e) => {
-      console.log('error');
-      return INITIAL_STATE;
-    }); //TODO error handling
+export const loginUser = dataToSubmit => {
+  const payload   = dataToSubmit;
+  payload.isLogin = true;
 
   return {
     type: LOGIN_USER,
-    payload: req,
+    payload: payload,
   };
 };
+export const logoutUser = () => {
+  return {
+    type: LOGOUT_USER,
+    payload: {...INITIAL_STATE}
+  }
+}
 
 //g REDUCER
 function userReducer(state = INITIAL_STATE, action) {
@@ -41,6 +37,13 @@ function userReducer(state = INITIAL_STATE, action) {
         name: action.payload.name,
         isLogin: action.payload.isLogin,
       };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        idx: action.payload.idx,
+        name: action.payload.name,
+        isLogin: action.payload.isLogin,
+      }
     default:
       return state;
   }

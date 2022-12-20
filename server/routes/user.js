@@ -13,7 +13,7 @@ router.post("/login", (req, res) => {
     `SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`,
     (err, data) => {
       if (data.length === 0) {
-        res.status(500).send("일치하는 유저 정보가 없습니다.");
+        res.status(500).send("일치하는 회원 정보가 없습니다.");
       } else if (data.length !== 0) {
         res.send(data[0]);
       }
