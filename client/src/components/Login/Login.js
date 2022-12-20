@@ -27,10 +27,10 @@ function Login({ handler }) {
     } else if (!password) {
       return alert("Password를 입력해주세요.");
     }
-  
+
     try {
       const res = await axios.post("/api/user/login", body);
-      
+
       handler(e);
 
       dispatch(loginUser(res.data));
@@ -40,7 +40,6 @@ function Login({ handler }) {
       return alert(msg);
     }
   };
-
 
   return (
     <LoginWrap>

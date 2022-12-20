@@ -8,7 +8,7 @@ import { logoutUser } from "../../modules/user";
 
 function Header() {
   const dispatch = useDispatch();
-  const user = useSelector(store => store.user);
+  const user = useSelector((store) => store.user);
   const [loginView, setloginView] = useState(false);
 
   const loginWrapHandler = (e) => {
@@ -19,7 +19,7 @@ function Header() {
 
   const logoutFn = () => {
     dispatch(logoutUser());
-  }
+  };
 
   return (
     <HeaderSt id="header">
@@ -33,8 +33,11 @@ function Header() {
           <Search />
         </HeaderBtn>
         {/* //g login Btn */}
-        <HeaderBtn className="buttonText" onClick={!user.isLogin ? loginWrapHandler : logoutFn}>
-          {!user.isLogin ? '로그인' : '로그아웃'}
+        <HeaderBtn
+          className="buttonText"
+          onClick={!user.isLogin ? loginWrapHandler : logoutFn}
+        >
+          {!user.isLogin ? "로그인" : "로그아웃"}
         </HeaderBtn>
       </HeaderBtnWrap>
       {/* //g loginWrap */}

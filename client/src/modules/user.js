@@ -1,4 +1,3 @@
-
 //g INITIAL STATE
 const INITIAL_STATE = {
   idx: 0,
@@ -11,8 +10,8 @@ export const LOGIN_USER = "user/LOGIN_USER";
 export const LOGOUT_USER = "user/LOGOUT_USER";
 
 //g ACTION
-export const loginUser = dataToSubmit => {
-  const payload   = dataToSubmit;
+export const loginUser = (dataToSubmit) => {
+  const payload = dataToSubmit;
   payload.isLogin = true;
 
   return {
@@ -23,9 +22,9 @@ export const loginUser = dataToSubmit => {
 export const logoutUser = () => {
   return {
     type: LOGOUT_USER,
-    payload: {...INITIAL_STATE}
-  }
-}
+    payload: { ...INITIAL_STATE },
+  };
+};
 
 //g REDUCER
 function userReducer(state = INITIAL_STATE, action) {
@@ -43,7 +42,7 @@ function userReducer(state = INITIAL_STATE, action) {
         idx: action.payload.idx,
         name: action.payload.name,
         isLogin: action.payload.isLogin,
-      }
+      };
     default:
       return state;
   }
