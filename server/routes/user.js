@@ -44,7 +44,7 @@ router.get("/auth", (req, res) => {
     console.log(auth);
   } else {
     const refreshToken = authHeader;
-    console.log(cookieParser.JSONCookies(req.headers.cookie).auth);
+    console.log(cookieParser.JSONCookies(req.headers.cookie));
   }
 
   res.send('hi');
