@@ -23,8 +23,8 @@ function Header() {
   };
 
   const test = async () => {
-    const res = await axios.get('/api/user/auth', {test: 'test'});
-  }
+    const res = await axios.get("/api/user/auth", { test: "test" });
+  };
 
   return (
     <HeaderSt id="header">
@@ -45,10 +45,7 @@ function Header() {
           {!user.isLogin ? "로그인" : "로그아웃"}
         </HeaderBtn>
 
-        <HeaderBtn
-          className="buttonText"
-          onClick={test}
-        >
+        <HeaderBtn className="buttonText" onClick={test}>
           테스트버튼
         </HeaderBtn>
       </HeaderBtnWrap>

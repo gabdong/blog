@@ -30,9 +30,9 @@ function Login({ wrapHandler }) {
 
     try {
       const res = await axios.post("/api/user/login", body);
-      const {user, accessToken} = res.data;
+      const { user, accessToken } = res.data;
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       wrapHandler(e);
 
