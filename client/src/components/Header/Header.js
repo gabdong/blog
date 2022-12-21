@@ -23,7 +23,7 @@ function Header() {
   };
 
   const test = async () => {
-    const res = await axios.post('/api/user/test', 'test');
+    const res = await axios.get('/api/user/auth', {test: 'test'});
   }
 
   return (

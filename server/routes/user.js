@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const db = require("../config/db");
 const token = require("../config/jwt");
 
 router.use(bodyParser.json());
+router.use(cookieParser());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+//g 로그인
 router.post("/login", (req, res) => {
   const { id, password } = req.body;
 
@@ -31,10 +34,18 @@ router.post("/login", (req, res) => {
   );
 });
 
-router.post("/test", (req, res) => {
-
+//g 권한조회
+router.get("/auth", (req, res) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(" ")[1];
+  const accessToken = authHeader && authHeader.split(" ")[1];
+
+  if (accessToken) {
+    const auth = token().check(accessToken, 'access');
+    console.log(auth);
+  } else {
+    const refreshToken = authHeader;
+    console.log(cookieParser.JSONCookies(req.headers.cookie).auth);
+  }
 
   res.send('hi');
 });

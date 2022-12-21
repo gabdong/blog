@@ -7,9 +7,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const accessToken = config.headers.Authorization;
-
-        console.log(accessToken);
+        // const accessToken = config.headers.Authorization;
+        console.log(config);
         return config;
     },
     (err) => {
