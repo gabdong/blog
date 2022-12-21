@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
+import axios from "../../utils/axios";
 
 function Header() {
   const dispatch = useDispatch();
@@ -20,6 +21,10 @@ function Header() {
   const logoutFn = () => {
     dispatch(logoutUser());
   };
+
+  const test = async () => {
+    const res = await axios.post('/api/user/test', 'test');
+  }
 
   return (
     <HeaderSt id="header">
@@ -39,9 +44,16 @@ function Header() {
         >
           {!user.isLogin ? "로그인" : "로그아웃"}
         </HeaderBtn>
+
+        <HeaderBtn
+          className="buttonText"
+          onClick={test}
+        >
+          테스트버튼
+        </HeaderBtn>
       </HeaderBtnWrap>
       {/* //g loginWrap */}
-      {loginView ? <Login handler={loginWrapHandler}></Login> : null}
+      {loginView ? <Login wrapHandler={loginWrapHandler}></Login> : null}
     </HeaderSt>
   );
 }

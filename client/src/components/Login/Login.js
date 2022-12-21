@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import axios from "axios";
+import axios from "../../utils/axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
 
-function Login({ handler }) {
+function Login({ wrapHandler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -30,20 +30,23 @@ function Login({ handler }) {
 
     try {
       const res = await axios.post("/api/user/login", body);
+      const {user, accessToken} = res.data;
 
-      handler(e);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-      dispatch(loginUser(res.data));
+      wrapHandler(e);
+
+      dispatch(loginUser(user));
     } catch (err) {
-      const msg = err.response.data;
+      const { error } = err.response.data;
 
-      return alert(msg);
+      return alert(error);
     }
   };
 
   return (
     <LoginWrap>
-      <LoginOverlay onClick={handler} />
+      <LoginOverlay onClick={wrapHandler} />
       <LoginContent>
         <LoginForm
           onSubmit={(e) => {

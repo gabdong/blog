@@ -2,6 +2,7 @@ const express = require("express");
 const router = express();
 const bodyParser = require("body-parser");
 const db = require("../config/db");
+const token = require("../config/jwt");
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -13,12 +14,29 @@ router.post("/login", (req, res) => {
     `SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`,
     (err, data) => {
       if (data.length === 0) {
-        res.status(500).send("일치하는 회원 정보가 없습니다.");
+        res.status(500).json({error: "일치하는 회원 정보가 없습니다."});
       } else if (data.length !== 0) {
-        res.send(data[0]);
+        const user = data[0];
+        const {id} = user;
+        const accessToken = token().access(id);
+        const refreshToken = token().refresh(id);
+
+        res.cookie('auth', refreshToken, {
+          maxAge: 1000 * 60 * 60 * 24,
+          httpOnly: true
+        });
+        res.json({user, accessToken});
       }
     }
   );
+});
+
+router.post("/test", (req, res) => {
+
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  res.send('hi');
 });
 
 module.exports = router;
