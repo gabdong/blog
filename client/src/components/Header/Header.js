@@ -23,7 +23,10 @@ function Header() {
   };
 
   const test = async () => {
-    const res = await axios.get("/api/user/auth", { test: "test" });
+    const res = await axios.get("/api/user/auth", {
+      params: { id: "test" },
+    });
+    console.log(res);
   };
 
   return (

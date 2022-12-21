@@ -39,9 +39,9 @@ function Login({ wrapHandler }) {
       dispatch(loginUser(user));
     } catch (err) {
       const { error } = err.response.data;
-      console.error(err);
+
+      console.error(error);
       return;
-      // return alert(error);
     }
   };
 
