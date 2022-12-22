@@ -35,12 +35,12 @@ function userReducer(state = INITIAL_STATE, action) {
     case LOGIN_USER:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     case LOGOUT_USER:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
