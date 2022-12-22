@@ -1,7 +1,10 @@
 //g INITIAL STATE
 const INITIAL_STATE = {
   idx: 0,
+  id: "",
   name: "",
+  phone: "",
+  email: "",
   isLogin: false,
 };
 
@@ -32,16 +35,12 @@ function userReducer(state = INITIAL_STATE, action) {
     case LOGIN_USER:
       return {
         ...state,
-        idx: action.payload.idx,
-        name: action.payload.name,
-        isLogin: action.payload.isLogin,
+        ...action.payload
       };
     case LOGOUT_USER:
       return {
         ...state,
-        idx: action.payload.idx,
-        name: action.payload.name,
-        isLogin: action.payload.isLogin,
+        ...action.payload
       };
     default:
       return state;

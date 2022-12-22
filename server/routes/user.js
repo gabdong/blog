@@ -13,10 +13,12 @@ router.post("/login", (req, res) => {
   const { id, password } = req.body;
 
   db.query(
-    `SELECT idx, name FROM member WHERE id='${id}' AND pw='${password}'`,
+    `SELECT idx, id, name, phone, email FROM member WHERE id='${id}' AND pw='${password}'`,
     (err, data) => {
+      if (err) return res.status(500).json({msg: err});
+
       if (data.length === 0) {
-        res.status(500).json({ error: "일치하는 회원 정보가 없습니다." });
+        res.status(404).json({ msg: "일치하는 회원 정보가 없습니다." });
       } else if (data.length !== 0) {
         const user = data[0];
         const { id } = user;
@@ -33,31 +35,55 @@ router.post("/login", (req, res) => {
   );
 });
 
-//g 권한조회
-router.get("/auth", (req, res) => {
-  const id = req.query.id;
-  const authHeader = req.headers["authorization"];
-  const accessToken = authHeader && authHeader.split(" ")[1];
-  const refreshToken = utils.getCookie(req.headers.cookie, "auth");
+//g get user info
+router.get("/user/:id", (req, res) => {
+  const {id} = req.params;
 
-  // if (accessToken) {
-  if (true) {
-    try {
-      const auth = token().check(accessToken, "access");
-    } catch (err) {
-      try {
-        const auth = token().check(refreshToken, "refresh");
-      } catch (err) {}
+  db.query(`SELECT idx, name, id, phone, email FROM member WHERE id='${id}'`, (err, data) => {
+    if (err) return res.status(500).json({msg: err});
 
-      console.log(auth);
+    if (data.length === 0) {
+      res.status(404).json({msg: "회원 정보를 찾을 수 없습니다."});
+    } else if (data.length !== 0) {
+      const user = data[0];
+
+      res.json({user});
     }
+  });
+});
+
+//g refresh auth
+router.post("/refreshAuth", (req, res) => {
+  const authHeader = req.headers["authorization"];
+  const accessToken = authHeader ? authHeader && authHeader.split(" ")[1] : null;
+  const refreshToken = utils.getCookie(req.headers.cookie, "auth");
+  const result = {};
+  const auth = accessToken 
+      ? token().check(accessToken, "access") || token().check(refreshToken, 'refresh')
+      : token().check(refreshToken, 'refresh');
+  const isAccessToken = accessToken && token().check(accessToken, "access") 
+      ? true
+      : false;
+
+  //g access, refresh 정보 없을경우
+  if (!auth) return res.status(401).json({msg: "로그인이 되어있지 않습니다."});
+
+  const { id } = auth;
+  if (!isAccessToken) { //g accessToken 갱신
+    const newAccessToken = token().access(id);
+    const newRefreshToken = token().refresh(id);
+
+    res.cookie("auth", newRefreshToken, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    });
+    result.accessToken = newAccessToken;
+    result.auth = token().check(newAccessToken, 'access');
   } else {
-    const cookie = req.headers.cookie.split(";");
-    const auth = token().check(refreshToken, "refresh");
-    console.log(refreshToken);
+    result.auth = auth;
   }
 
-  res.send("hi");
+  res.json(result);
 });
 
 module.exports = router;

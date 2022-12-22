@@ -7,6 +7,8 @@
  * @return {String} value : cookie value
  */
 exports.getCookie = (str, target) => {
+  if (!str) return null;
+  
   const split = str.split(";");
 
   for (const cookieString of split) {

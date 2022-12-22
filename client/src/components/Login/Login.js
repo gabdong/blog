@@ -29,7 +29,7 @@ function Login({ wrapHandler }) {
     }
 
     try {
-      const res = await axios.post("/api/user/login", body);
+      const res = await axios.post("/apis/user/login", body);
       const { user, accessToken } = res.data;
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -38,9 +38,9 @@ function Login({ wrapHandler }) {
 
       dispatch(loginUser(user));
     } catch (err) {
-      const { error } = err.response.data;
+      const { msg } = err.response.data;
 
-      console.error(error);
+      console.error(msg);
       return;
     }
   };

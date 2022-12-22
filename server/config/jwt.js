@@ -20,7 +20,13 @@ const token = () => {
           ? process.env.ACCESS_TOKEN_SECRET
           : process.env.REFRESH_TOKEN_SECRET;
 
-      return jwt.verify(token, secret_key);
+      const auth = jwt.verify(token, secret_key, (err, decodedData) => {
+        if (err) return false;
+
+        return decodedData;
+      });
+
+      return auth;
     },
   };
 };
