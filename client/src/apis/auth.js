@@ -1,22 +1,23 @@
-import axios from '../utils/axios'
+import axios from "../utils/axios";
 
 export async function refreshAuth() {
-    try {
-        const res = await axios.post("/apis/user/refreshAuth");
-        const {accessToken, auth} = res.data;
+  try {
+    const res = await axios.post("/apis/user/refreshAuth");
+    const { accessToken, auth } = res.data;
 
-        if (!auth) return false;
-  
-        if (accessToken) axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    if (!auth) return false;
 
-        const {id} = auth;
-        const {user} = await (await axios.get(`/apis/user/${id}`)).data;
+    if (accessToken)
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-        return {status: 200, user};
-    } catch (err) {
-        const {status} = err.response;
-        const {msg} = err.response.data;
-  
-        return {status: status, msg};
-    }
-};
+    const { id } = auth;
+    const { user } = await (await axios.get(`/apis/user/${id}`)).data;
+
+    return { status: 200, user };
+  } catch (err) {
+    const { status } = err.response;
+    const { msg } = err.response.data;
+
+    return { status: status, msg };
+  }
+}
