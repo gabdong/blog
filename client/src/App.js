@@ -13,15 +13,18 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    refreshAuth().then((data) => {
-      const user = data;
+    (async function() {
+        const data = await refreshAuth();
+        const {status, msg, user} = data;
 
-      if (!user) return;
-
-      dispatch(loginUser(user));
-    }).catch((err) => {
-      console.error(err);
-    });
+        if(status === 200 ){
+          if (!user) return;
+    
+          dispatch(loginUser(user));
+        } else {
+          console.error(msg);
+        }
+    })();
   }, []);
   
   return (

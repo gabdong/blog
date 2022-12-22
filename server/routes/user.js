@@ -36,7 +36,7 @@ router.post("/login", (req, res) => {
 });
 
 //g get user info
-router.get("/user/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   const {id} = req.params;
 
   db.query(`SELECT idx, name, id, phone, email FROM member WHERE id='${id}'`, (err, data) => {
@@ -84,6 +84,14 @@ router.post("/refreshAuth", (req, res) => {
   }
 
   res.json(result);
+});
+
+router.delete("/auth", (req, res) => {
+  res.cookie('auth', '', {
+    httpOnly: true,
+    maxAge: 0
+  });
+  res.send('Logout');
 });
 
 module.exports = router;

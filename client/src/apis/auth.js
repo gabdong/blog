@@ -10,12 +10,13 @@ export async function refreshAuth() {
         if (accessToken) axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
         const {id} = auth;
-        const {user} = await (await axios.get(`/apis/user/user/${id}`)).data;
+        const {user} = await (await axios.get(`/apis/user/${id}`)).data;
 
-        return user;
+        return {status: 200, user};
     } catch (err) {
+        const {status} = err.response;
         const {msg} = err.response.data;
   
-        return msg;
+        return {status: status, msg};
     }
 };
