@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import NavBtn from "./NavBtn.js";
+import { useSelector } from "react-redux";
 
 function Nav() {
+  const user = useSelector(store => store.user);
+  const {isLogin} = user;
+
   return (
     <NavSt id="nav">
       <NavBtn path="/" text="Home" />
       <NavBtn path="/board" text="Board" />
+      {isLogin ? <NavBtn path="/settings" text="Settings"/> : null}
     </NavSt>
   );
 }
@@ -13,7 +18,7 @@ function Nav() {
 const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   width: 200px;
 `;
 

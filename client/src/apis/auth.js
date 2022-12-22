@@ -21,3 +21,8 @@ export async function refreshAuth() {
     return { status: status, msg };
   }
 }
+
+export function removeAuth() {
+    axios.delete("/apis/user/auth");
+    axios.defaults.headers.common["Authorization"] = "";
+}

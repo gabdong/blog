@@ -1,13 +1,14 @@
 import { FaSearch as Search } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
-import axios from "../../utils/axios";
+import { removeAuth } from "../../apis/auth";
 
 function Header() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const [loginView, setloginView] = useState(false);
@@ -19,9 +20,8 @@ function Header() {
   };
 
   const logoutFn = () => {
-    axios.delete("/apis/user/auth");
-    axios.defaults.headers.common["Authorization"] = "";
-
+    removeAuth();
+    navigate('/');
     dispatch(logoutUser());
   };
 
