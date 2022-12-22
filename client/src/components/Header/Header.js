@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 
 function Header() {
   const dispatch = useDispatch();
@@ -19,8 +19,8 @@ function Header() {
   };
 
   const logoutFn = () => {
-    axios.delete('/apis/user/auth');
-    axios.defaults.headers.common["Authorization"] = '';
+    axios.delete("/apis/user/auth");
+    axios.defaults.headers.common["Authorization"] = "";
 
     dispatch(logoutUser());
   };

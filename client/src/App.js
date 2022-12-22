@@ -13,17 +13,17 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async function() {
-        const data = await refreshAuth();
-        const {status, msg, user} = data;
+    (async function () {
+      const data = await refreshAuth();
+      const { status, msg, user } = data;
 
-        if(status === 200 ){
-          if (!user) return;
-    
-          dispatch(loginUser(user));
-        } else {
-          console.error(msg);
-        }
+      if (status === 200) {
+        if (!user) return;
+
+        dispatch(loginUser(user));
+      } else {
+        console.error(msg);
+      }
     })();
   }, [dispatch]);
   
