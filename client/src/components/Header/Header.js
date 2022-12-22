@@ -43,10 +43,6 @@ function Header() {
         >
           {!user.isLogin ? "로그인" : "로그아웃"}
         </HeaderBtn>
-
-        {/* <HeaderBtn className="buttonText" onClick={test}>
-          테스트버튼
-        </HeaderBtn> */}
       </HeaderBtnWrap>
       {/* //g loginWrap */}
       {loginView ? <Login wrapHandler={loginWrapHandler}></Login> : null}

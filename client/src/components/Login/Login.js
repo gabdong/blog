@@ -90,7 +90,7 @@ const LoginWrap = styled.article`
 const LoginOverlay = styled.div`
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, var(--primary-color-d), transparent);
+  background: rgba(0, 0, 0, 0.8);
   position: fixed;
   left: 0;
   top: 0;
@@ -100,8 +100,7 @@ const LoginContent = styled.div`
   height: 300px;
   max-width: 90%;
   padding: 0 20px;
-  background: #ffffff;
-  border-radius: var(--border-radius);
+  background: var(--dark-l);
   position: relative;
   z-index: 1;
 `;
@@ -113,7 +112,7 @@ const LoginForm = styled.form`
   gap: 10px;
   width: 100%;
   height: 100%;
-  color: #000000;
+  color: #ffffff;
 
   input {
     width: 100%;

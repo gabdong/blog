@@ -25,7 +25,7 @@ function App() {
         console.error(msg);
       }
     })();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Wrapper id="wrapper">
