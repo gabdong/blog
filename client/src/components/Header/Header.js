@@ -1,5 +1,5 @@
 import { FaSearch as Search } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -8,7 +8,6 @@ import { logoutUser } from "../../modules/user";
 import { removeAuth } from "../../apis/auth";
 
 function Header() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const [loginView, setloginView] = useState(false);
@@ -21,7 +20,6 @@ function Header() {
 
   const logoutFn = () => {
     removeAuth();
-    navigate('/');
     dispatch(logoutUser());
   };
 
