@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const app = express();
-const apis = require("./routes/index.js");
+const apis = require("./apis/index.js");
 const PORT = process.env.port || 9411;
 
 app.use(cors());

@@ -6,12 +6,12 @@ const token = () => {
   return {
     access(id) {
       return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m",
+        expiresIn: "10s",
       });
     },
     refresh(id) {
       return jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "1days",
+        expiresIn: "1d",
       });
     },
     check(token, mode) {
