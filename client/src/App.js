@@ -26,7 +26,7 @@ function App() {
       }
     })();
   }, [dispatch]);
-  
+
   return (
     <Wrapper id="wrapper">
       <Router basename={process.env.PUBLIC_URL}>
