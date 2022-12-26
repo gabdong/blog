@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
 import { removeAuth } from "../../apis/auth";
+import authAxios from '../../utils/axios';
 
 function Header() {
   const dispatch = useDispatch();
@@ -22,6 +23,14 @@ function Header() {
     removeAuth();
     dispatch(logoutUser());
   };
+
+  //! test
+  const test = () => {
+    const body = {test: 'test'};
+    authAxios.post('/apis/user/test', body).then((res) => {
+      // console.log('return');
+    });
+  }
 
   return (
     <HeaderSt id="header">
@@ -40,6 +49,12 @@ function Header() {
           onClick={!user.isLogin ? loginWrapHandler : logoutFn}
         >
           {!user.isLogin ? "로그인" : "로그아웃"}
+        </HeaderBtn>
+        <HeaderBtn
+          className="buttonText"
+          onClick={test}
+        >
+          테스트
         </HeaderBtn>
       </HeaderBtnWrap>
       {/* //g loginWrap */}

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import axios from "../../utils/axios";
+import authAxios from "../../utils/axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
@@ -17,22 +17,21 @@ function Login({ wrapHandler }) {
     setPassword(e.target.value);
   };
   const loginFn = async (e, id, password) => {
-    e.stopPropagation();
     e.preventDefault();
 
     const body = { id, password };
 
     if (!id) {
-      return alert("ID를 입력해주세요.");
+      return alert("아이디를 입력해주세요.");
     } else if (!password) {
-      return alert("Password를 입력해주세요.");
+      return alert("비밀번호를 입력해주세요.");
     }
 
     try {
-      const res = await axios.post("/apis/user/login", body);
+      const res = await authAxios.post("/apis/user/login", body);
       const { user, accessToken } = res.data;
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      authAxios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       wrapHandler(e);
 

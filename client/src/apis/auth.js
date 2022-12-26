@@ -2,7 +2,7 @@ import axios from "../utils/axios";
 
 export async function refreshAuth() {
   try {
-    const res = await axios.post("/apis/user/refreshAuth");
+    const res = await axios.post("/apis/auth/refreshAuth");
     const { accessToken, auth } = res.data;
 
     if (!auth) return false;
@@ -23,6 +23,6 @@ export async function refreshAuth() {
 }
 
 export function removeAuth() {
-    axios.delete("/apis/user/auth");
+    axios.delete("/apis/auth");
     axios.defaults.headers.common["Authorization"] = "";
 }
