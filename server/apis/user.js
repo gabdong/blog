@@ -18,7 +18,8 @@ apis.post("/login", (req, res) => {
     WHERE id='${id}' 
     AND pw='${password}'`,
     (err, data) => {
-      if (err) return res.status(500).json({ msg: '회원정보를 불러오지 못했습니다.' });
+      if (err)
+        return res.status(500).json({ msg: "회원정보를 불러오지 못했습니다." });
 
       if (data.length === 0) {
         res.status(404).json({ msg: "일치하는 회원 정보가 없습니다." });
@@ -60,9 +61,9 @@ apis.get("/:id", (req, res) => {
 });
 
 //! TEST
-apis.post('/test', (req, res) => {
+apis.post("/test", (req, res) => {
   // console.log(req.headers.cookie);
-  res.send('TEST');
+  res.send("TEST");
 });
 
 module.exports = apis;

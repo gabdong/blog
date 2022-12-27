@@ -8,7 +8,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-
     // if (!config.headers.Authorization) return config;
 
     verifyToken();
