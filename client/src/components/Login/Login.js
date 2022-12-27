@@ -31,9 +31,7 @@ function Login({ wrapHandler }) {
       const res = await authAxios.post("/apis/user/login", body);
       const { user, accessToken } = res.data;
 
-      authAxios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
+      authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       wrapHandler(e);
 

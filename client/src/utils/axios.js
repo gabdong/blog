@@ -1,4 +1,5 @@
 import axios from "axios";
+import { verifyToken } from "../apis/auth";
 
 const instance = axios.create({
   timeout: 1000,
@@ -7,7 +8,11 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    console.log(config);
+
+    // if (!config.headers.Authorization) return config;
+
+    verifyToken();
+
     return config;
   },
   (err) => {

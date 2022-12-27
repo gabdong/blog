@@ -7,6 +7,7 @@ import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
 import { removeAuth } from "../../apis/auth";
 import authAxios from '../../utils/axios';
+import axios from 'axios';
 
 function Header() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function Header() {
   const test = () => {
     const body = {test: 'test'};
     authAxios.post('/apis/user/test', body).then((res) => {
+      console.log('test req');
       // console.log('return');
     });
   }
