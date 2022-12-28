@@ -6,26 +6,46 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-instance.interceptors.request.use(
-  async (config) => {
-    // if (!config.headers.Authorization) return config;
+/**
+ * * axios 요청만들어주는 함수
+ *
+ * @param {String} method
+ * @param {String} url
+ * @param {Object} body
+ * @param {Boolean} checkAuth
+ */
+export function request(method, url, dataToSubmit = {}, checkAuth = false) {
+  instance({
+    method,
+    url,
+    data: dataToSubmit,
+  });
 
-    verifyToken();
+  if (checkAuth) {
+    instance.interceptors.request.use(
+      async (config) => {
+        // if (!config.headers.Authorization) return config;
 
-    return config;
-  },
-  (err) => {
-    return Promise.reject(err);
+        verifyToken();
+
+        return config;
+      },
+      (err) => {
+        return Promise.reject(err);
+      }
+    );
+
+    instance.interceptors.response.use(
+      (res) => {
+        return res;
+      },
+      (err) => {
+        return Promise.reject(err);
+      }
+    );
   }
-);
+}
 
-instance.interceptors.response.use(
-  (res) => {
-    return res;
-  },
-  (err) => {
-    return Promise.reject(err);
-  }
-);
+// export default request;
 
 export default instance;
