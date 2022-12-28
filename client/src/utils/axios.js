@@ -22,29 +22,30 @@ export function request(method, url, dataToSubmit = {}, checkAuth = false) {
   });
 
   if (checkAuth) {
-    instance.interceptors.request.use(
-      async (config) => {
-        // if (!config.headers.Authorization) return config;
-
-        verifyToken();
-
-        return config;
-      },
-      (err) => {
-        return Promise.reject(err);
-      }
-    );
-
-    instance.interceptors.response.use(
-      (res) => {
-        return res;
-      },
-      (err) => {
-        return Promise.reject(err);
-      }
-    );
   }
 }
+
+instance.interceptors.request.use(
+  async (config) => {
+    // if (!config.headers.Authorization) return config;
+
+    verifyToken();
+
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
+
+instance.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
 
 // export default request;
 
