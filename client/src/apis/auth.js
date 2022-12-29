@@ -36,9 +36,7 @@ export async function verifyToken() {
   try {
     const result = await axios.get("/apis/auth/verify-token");
 
-    console.log(result);
     return result;
   } catch (err) {
-    console.log(err);
   }
 }

@@ -5,30 +5,31 @@ import "./App.css";
 import Nav from "./components/Nav/Nav.js";
 import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
-import { refreshAuth } from "./apis/auth";
-import authAxios from "./utils/axios";
-import { useDispatch } from "react-redux";
-import { loginUser } from "./modules/user";
+// import axios from './utils/axios'
+// import { refreshAuth } from "./apis/auth";
+// import authAxios from "./utils/axios";
+// import { useDispatch } from "react-redux";
+// import { loginUser } from "./modules/user";
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    (async function () {
-      const data = await refreshAuth();
-      const { status, msg, accessToken, id } = data;
+  // useEffect(() => {
+  //   (async function () {
+  //     const data = await refreshAuth();
+  //     const { status, msg, accessToken, id } = data;
 
-      if (status === 200) {
-        authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  //     if (status === 200) {
+  //       authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-        const { user } = (await authAxios.get(`/apis/user/${id}`)).data;
+  //       const { user } = (await authAxios.get(`/apis/user/${id}`)).data;
 
-        dispatch(loginUser(user));
-      } else {
-        console.error(msg);
-      }
-    })();
-  }, [dispatch]);
+  //       dispatch(loginUser(user));
+  //     } else {
+  //       console.error(msg);
+  //     }
+  //   })();
+  // }, [dispatch]);
 
   return (
     <Wrapper id="wrapper">

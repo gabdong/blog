@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import authAxios from "../../utils/axios";
+import axios from "../../utils/axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
@@ -28,10 +28,10 @@ function Login({ wrapHandler }) {
     }
 
     try {
-      const res = await authAxios.post("/apis/user/login", body);
+      const res = await axios.post("/apis/user/login", body);
       const { user, accessToken } = res.data;
 
-      authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       wrapHandler(e);
 

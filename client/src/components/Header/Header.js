@@ -6,9 +6,7 @@ import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
 import { removeAuth } from "../../apis/auth";
-import authAxios from "../../utils/axios";
-// import axios from "axios";
-import { request } from "../../utils/axios";
+import axios from "../../utils/axios";
 
 function Header() {
   const dispatch = useDispatch();
@@ -28,12 +26,10 @@ function Header() {
 
   //! test
   const test = () => {
-    const body = { test: "test" };
-    // authAxios.post("/apis/user/test", body).then((res) => {
-    //   console.log("test req");
-    //   console.log('return');
-    // });
-    request("post", "/apis/user/test", body, true);
+    const body = { test: "test", checkAuth: true };
+    axios.post('/apis/user/test', body).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
