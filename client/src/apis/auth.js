@@ -38,6 +38,8 @@ export async function checkToken() {
 
     return result;
   } catch (err) {
-    console.log(err);
+    const error = {status: err.response.status, msg: err.response.data.msg};
+
+    return error;
   }
 }

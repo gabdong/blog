@@ -28,6 +28,7 @@ function Header() {
   const test = () => {
     const body = { test: "test", checkAuth: true };
     axios.post('/apis/user/test', body).then((res) => {
+      console.log(res);
     });
   };
 

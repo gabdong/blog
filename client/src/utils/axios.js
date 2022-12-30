@@ -12,16 +12,20 @@ instance.interceptors.request.use(
     const {checkAuth} = config.data;
 
     if (checkAuth === true) {
-      const {accessToken} = store.getState().user;
-      console.log(accessToken);
+      let { accessToken } = store.getState().user;
 
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      if (accessToken) axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       const checkAuthResult = await checkToken();
+      const {status, msg} = checkAuthResult;
 
-      console.log(checkAuthResult);
+      if (status === 200) {
+        const {newAccessToken} = checkAuthResult.data;
 
-      return config;
+        if (newAccessToken) axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+        return config;
+      } else if (status === 401) return Promise.reject({msg});
     }
 
     return config;
