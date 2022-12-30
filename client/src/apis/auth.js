@@ -34,7 +34,7 @@ export function removeAuth() {
  */
 export async function checkToken() {
   try {
-    const result = await axios.get("/apis/auth/verify-token");
+    const result = await axios.get("/apis/auth/check-token");
 
     return result;
   } catch (err) {

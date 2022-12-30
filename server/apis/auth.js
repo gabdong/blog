@@ -53,25 +53,25 @@ apis.delete("/", (req, res) => {
 /**
  * * token 유효성 검사, refreshToken만 있는경우 token 재발급
  */
-apis.get("/verify-token", (req, res) => {
+apis.get("/check-token", (req, res) => {
   const accessToken = req.headers.authorization;
-  const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
-  db.query(
-    `SELECT refreshToken 
-    FROM auth 
-    WHERE hashIdx='${refreshTokenIdx}'`, 
-    (err, data) => {
-      if (err) return res.status(500).json({msg: '토큰 요청을 실패하였습니다.'});
+  const checkAccessToken = token().check(accessToken, 'access');
 
-      const refreshToken = data[0].refreshToken;
-      const result = {};
-      const verify = accessToken
-        ? token().check(accessToken, "access")
-        : token().check(refreshToken, "refresh");
+  if (!checkAccessToken) {
+    const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
 
-      if (!verify) return res.status(401).json({ msg: "권한이 없습니다." });
-
-      if (!accessToken) {
+    db.query(
+      `SELECT refreshToken 
+      FROM auth 
+      WHERE hashIdx='${refreshTokenIdx}'`, 
+      (err, data) => {
+        if (err) return res.status(500).json({msg: '토큰 요청을 실패하였습니다.'});
+  
+        const refreshToken = data[0].refreshToken;
+        const checkRefreshToken = token().check(refreshToken, "refresh");
+  
+        if (!verify) return res.status(401).json({ msg: "권한이 없습니다." });
+  
         const { id } = verify;
         const newAccessToken = token().access(id);
         const newRefreshToken = token().refresh(id);
@@ -82,14 +82,15 @@ apis.get("/verify-token", (req, res) => {
         });
 
         result.accessToken = newAccessToken;
+
+        const auth = verify ? true : false;
+  
+        result.auth = auth;
+  
+        res.json({ result });
       }
-      const auth = verify ? true : false;
-
-      result.auth = auth;
-
-      res.json({ result });
-    }
-  );
+    );
+  }
 });
 
 module.exports = apis;
