@@ -4,8 +4,8 @@ import ReduxPromise from "redux-promise";
 import rootReducer from "../modules";
 
 const createStoreWithMiddleware = applyMiddleware(
-    ReduxPromise,
-    ReduxThunk
+  ReduxPromise,
+  ReduxThunk
 )(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 

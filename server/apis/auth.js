@@ -55,22 +55,24 @@ apis.delete("/", (req, res) => {
  */
 apis.get("/check-token", (req, res) => {
   const accessToken = req.headers.authorization;
-  const checkAccessToken = token().check(accessToken, 'access');
+  const checkAccessToken = token().check(accessToken, "access");
 
   if (!checkAccessToken) {
     const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
     db.query(
       `SELECT refreshToken 
       FROM auth 
-      WHERE hashIdx='${refreshTokenIdx}'`, 
+      WHERE hashIdx='${refreshTokenIdx}'`,
       (err, data) => {
-        if (err) return res.status(500).json({msg: '토큰 요청을 실패하였습니다.'});
-  
+        if (err)
+          return res.status(500).json({ msg: "토큰 요청을 실패하였습니다." });
+
         const refreshToken = data.length > 0 ? data[0].refreshToken : null;
         const checkRefreshToken = token().check(refreshToken, "refresh");
-  
-        if (!checkRefreshToken) return res.status(401).json({ msg: "권한이 없습니다." });
-  
+
+        if (!checkRefreshToken)
+          return res.status(401).json({ msg: "권한이 없습니다." });
+
         const { id } = checkRefreshToken;
         const newAccessToken = token().access(id);
         const newRefreshToken = token().refresh(id);
@@ -79,11 +81,11 @@ apis.get("/check-token", (req, res) => {
           httpOnly: true,
         });
 
-        res.json({status: 200, newAccessToken, auth: true });
+        res.json({ status: 200, newAccessToken, auth: true });
       }
     );
   } else {
-    res.json({status: 200, auth: true});
+    res.json({ status: 200, auth: true });
   }
 });
 
