@@ -1,5 +1,6 @@
 import axios from "axios";
-// import { verifyToken } from "../apis/auth";
+import store from "./store";
+import { checkToken } from "../apis/auth";
 
 const instance = axios.create({
   timeout: 1000,
@@ -8,8 +9,18 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    if (config.checkAuth === true) {
-      console.log(config);
+    const {checkAuth} = config.data;
+
+    if (checkAuth === true) {
+      const {accessToken} = store.getState().user;
+      console.log(accessToken);
+
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+      const checkAuthResult = await checkToken();
+
+      console.log(checkAuthResult);
+
       return config;
     }
 

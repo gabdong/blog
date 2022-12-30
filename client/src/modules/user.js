@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   name: "",
   phone: "",
   email: "",
+  accessToken: "",
   isLogin: false,
 };
 

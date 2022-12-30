@@ -13,8 +13,8 @@ exports.getCookie = (str, target) => {
 
   for (const cookieString of split) {
     const arr = cookieString.split("=");
-    const key = arr[0];
-    const value = arr[1];
+    const key = arr[0].trim();
+    const value = arr[1].trim();
 
     if (key == target) return value;
   }

@@ -1,6 +1,7 @@
 const express = require("express");
 const apis = express();
 const bodyParser = require("body-parser");
+const db = require("../config/db");
 const { getCookie } = require("../utils/utils");
 const token = require("../config/jwt");
 
@@ -53,33 +54,42 @@ apis.delete("/", (req, res) => {
  * * token 유효성 검사, refreshToken만 있는경우 token 재발급
  */
 apis.get("/verify-token", (req, res) => {
-  const accessToken = req.headers.Authorization;
-  const refreshToken = getCookie(req.headers.cookie, "auth");
+  const accessToken = req.headers.authorization;
+  const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
+  db.query(
+    `SELECT refreshToken 
+    FROM auth 
+    WHERE hashIdx='${refreshTokenIdx}'`, 
+    (err, data) => {
+      if (err) return res.status(500).json({msg: '토큰 요청을 실패하였습니다.'});
 
-  const result = {};
-  const verify = accessToken
-    ? token().check(accessToken, "access")
-    : token().check(refreshToken, "refresh");
+      const refreshToken = data[0].refreshToken;
+      const result = {};
+      const verify = accessToken
+        ? token().check(accessToken, "access")
+        : token().check(refreshToken, "refresh");
 
-  if (!verify) res.status(401).json({ msg: "권한이 없습니다." });
+      if (!verify) return res.status(401).json({ msg: "권한이 없습니다." });
 
-  if (!accessToken) {
-    const { id } = verify;
-    const newAccessToken = token().access(id);
-    const newRefreshToken = token().refresh(id);
+      if (!accessToken) {
+        const { id } = verify;
+        const newAccessToken = token().access(id);
+        const newRefreshToken = token().refresh(id);
 
-    res.cookie("auth", newRefreshToken, {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-    });
+        res.cookie("auth", newRefreshToken, {
+          maxAge: 1000 * 60 * 60 * 24,
+          httpOnly: true,
+        });
 
-    result.accessToken = newAccessToken;
-  }
-  const auth = verify ? true : false;
+        result.accessToken = newAccessToken;
+      }
+      const auth = verify ? true : false;
 
-  result.auth = auth;
+      result.auth = auth;
 
-  res.json({ result });
+      res.json({ result });
+    }
+  );
 });
 
 module.exports = apis;

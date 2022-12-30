@@ -29,9 +29,9 @@ function Login({ wrapHandler }) {
 
     try {
       const res = await axios.post("/apis/user/login", body);
-      const { user, accessToken } = res.data;
+      const { user } = res.data;
 
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      //TODO localStorage에 로그인 기록남기기
 
       wrapHandler(e);
 

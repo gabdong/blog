@@ -58,7 +58,8 @@ apis.post("/login", (req, res) => {
                   maxAge: 1000 * 60 * 60 * 24,
                   httpOnly: true,
                 });
-                res.json({ user, accessToken });
+                user.accessToken = accessToken;
+                res.json({ user });
               }
             );
           }

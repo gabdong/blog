@@ -32,11 +32,12 @@ export function removeAuth() {
 /**
  * * api요청의 accessToken 유효성을 검사해주는 함수
  */
-export async function verifyToken() {
+export async function checkToken() {
   try {
     const result = await axios.get("/apis/auth/verify-token");
 
     return result;
   } catch (err) {
+    console.log(err);
   }
 }

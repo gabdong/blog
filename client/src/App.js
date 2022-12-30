@@ -1,5 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect, useState } from "react";
+// import { getCookie } from "./utils/Cookie";
 import styled from "styled-components";
 import "./App.css";
 import Nav from "./components/Nav/Nav.js";
