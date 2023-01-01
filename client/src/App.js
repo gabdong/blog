@@ -1,36 +1,23 @@
 import { BrowserRouter as Router } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import { getCookie } from "./utils/Cookie";
+import { useEffect } from "react";
 import styled from "styled-components";
 import "./App.css";
 import Nav from "./components/Nav/Nav.js";
 import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
-// import axios from './utils/axios'
-// import { refreshAuth } from "./apis/auth";
-// import authAxios from "./utils/axios";
-// import { useDispatch } from "react-redux";
-// import { loginUser } from "./modules/user";
 
 function App() {
-  // const dispatch = useDispatch();
+  const isLogin = window.localStorage.getItem("isLogin");
 
-  // useEffect(() => {
-  //   (async function () {
-  //     const data = await refreshAuth();
-  //     const { status, msg, accessToken, id } = data;
-
-  //     if (status === 200) {
-  //       authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-  //       const { user } = (await authAxios.get(`/apis/user/${id}`)).data;
-
-  //       dispatch(loginUser(user));
-  //     } else {
-  //       console.error(msg);
-  //     }
-  //   })();
-  // }, [dispatch]);
+  console.log(isLogin);
+  useEffect(() => {
+    window.addEventListener("storage", (e) => {
+      console.log("hi");
+      if (e.key == "login") {
+        console.log("login");
+      }
+    });
+  }, [isLogin]);
 
   return (
     <Wrapper id="wrapper">

@@ -16,6 +16,8 @@ function Login({ wrapHandler }) {
   const passwordHandler = (e) => {
     setPassword(e.target.value);
   };
+
+  //g login
   const loginFn = async (e, id, password) => {
     e.preventDefault();
 
@@ -31,7 +33,7 @@ function Login({ wrapHandler }) {
       const res = await axios.post("/apis/user/login", body);
       const { user } = res.data;
 
-      //TODO localStorage에 로그인 기록남기기
+      window.localStorage.setItem("isLogin", true);
 
       wrapHandler(e);
 

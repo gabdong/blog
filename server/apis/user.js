@@ -39,37 +39,74 @@ apis.post("/login", (req, res) => {
 
         //g refreshToken 저장
         db.query(
-          `INSERT INTO auth SET 
-          refreshToken='${refreshToken}'`,
+          `SELECT hashIdx 
+          FROM auth 
+          WHERE id='${id}'`,
           (err, data) => {
+            let hashIdx;
+
             if (err)
               return res
                 .status(500)
-                .json({ msg: "인증정보 저장을 실패하였습니다." });
+                .json({ msg: "토큰검색을 실패하였습니다." });
+            if (data.length > 0) {
+              //g 이미 refresh token 정보 저장되어있을경우 update
+              hashIdx = data[0].hashIdx;
 
-            const { insertId } = data;
-            const hashIdx = md5(
-              `${process.env.REFRESH_TOKEN_HASH_IDX_KEY}${insertId}`
-            );
-
-            db.query(
-              `UPDATE auth SET 
-              hashIdx='${hashIdx}' 
-              WHERE idx=${insertId}`,
-              (err, data) => {
-                if (err)
-                  return res.status(500).json({
-                    msg: "인증정보 암호화 업데이트를 실패하였습니다.",
+              db.query(
+                `UPDATE auth 
+                SET refreshToken='${refreshToken}' 
+                WHERE hashIdx='${hashIdx}'`,
+                (err, data) => {
+                  if (err)
+                    return res
+                      .status(500)
+                      .json({ msg: "토큰 업데이트를 실패하였습니다." });
+                  res.cookie("refreshToken", hashIdx, {
+                    maxAge: 1000 * 60 * 60 * 24,
+                    httpOnly: true,
                   });
+                  user.accessToken = accessToken;
+                  res.json({ user });
+                }
+              );
+            } else {
+              //g refresh token 정보 없을경우 insert
+              db.query(
+                `INSERT INTO auth SET 
+                refreshToken='${refreshToken}', 
+                id='${id}'`,
+                (err, data) => {
+                  if (err)
+                    return res
+                      .status(500)
+                      .json({ msg: "인증정보 저장을 실패하였습니다." });
 
-                res.cookie("refreshToken", hashIdx, {
-                  maxAge: 1000 * 60 * 60 * 24,
-                  httpOnly: true,
-                });
-                user.accessToken = accessToken;
-                res.json({ user });
-              }
-            );
+                  const { insertId } = data;
+                  hashIdx = md5(
+                    `${process.env.REFRESH_TOKEN_HASH_IDX_KEY}${insertId}`
+                  );
+
+                  db.query(
+                    `UPDATE auth SET 
+                    hashIdx='${hashIdx}' 
+                    WHERE idx=${insertId}`,
+                    (err, data) => {
+                      if (err)
+                        return res.status(500).json({
+                          msg: "인증정보 암호화 업데이트를 실패하였습니다.",
+                        });
+                      res.cookie("refreshToken", hashIdx, {
+                        maxAge: 1000 * 60 * 60 * 24,
+                        httpOnly: true,
+                      });
+                      user.accessToken = accessToken;
+                      res.json({ user });
+                    }
+                  );
+                }
+              );
+            }
           }
         );
       }

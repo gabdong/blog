@@ -9,6 +9,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
+    if (!config.data) return config;
+
     const { checkAuth } = config.data;
 
     if (checkAuth === true) {
@@ -17,6 +19,7 @@ instance.interceptors.request.use(
       if (accessToken)
         axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
+      //g check auth
       const checkAuthResult = await checkToken();
       const { status, msg } = checkAuthResult;
 
@@ -27,7 +30,12 @@ instance.interceptors.request.use(
           axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
         return config;
-      } else if (status === 401) return Promise.reject({ msg });
+      } else if (status === 401) {
+        const authError = new Error(msg);
+        authError.code = 401;
+
+        throw authError;
+      }
     }
 
     return config;

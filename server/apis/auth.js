@@ -43,11 +43,21 @@ apis.get("/refresh", (req, res) => {
  * * delete refresh token
  */
 apis.delete("/", (req, res) => {
-  res.cookie("auth", "", {
-    httpOnly: true,
-    maxAge: 0,
-  });
-  res.send("Logout");
+  const hashIdx = getCookie(req.headers.cookie, "refreshToken");
+
+  db.query(
+    `DELETE FROM auth
+    WHERE hashIdx='${hashIdx}'`,
+    (err, data) => {
+      if (err) res.status(500).json({ msg: "토큰정보 삭제를 실패하였습니다." });
+
+      res.cookie("refreshToken", "", {
+        httpOnly: true,
+        maxAge: 0,
+      });
+      res.send("Logout");
+    }
+  );
 });
 
 /**

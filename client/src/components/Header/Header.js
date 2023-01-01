@@ -13,12 +13,14 @@ function Header() {
   const user = useSelector((store) => store.user);
   const [loginView, setloginView] = useState(false);
 
+  //g login modal control
   const loginWrapHandler = (e) => {
     e.preventDefault();
 
     setloginView(!loginView);
   };
 
+  //g logout
   const logoutFn = () => {
     removeAuth();
     dispatch(logoutUser());
@@ -26,10 +28,11 @@ function Header() {
 
   //! test
   const test = () => {
-    const body = { test: "test", checkAuth: true };
-    axios.post("/apis/user/test", body).then((res) => {
-      console.log(res);
-    });
+    window.localStorage.clear();
+    // const body = { test: "test", checkAuth: true };
+    // axios.post("/apis/user/test", body).then((res) => {
+    //   console.log(res);
+    // });
   };
 
   return (
