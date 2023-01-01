@@ -86,12 +86,31 @@ apis.get("/check-token", (req, res) => {
         const { id } = checkRefreshToken;
         const newAccessToken = token().access(id);
         const newRefreshToken = token().refresh(id);
-        res.cookie("auth", newRefreshToken, {
-          maxAge: 1000 * 60 * 60 * 24,
-          httpOnly: true,
-        });
 
-        res.json({ status: 200, newAccessToken, auth: true });
+        db.query(
+          `SELECT idx, id, name, phone, email 
+          FROM member 
+          WHERE id='${id}'`,
+          (err, data) => {
+            if (err)
+              return res
+                .status(500)
+                .json({ msg: "유저정보 요청을 실패하였습니다." });
+
+            if (data.length === 0)
+              return res
+                .status(404)
+                .json({ msg: "유저정보를 찾을수 없습니다." });
+
+            const user = data[0];
+
+            res.cookie("auth", newRefreshToken, {
+              maxAge: 1000 * 60 * 60 * 24,
+              httpOnly: true,
+            });
+            res.json({ status: 200, newAccessToken, auth: true, user });
+          }
+        );
       }
     );
   } else {
