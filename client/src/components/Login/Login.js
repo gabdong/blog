@@ -33,8 +33,6 @@ function Login({ wrapHandler }) {
       const res = await axios.post("/apis/user/login", body);
       const { user } = res.data;
 
-      window.localStorage.setItem("isLogin", true);
-
       wrapHandler(e);
 
       dispatch(loginUser(user));

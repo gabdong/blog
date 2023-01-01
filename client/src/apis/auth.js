@@ -5,7 +5,6 @@ import axios from "axios";
  * * 로그아웃시 권한을 제거해주는 함수
  */
 export function removeAuth() {
-  window.localStorage.setItem("isLogin", false);
   authAxios.delete("/apis/auth");
   authAxios.defaults.headers.common["Authorization"] = "";
 }

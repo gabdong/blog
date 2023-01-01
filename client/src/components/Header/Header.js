@@ -29,10 +29,10 @@ function Header() {
   //! test
   const test = () => {
     window.localStorage.clear();
-    // const body = { test: "test", checkAuth: true };
-    // axios.post("/apis/user/test", body).then((res) => {
-    //   console.log(res);
-    // });
+    const body = { test: "test", checkAuth: true };
+    axios.post("/apis/user/test", body).then((res) => {
+      console.log(res);
+    });
   };
 
   return (

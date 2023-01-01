@@ -7,17 +7,9 @@ import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
 
 function App() {
-  const isLogin = window.localStorage.getItem("isLogin");
-
-  console.log(isLogin);
   useEffect(() => {
-    window.addEventListener("storage", (e) => {
-      console.log("hi");
-      if (e.key == "login") {
-        console.log("login");
-      }
-    });
-  }, [isLogin]);
+    console.log("hi");
+  }, []);
 
   return (
     <Wrapper id="wrapper">
