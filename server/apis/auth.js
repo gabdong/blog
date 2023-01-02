@@ -34,7 +34,7 @@ apis.delete("/", (req, res) => {
  */
 apis.get("/check-token", (req, res) => {
   const { authorization } = req.headers;
-  const accessToken = authorization?.split(' ')[1];
+  const accessToken = authorization?.split(" ")[1];
   const checkAccessToken = token().check(accessToken, "access");
 
   if (!checkAccessToken) {
@@ -87,10 +87,12 @@ apis.get("/check-token", (req, res) => {
                 db.query(
                   `SELECT hash_idx 
                   FROM auth 
-                  WHERE member='${idx}'`, 
+                  WHERE member='${idx}'`,
                   (err, data) => {
                     if (err)
-                      return res.status(500).json({msg: '토큰 hash idx요청을 실패하였습니다.'});
+                      return res
+                        .status(500)
+                        .json({ msg: "토큰 hash idx요청을 실패하였습니다." });
 
                     const hashIdx = data[0].hash_idx;
 
