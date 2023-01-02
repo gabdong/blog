@@ -65,12 +65,11 @@ function Header() {
 
 const HeaderSt = styled.header`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 20px 0;
-  position: sticky;
-  left: 0;
-  top: 0;
+  min-height: 60px;
+  background: #000000;
 `;
 const HeaderBtnWrap = styled.div`
   display: flex;

@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import Home from "./Home.js";
 import Board from "./Board.js";
-import Settings from "./Settings.js";
+import Settings from "./Settings/Settings.js";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute.js";
 
 function Pages() {

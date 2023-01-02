@@ -47,10 +47,18 @@ function App() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 40px;
+  max-width: 90%;
+  height: 100%;
+  margin: 0 auto;
+  background: #000000;
+  overflow: hidden;
 `;
 const Main = styled.main`
   display: flex;
-  padding-top: 40px;
+  flex: 1;
+  height: calc(100% - var(--header-height) - var(--main-gap));
+  padding-bottom: 60px;
 `;
 
 export default App;

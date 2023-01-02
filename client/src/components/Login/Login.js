@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import axios from "../../utils/axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
+import axios from "../../utils/axios";
+import { authCheckAxios } from "../../utils/axios";
 
 function Login({ wrapHandler }) {
   const dispatch = useDispatch();
@@ -31,7 +32,10 @@ function Login({ wrapHandler }) {
 
     try {
       const res = await axios.post("/apis/user/login", body);
-      const { user } = res.data;
+      const { user, accessToken } = res.data;
+
+      axios.defaults.headers.common.Authorization = accessToken;
+      authCheckAxios.defaults.headers.common.Authorization = accessToken;
 
       wrapHandler(e);
 

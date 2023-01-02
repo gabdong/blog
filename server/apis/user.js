@@ -66,8 +66,7 @@ apis.post("/login", (req, res) => {
                     maxAge: 1000 * 60 * 60 * 24,
                     httpOnly: true,
                   });
-                  user.accessToken = accessToken;
-                  res.json({ user });
+                  res.json({ user, accessToken });
                 }
               );
             } else {
@@ -100,8 +99,7 @@ apis.post("/login", (req, res) => {
                         maxAge: 1000 * 60 * 60 * 24,
                         httpOnly: true,
                       });
-                      user.accessToken = accessToken;
-                      res.json({ user });
+                      res.json({ user, accessToken });
                     }
                   );
                 }
@@ -136,6 +134,7 @@ apis.get("/:id", (req, res) => {
 
 //! TEST
 apis.post("/test", (req, res) => {
+  // console.log(req.headers);
   // console.log(req.headers.cookie);
   res.send("TEST");
 });

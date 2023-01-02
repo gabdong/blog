@@ -1,8 +1,11 @@
 import axios from "axios";
-import store from "./store";
 import { checkToken } from "../apis/auth";
 
 const instance = axios.create({
+  timeout: 1000,
+  withCredentials: true,
+});
+export const authCheckAxios = axios.create({
   timeout: 1000,
   withCredentials: true,
 });
@@ -14,11 +17,6 @@ instance.interceptors.request.use(
     const { checkAuth } = config.data;
 
     if (checkAuth === true) {
-      let { accessToken } = store.getState().user;
-
-      if (accessToken)
-        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
       //g check auth
       const checkAuthResult = await checkToken();
       const { status, msg } = checkAuthResult;
@@ -26,8 +24,10 @@ instance.interceptors.request.use(
       if (status === 200) {
         const { newAccessToken } = checkAuthResult.data;
 
-        if (newAccessToken)
-          axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        if (newAccessToken) {
+          authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+          instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        }
 
         return config;
       } else if (status === 401) {

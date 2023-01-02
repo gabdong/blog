@@ -5,10 +5,10 @@
     --primary-color-d-text: #ffffff;
 
     --dark-l: #121212;
-
     --transition: 0.2s;
-
     --border-radius: 4px;
+    --header-height: 60px;
+    --main-gap: 40px;
 }
 @font-face {
     font-family: "SUIT-Regular";
@@ -82,21 +82,19 @@ button {
 a {
     all: unset;
 }
-* {
-    -webkit-box-sizing: border-box !important;
-    -moz-box-sizing: border-box !important;
-    box-sizing: border-box !important;
-}
-#root {
-    max-width: 90%;
-    margin: 0 auto;
-    background: #000000;
-}
 input {
     all: unset;
 }
 h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Regular';
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#root {
+    height: 100%;
 }
 .headline {
     font-family: 'SUIT-Medium';
@@ -131,6 +129,22 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Medium';
     font-size: 16px;
     letter-spacing: 0.1px;
+}
+.underline {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ffffff;
+}
+.scroll {
+    overflow-y: auto;
+}
+.scroll::-webkit-scrollbar {
+    width: 6px;
+    background: var(--dark-l);
+    border-radius: var(--border-radius);
+}
+.scroll::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: var(--border-radius);
 }
 
 .m0 { margin: 0px; }

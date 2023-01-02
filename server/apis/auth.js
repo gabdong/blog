@@ -64,7 +64,8 @@ apis.delete("/", (req, res) => {
  * * token 유효성 검사, refreshToken만 있는경우 token 재발급
  */
 apis.get("/check-token", (req, res) => {
-  const accessToken = req.headers.authorization;
+  const { authorization } = req.headers;
+  const accessToken = authorization?.split(' ')[1];
   const checkAccessToken = token().check(accessToken, "access");
 
   if (!checkAccessToken) {
@@ -104,11 +105,35 @@ apis.get("/check-token", (req, res) => {
 
             const user = data[0];
 
-            res.cookie("auth", newRefreshToken, {
-              maxAge: 1000 * 60 * 60 * 24,
-              httpOnly: true,
-            });
-            res.json({ status: 200, newAccessToken, auth: true, user });
+            db.query(
+              `UPDATE auth SET 
+              refreshToken='${newRefreshToken}' 
+              WHERE id='${id}'`,
+              (err, data) => {
+                if (err)
+                  return res.status(500).json({
+                    msg: "인증정보 암호화 업데이트를 실패하였습니다.",
+                  });
+
+                db.query(
+                  `SELECT hashIdx 
+                  FROM auth 
+                  WHERE id='${id}'`, 
+                  (err, data) => {
+                    if (err)
+                      return res.status(500).json({msg: '토큰 hash idx요청을 실패하였습니다.'});
+
+                    const {hashIdx} = data[0];
+
+                    res.cookie("refreshToken", hashIdx, {
+                      maxAge: 1000 * 60 * 60 * 24,
+                      httpOnly: true,
+                    });
+                    res.json({ status: 200, newAccessToken, auth: true, user });
+                  }
+                );
+              }
+            );
           }
         );
       }
