@@ -18,7 +18,7 @@ apis.post("/login", (req, res) => {
     `SELECT idx, id, name, phone, email 
     FROM member 
     WHERE id='${id}' 
-    AND pw='${password}'`,
+    AND password='${password}'`,
     (err, data) => {
       if (err)
         return res.status(500).json({ msg: "회원정보를 불러오지 못했습니다." });
@@ -31,17 +31,17 @@ apis.post("/login", (req, res) => {
         });
       } else if (isLogin) {
         const user = data[0];
-        const { id } = user;
+        const { idx } = user;
 
         //g Token 발행
-        const accessToken = token().access(id);
-        const refreshToken = token().refresh(id);
+        const accessToken = token().access(idx);
+        const refreshToken = token().refresh(idx);
 
         //g refreshToken 저장
         db.query(
-          `SELECT hashIdx 
+          `SELECT hash_idx 
           FROM auth 
-          WHERE id='${id}'`,
+          WHERE member='${idx}'`,
           (err, data) => {
             let hashIdx;
 
@@ -51,12 +51,12 @@ apis.post("/login", (req, res) => {
                 .json({ msg: "토큰검색을 실패하였습니다." });
             if (data.length > 0) {
               //g 이미 refresh token 정보 저장되어있을경우 update
-              hashIdx = data[0].hashIdx;
+              hashIdx = data[0].hash_idx;
 
               db.query(
                 `UPDATE auth 
-                SET refreshToken='${refreshToken}' 
-                WHERE hashIdx='${hashIdx}'`,
+                SET refresh_token='${refreshToken}' 
+                WHERE hash_idx='${hashIdx}'`,
                 (err, data) => {
                   if (err)
                     return res
@@ -73,8 +73,8 @@ apis.post("/login", (req, res) => {
               //g refresh token 정보 없을경우 insert
               db.query(
                 `INSERT INTO auth SET 
-                refreshToken='${refreshToken}', 
-                id='${id}'`,
+                refresh_token='${refreshToken}', 
+                member='${idx}'`,
                 (err, data) => {
                   if (err)
                     return res
@@ -88,7 +88,7 @@ apis.post("/login", (req, res) => {
 
                   db.query(
                     `UPDATE auth SET 
-                    hashIdx='${hashIdx}' 
+                    hash_idx='${hashIdx}' 
                     WHERE idx=${insertId}`,
                     (err, data) => {
                       if (err)
