@@ -1,40 +1,21 @@
+import { AiOutlinePlus as Plus } from "react-icons/ai";
 import styled from "styled-components";
 
 function BoardSettings() {
   return (
-    <SettingSection className="scroll">
+    <BoardSettingSection className="scroll">
       <h2 className="normalText mb15">게시판 메뉴설정</h2>
       <BoardSettingWrap className="scroll">
         <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
-        </BoardSettingItem>
-        <BoardSettingItem className="boardSettingItem">
-          <p class="normalText">test</p>
+          <p className="normalText">Board</p>
+          <Plus className="addBoardCategoryBtn" />
         </BoardSettingItem>
       </BoardSettingWrap>
-    </SettingSection>
+    </BoardSettingSection>
   );
 }
 
-const SettingSection = styled.section`
+const BoardSettingSection = styled.section`
   height: 100%;
 `;
 const BoardSettingWrap = styled.div`
@@ -51,16 +32,20 @@ const BoardSettingItem = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 40px;
   padding: 0 14px;
   border-radius: var(--border-radius);
   background: var(--primary-color-d-o);
-  cursor: pointer;
   transition: var(--transition);
 
   &:hover {
     background: var(--primary-color-d);
+  }
+
+  .addBoardCategoryBtn {
+    cursor: pointer;
   }
 `;
 
