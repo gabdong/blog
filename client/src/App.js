@@ -53,6 +53,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   background: #000000;
   overflow: hidden;
+  user-select: none;
 `;
 const Main = styled.main`
   display: flex;

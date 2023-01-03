@@ -1,6 +1,7 @@
 :root {
     --primary-color: #1950f8;
-    --primary-color-d: #304278;
+    --primary-color-d: #061238;
+    --primary-color-d-o: rgba(6, 18, 56, 0.5);
     --primary-color-l: #6389F9;
     --primary-color-d-text: #ffffff;
 
@@ -138,7 +139,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     overflow-y: auto;
 }
 .scroll::-webkit-scrollbar {
-    width: 6px;
+    width: 3px;
     background: var(--dark-l);
     border-radius: var(--border-radius);
 }
