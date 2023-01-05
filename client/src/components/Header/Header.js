@@ -13,14 +13,20 @@ function Header() {
   const user = useSelector((store) => store.user);
   const [loginView, setloginView] = useState(false);
 
-  //g login modal control
+  /**
+   * g login modal control
+   *
+   * @param {Event} e
+   */
   const loginWrapHandler = (e) => {
     e.preventDefault();
 
     setloginView(!loginView);
   };
 
-  //g logout
+  /**
+   * g logout
+   */
   const logoutFn = () => {
     removeAuth();
     dispatch(logoutUser());

@@ -1,7 +1,31 @@
 import { AiOutlinePlus as Plus } from "react-icons/ai";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 function BoardSettings() {
+  const [boardList, setBoardList] = useState([]);
+
+  /**
+   * g 게시판 메뉴리스트 요청함수
+   */
+  const getBoardList = async () => {
+    try {
+      const json = await axios.get("/apis/board");
+      const boardData = json.data;
+
+      setBoardList(boardData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getBoardList();
+  }, []);
+
+  console.log(boardList);
+
   return (
     <BoardSettingSection className="scroll">
       <h2 className="normalText mb15">게시판 메뉴설정</h2>

@@ -9,7 +9,7 @@ apis.use(bodyParser.json());
 apis.use(bodyParser.urlencoded({ extended: true }));
 
 /**
- * * delete refresh token
+ * g delete refresh token
  */
 apis.delete("/", (req, res) => {
   const hashIdx = getCookie(req.headers.cookie, "refreshToken");
@@ -30,7 +30,7 @@ apis.delete("/", (req, res) => {
 });
 
 /**
- * * token 유효성 검사, refreshToken만 있는경우 token 재발급
+ * g token 유효성 검사, refreshToken만 있는경우 token 재발급
  */
 apis.get("/check-token", (req, res) => {
   const { authorization } = req.headers;
