@@ -13,10 +13,10 @@ apis.use(bodyParser.urlencoded({ extended: true }));
 apis.get("/", (req, res) => {
   db.query(
     `SELECT map.board AS idx, map.position, board.title, board.depth, parent.idx AS parentIdx, parent_map.position AS parentPosition 
-    FROM board_map map 
-    INNER JOIN board board ON map.board=board.idx 
-    LEFT JOIN board parent ON map.parent=parent.idx 
-    LEFT JOIN board_map parent_map ON parent_map.board=parent.idx 
+    FROM board_map map -- //g 게시판 계층, 순서정보
+    INNER JOIN board board ON map.board=board.idx -- //g 게시판 정보
+    LEFT JOIN board parent ON map.parent=parent.idx -- //g 부모 게시판 정보
+    LEFT JOIN board_map parent_map ON parent_map.board=parent.idx -- //g 부모 게시판 계층, 순서정보
     WHERE map.delete_datetime IS NULL`,
     (err, data) => {
       if (err)
