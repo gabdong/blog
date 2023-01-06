@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import BoardSettings from "./BoardSettings";
+import BoardSettings from "./BoardSettings/BoardSettings";
 
 function Settings() {
   return (

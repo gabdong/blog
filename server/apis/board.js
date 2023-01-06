@@ -12,36 +12,33 @@ apis.use(bodyParser.urlencoded({ extended: true }));
  */
 apis.get("/", (req, res) => {
   db.query(
-    `SELECT map.board AS idx, map.position, board.title, board.depth, parent.idx AS parentIdx, parent_map.position AS parentPosition 
-    FROM board_map map -- //g 게시판 계층, 순서정보
-    INNER JOIN board board ON map.board=board.idx -- //g 게시판 정보
-    LEFT JOIN board parent ON map.parent=parent.idx -- //g 부모 게시판 정보
-    LEFT JOIN board_map parent_map ON parent_map.board=parent.idx -- //g 부모 게시판 계층, 순서정보
-    WHERE map.delete_datetime IS NULL`,
+    `SELECT idx, depth, parent, position, auth, title 
+    FROM board 
+    WHERE delete_datetime IS NULL 
+    ORDER BY depth ASC`,
     (err, data) => {
-      if (err)
-        res.status(500).json({ msg: "게시판 메뉴 요청을 실패하였습니다." });
-      const returnData = [];
-      for (const boardData of data) {
-        const { idx, position, title, depth, parentIdx, parentPosition } =
-          boardData;
+      if (err) res.status(500).json({msg: '게시판 메뉴리스트 요청을 실패하였습니다.'});
 
-        if (depth == 1) {
-          returnData[position] = {
-            idx,
-            title,
-            child: [],
+      const boardData = {};
+      for (const menu of data) {
+        const {idx, depth, parent, position, auth, title} = menu;
+
+        if (depth === 1) {
+          boardData[idx] = {
+            position, auth, title, child: {}
           };
         } else {
-          const parentData = returnData[parentPosition];
+          const parentData = boardData[parent];
 
-          if (parentIdx === parentData.idx) {
-            parentData.child[position] = { idx, title };
+          if (parentData) {
+            parentData.child[idx] = {
+              parent, position, auth, title
+            }
           }
         }
       }
 
-      res.json(returnData);
+      res.json(boardData);
     }
   );
 });
