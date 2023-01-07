@@ -148,6 +148,9 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     border-radius: var(--border-radius);
 }
 
+.w100 { width: 100% }
+.h100 { height: 100% }
+
 .m0 { margin: 0px; }
 .m5 { margin: 5px; }
 .m10 { margin: 10px; }

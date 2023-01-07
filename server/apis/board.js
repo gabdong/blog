@@ -17,23 +17,34 @@ apis.get("/", (req, res) => {
     WHERE delete_datetime IS NULL 
     ORDER BY depth ASC`,
     (err, data) => {
-      if (err) res.status(500).json({msg: '게시판 메뉴리스트 요청을 실패하였습니다.'});
+      if (err)
+        res
+          .status(500)
+          .json({ msg: "게시판 메뉴리스트 요청을 실패하였습니다." });
 
       const boardData = {};
       for (const menu of data) {
-        const {idx, depth, parent, position, auth, title} = menu;
+        const { idx, depth, parent, position, auth, title } = menu;
 
         if (depth === 1) {
           boardData[idx] = {
-            position, auth, title, child: {}
+            position,
+            auth,
+            title,
+            child: {},
+            depth,
           };
         } else {
           const parentData = boardData[parent];
 
           if (parentData) {
             parentData.child[idx] = {
-              parent, position, auth, title
-            }
+              parent,
+              position,
+              auth,
+              title,
+              depth,
+            };
           }
         }
       }

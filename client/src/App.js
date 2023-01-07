@@ -11,7 +11,7 @@ import { loginUser } from "./modules/user";
 
 function App() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -25,13 +25,13 @@ function App() {
         dispatch(loginUser(user));
       } catch (err) {}
 
-      setLoading(true);
+      setLoading(false);
     })();
   }, [dispatch]);
 
   return (
     <Wrapper id="wrapper">
-      {loading ? (
+      {loading ? null : (
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
           <Main>
@@ -39,7 +39,7 @@ function App() {
             <Pages />
           </Main>
         </Router>
-      ) : null}
+      )}
     </Wrapper>
   );
 }

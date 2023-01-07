@@ -2,18 +2,23 @@ import { AiOutlinePlus as Plus } from "react-icons/ai";
 import { AiOutlineMinus as Minus } from "react-icons/ai";
 import styled from "styled-components";
 
-function BoardSettingItem() {
-    return (
-        <BoardSettingItemSt className="boardSettingItem">
-            <p className="normalText">Board</p>
-            <Plus className="addBoardCategoryBtn" />
-            <Minus className="addBoardCategoryBtn" />
-        </BoardSettingItemSt>
-    );
+//TODO auth설정 추가
+function BoardSettingItem({ text, edit, depth }) {
+  console.log(depth);
+  return (
+    <BoardSettingItemSt
+      className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
+    >
+      <p className="normalText">{text}</p>
+      <SettingBtnWrapSt>
+        <Plus className="addBoardCategoryBtn" />
+        {edit ? <Minus className="addBoardCategoryBtn" /> : null}
+      </SettingBtnWrapSt>
+    </BoardSettingItemSt>
+  );
 }
 
 const BoardSettingItemSt = styled.div`
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -28,8 +33,17 @@ const BoardSettingItemSt = styled.div`
     background: var(--primary-color-d);
   }
 
+  &.child {
+    margin-left: 20px;
+  }
+
   .addBoardCategoryBtn {
     cursor: pointer;
   }
+`;
+
+const SettingBtnWrapSt = styled.div`
+  display: flex;
+  gap: 5px;
 `;
 export default BoardSettingItem;
