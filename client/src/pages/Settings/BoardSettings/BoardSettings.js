@@ -87,7 +87,6 @@ function BoardSettings() {
     return renderList;
   };
 
-  console.log(boardList);
   return (
     <div className="h100">
       {loading ? null : (
@@ -108,7 +107,7 @@ const BoardSettingSection = styled.section`
 `;
 const BoardSettingWrap = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
   width: 100%;
   max-width: 860px;
