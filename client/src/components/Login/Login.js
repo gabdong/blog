@@ -18,7 +18,7 @@ function Login({ wrapHandler }) {
     setPassword(e.target.value);
   };
 
-  //g login
+  //* login
   const loginFn = async (e, id, password) => {
     e.preventDefault();
 

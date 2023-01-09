@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 //TODO auth설정 추가
 function BoardSettingItem({ text, edit, depth }) {
-  console.log(depth);
   return (
     <BoardSettingItemSt
       className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}

@@ -15,6 +15,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
+      //* 권환 확인
       try {
         const authCheck = await checkToken();
         const accessToken = authCheck.data.newAccessToken;

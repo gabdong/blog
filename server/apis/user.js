@@ -9,11 +9,11 @@ const md5 = require("md5");
 apis.use(bodyParser.json());
 apis.use(bodyParser.urlencoded({ extended: true }));
 
-//g 로그인
+//* 로그인
 apis.post("/login", (req, res) => {
   const { id, password } = req.body;
 
-  //g 로그인 정보 확인
+  //* 로그인 정보 확인
   db.query(
     `SELECT idx, id, name, phone, email 
     FROM member 
@@ -33,11 +33,11 @@ apis.post("/login", (req, res) => {
         const user = data[0];
         const { idx } = user;
 
-        //g Token 발행
+        //* Token 발행
         const accessToken = token().access(idx);
         const refreshToken = token().refresh(idx);
 
-        //g refreshToken 저장
+        //* refreshToken 저장
         db.query(
           `SELECT hash_idx 
           FROM auth 
@@ -50,7 +50,7 @@ apis.post("/login", (req, res) => {
                 .status(500)
                 .json({ msg: "토큰검색을 실패하였습니다." });
             if (data.length > 0) {
-              //g 이미 refresh token 정보 저장되어있을경우 update
+              //* 이미 refresh token 정보 저장되어있을경우 update
               hashIdx = data[0].hash_idx;
 
               db.query(
@@ -70,7 +70,7 @@ apis.post("/login", (req, res) => {
                 }
               );
             } else {
-              //g refresh token 정보 없을경우 insert
+              //* refresh token 정보 없을경우 insert
               db.query(
                 `INSERT INTO auth SET 
                 refresh_token='${refreshToken}', 
@@ -112,7 +112,7 @@ apis.post("/login", (req, res) => {
   );
 });
 
-//g get user info
+//* get user info
 apis.get("/:id", (req, res) => {
   const { id } = req.params;
 

@@ -27,7 +27,7 @@ function BoardSettings() {
   }, []);
 
   /**
-   * 게시판 순서에 맞게 랜더링 해주는 함수
+   * * 게시판 순서에 맞게 랜더링 해주는 함수
    *
    * @param {Object} data
    *
@@ -38,15 +38,25 @@ function BoardSettings() {
   const renderBoardList = (data) => {
     const renderList = [];
 
+    // depth1,2의 position은 별도이지만 출력배열은 하나이기때문에 index 계산을 하기위한 변수
+    let childTotalCnt = 0;
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
       const { position, title, child, depth } = boardData;
       const childCnt = Object.keys(child).length;
+      const newPosition = position + childTotalCnt;
 
-      const sumCnt = renderList.length;
-      const newPosition = position + sumCnt;
+      //* depth1
+      renderList[newPosition] = (
+        <BoardSettingItem
+          key={boardIdx}
+          text={title}
+          edit={true}
+          depth={depth}
+        />
+      );
 
-      //g depth2
+      //* depth2
       if (childCnt > 0) {
         for (const [childIdx, childData] of Object.entries(child)) {
           const {
@@ -59,7 +69,7 @@ function BoardSettings() {
 
           if (parent === Number(boardIdx)) {
             // parent menu가 있기때문에 +1 해줌
-            const newChildPosition = childPosition + sumCnt + 1;
+            const newChildPosition = position + childPosition + childTotalCnt + 1;
 
             renderList[newChildPosition] = (
               <BoardSettingItem
@@ -71,17 +81,9 @@ function BoardSettings() {
             );
           }
         }
-      }
 
-      //g depth1
-      renderList[newPosition] = (
-        <BoardSettingItem
-          key={boardIdx}
-          text={title}
-          edit={true}
-          depth={depth}
-        />
-      );
+        childTotalCnt += childCnt;
+      }
     }
 
     return renderList;

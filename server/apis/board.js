@@ -7,9 +7,7 @@ const db = require("../config/db");
 apis.use(bodyParser.json());
 apis.use(bodyParser.urlencoded({ extended: true }));
 
-/**
- * g 게시판 메뉴리스트 요청
- */
+//* 게시판 메뉴리스트 요청
 apis.get("/", (req, res) => {
   db.query(
     `SELECT idx, depth, parent, position, auth, title 

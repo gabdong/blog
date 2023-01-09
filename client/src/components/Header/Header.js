@@ -14,7 +14,7 @@ function Header() {
   const [loginView, setloginView] = useState(false);
 
   /**
-   * g login modal control
+   * * login modal control
    *
    * @param {Event} e
    */
@@ -25,7 +25,7 @@ function Header() {
   };
 
   /**
-   * g logout
+   * * logout
    */
   const logoutFn = () => {
     removeAuth();
@@ -43,16 +43,16 @@ function Header() {
 
   return (
     <HeaderSt id="header">
-      {/* //g Logo */}
+      {/* //* Logo */}
       <Link to="/">
         <Logo id="logo">Gabdong</Logo>
       </Link>
       <HeaderBtnWrap>
-        {/* //g Search Btn */}
+        {/* //* Search Btn */}
         <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
-        {/* //g login Btn */}
+        {/* //* login Btn */}
         <HeaderBtn
           className="buttonText"
           onClick={!user.isLogin ? loginWrapHandler : logoutFn}
@@ -63,7 +63,7 @@ function Header() {
           테스트
         </HeaderBtn>
       </HeaderBtnWrap>
-      {/* //g loginWrap */}
+      {/* //* loginWrap */}
       {loginView ? <Login wrapHandler={loginWrapHandler}></Login> : null}
     </HeaderSt>
   );
