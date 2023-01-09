@@ -16,7 +16,7 @@ apis.post("/login", (req, res) => {
   //* 로그인 정보 확인
   db.query(
     `SELECT idx, id, name, phone, email 
-    FROM member 
+    FROM members 
     WHERE id='${id}' 
     AND password='${password}'`,
     (err, data) => {
@@ -40,7 +40,7 @@ apis.post("/login", (req, res) => {
         //* refreshToken 저장
         db.query(
           `SELECT hash_idx 
-          FROM auth 
+          FROM tokens 
           WHERE member='${idx}'`,
           (err, data) => {
             let hashIdx;
@@ -54,7 +54,7 @@ apis.post("/login", (req, res) => {
               hashIdx = data[0].hash_idx;
 
               db.query(
-                `UPDATE auth 
+                `UPDATE tokens 
                 SET refresh_token='${refreshToken}' 
                 WHERE hash_idx='${hashIdx}'`,
                 (err, data) => {
@@ -72,7 +72,7 @@ apis.post("/login", (req, res) => {
             } else {
               //* refresh token 정보 없을경우 insert
               db.query(
-                `INSERT INTO auth SET 
+                `INSERT INTO tokens SET 
                 refresh_token='${refreshToken}', 
                 member='${idx}'`,
                 (err, data) => {
@@ -87,7 +87,7 @@ apis.post("/login", (req, res) => {
                   );
 
                   db.query(
-                    `UPDATE auth SET 
+                    `UPDATE tokens SET 
                     hash_idx='${hashIdx}' 
                     WHERE idx=${insertId}`,
                     (err, data) => {
@@ -117,7 +117,9 @@ apis.get("/:id", (req, res) => {
   const { id } = req.params;
 
   db.query(
-    `SELECT idx, name, id, phone, email FROM member WHERE id='${id}'`,
+    `SELECT idx, name, id, phone, email 
+    FROM members 
+    WHERE id='${id}'`,
     (err, data) => {
       if (err) return res.status(500).json({ msg: err });
 

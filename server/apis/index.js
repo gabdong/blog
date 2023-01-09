@@ -1,8 +1,8 @@
 const express = require("express");
 const apis = express();
 
-apis.use("/user", require("./user.js"));
-apis.use("/auth", require("./auth.js"));
-apis.use("/board", require("./board.js"));
+apis.use("/users", require("./users.js"));
+apis.use("/tokens", require("./tokens.js"));
+apis.use("/boards", require("./boards.js"));
 
 module.exports = apis;

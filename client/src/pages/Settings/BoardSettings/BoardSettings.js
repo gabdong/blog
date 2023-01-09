@@ -4,7 +4,7 @@ import axios from "axios";
 import BoardSettingItem from "./BoardSettingItem";
 
 function BoardSettings() {
-  const [boardList, setBoardList] = useState([]);
+  const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
 
   /**
@@ -12,7 +12,7 @@ function BoardSettings() {
    */
   const getBoardList = async () => {
     try {
-      const json = await axios.get("/apis/board");
+      const json = await axios.get("/apis/boards");
       const boardData = json.data;
 
       setBoardList(boardData);
@@ -38,8 +38,12 @@ function BoardSettings() {
   const renderBoardList = (data) => {
     const renderList = [];
 
-    // depth1,2의 position은 별도이지만 출력배열은 하나이기때문에 index 계산을 하기위한 변수
+    /**
+     * * depth1,2의 position은 별도이지만 출력배열은 하나이기때문에 
+     * * index 계산을 하기위한 변수
+     */
     let childTotalCnt = 0;
+
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
       const { position, title, child, depth } = boardData;
@@ -53,6 +57,9 @@ function BoardSettings() {
           text={title}
           edit={true}
           depth={depth}
+          idx={boardIdx}
+          boardList={boardList}
+          boardListHandler={setBoardList}
         />
       );
 
@@ -77,6 +84,9 @@ function BoardSettings() {
                 text={childTitle}
                 edit={true}
                 depth={childDepth}
+                idx={childIdx}
+                boardList={boardList}
+                boardListHandler={setBoardList}
               />
             );
           }
@@ -95,7 +105,7 @@ function BoardSettings() {
         <BoardSettingSection className="scroll">
           <h2 className="normalText mb15">게시판 메뉴설정</h2>
           <BoardSettingWrap className="scroll">
-            <BoardSettingItem text="메뉴 추가" edit={false} />
+            <BoardSettingItem text="메뉴 추가" edit={false} boardListHandler={setBoardList} boardList={boardList}/>
             {renderBoardList(boardList)}
           </BoardSettingWrap>
         </BoardSettingSection>

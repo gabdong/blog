@@ -11,7 +11,7 @@ apis.use(bodyParser.urlencoded({ extended: true }));
 apis.get("/", (req, res) => {
   db.query(
     `SELECT idx, depth, parent, position, auth, title 
-    FROM board 
+    FROM boards 
     WHERE delete_datetime IS NULL 
     ORDER BY depth ASC`,
     (err, data) => {

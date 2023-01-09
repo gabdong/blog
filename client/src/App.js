@@ -5,7 +5,7 @@ import "./App.css";
 import Nav from "./components/Nav/Nav.js";
 import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
-import { checkToken } from "./apis/auth";
+import { checkToken } from "./apis/tokens";
 import { useDispatch } from "react-redux";
 import { loginUser } from "./modules/user";
 
@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      //* 권환 확인
+      //* 권한 확인
       try {
         const authCheck = await checkToken();
         const accessToken = authCheck.data.newAccessToken;
@@ -24,7 +24,9 @@ function App() {
         user.isLogin = true;
 
         dispatch(loginUser(user));
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+      }
 
       setLoading(false);
     })();

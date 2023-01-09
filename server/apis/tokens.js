@@ -8,14 +8,12 @@ const token = require("../config/jwt");
 apis.use(bodyParser.json());
 apis.use(bodyParser.urlencoded({ extended: true }));
 
-/**
- * g delete refresh token
- */
+//* refresh token 삭제
 apis.delete("/", (req, res) => {
   const hashIdx = getCookie(req.headers.cookie, "refreshToken");
 
   db.query(
-    `DELETE FROM auth
+    `DELETE FROM tokens
     WHERE hash_idx='${hashIdx}'`,
     (err, data) => {
       if (err) res.status(500).json({ msg: "토큰정보 삭제를 실패하였습니다." });
@@ -29,9 +27,7 @@ apis.delete("/", (req, res) => {
   );
 });
 
-/**
- * g token 유효성 검사, refreshToken만 있는경우 token 재발급
- */
+//* token 유효성 검사, refreshToken만 있는경우 token 재발급
 apis.get("/check-token", (req, res) => {
   const { authorization } = req.headers;
   const accessToken = authorization?.split(" ")[1];
@@ -41,7 +37,7 @@ apis.get("/check-token", (req, res) => {
     const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
     db.query(
       `SELECT refresh_token 
-      FROM auth 
+      FROM tokens 
       WHERE hash_idx='${refreshTokenIdx}'`,
       (err, data) => {
         if (err)
@@ -59,7 +55,7 @@ apis.get("/check-token", (req, res) => {
 
         db.query(
           `SELECT idx, id, name, phone, email 
-          FROM member 
+          FROM members 
           WHERE idx=${idx}`,
           (err, data) => {
             if (err)
@@ -75,7 +71,7 @@ apis.get("/check-token", (req, res) => {
             const user = data[0];
 
             db.query(
-              `UPDATE auth SET 
+              `UPDATE tokens SET 
               refresh_token='${newRefreshToken}' 
               WHERE member='${idx}'`,
               (err, data) => {
@@ -86,7 +82,7 @@ apis.get("/check-token", (req, res) => {
 
                 db.query(
                   `SELECT hash_idx 
-                  FROM auth 
+                  FROM tokens 
                   WHERE member='${idx}'`,
                   (err, data) => {
                     if (err)

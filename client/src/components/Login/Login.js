@@ -11,6 +11,7 @@ function Login({ wrapHandler }) {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
+  //* id, password handler
   const idHandler = (e) => {
     setId(e.target.value);
   };
@@ -18,7 +19,13 @@ function Login({ wrapHandler }) {
     setPassword(e.target.value);
   };
 
-  //* login
+  /**
+   * * login
+   * 
+   * @param {Event} e 
+   * @param {String} id 
+   * @param {String} password 
+   */
   const loginFn = async (e, id, password) => {
     e.preventDefault();
 
@@ -31,7 +38,7 @@ function Login({ wrapHandler }) {
     }
 
     try {
-      const res = await axios.post("/apis/user/login", body);
+      const res = await axios.post("/apis/users/login", body);
       const { user, accessToken } = res.data;
 
       axios.defaults.headers.common.Authorization = accessToken;

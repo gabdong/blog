@@ -4,8 +4,8 @@ import { authCheckAxios } from "../utils/axios";
 /**
  * * 로그아웃시 권한을 제거해주는 함수
  */
-export function removeAuth() {
-  axios.delete("/apis/auth");
+export function removeToken() {
+  axios.delete("/apis/tokens");
   axios.defaults.headers.common["Authorization"] = "";
 }
 
@@ -16,7 +16,7 @@ export function removeAuth() {
  */
 export async function checkToken() {
   try {
-    const result = await authCheckAxios.get("/apis/auth/check-token");
+    const result = await authCheckAxios.get("/apis/tokens/check-token");
 
     return result;
   } catch (err) {

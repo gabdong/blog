@@ -13,7 +13,7 @@ function Pages() {
         <Route path="/board" element={<Board />} />
         <Route
           path="/settings"
-          element={<PrivateRoute component={<Settings />}></PrivateRoute>}
+          element={<PrivateRoute component={<Settings />} />}
         />
       </Routes>
     </PagesSt>

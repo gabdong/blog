@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Login from "../Login/Login";
 import { logoutUser } from "../../modules/user";
-import { removeAuth } from "../../apis/auth";
+import { removeToken } from "../../apis/tokens";
 import axios from "../../utils/axios";
 
 function Header() {
@@ -28,7 +28,7 @@ function Header() {
    * * logout
    */
   const logoutFn = () => {
-    removeAuth();
+    removeToken();
     dispatch(logoutUser());
   };
 
@@ -36,7 +36,7 @@ function Header() {
   const test = () => {
     window.localStorage.clear();
     const body = { test: "test", checkAuth: true };
-    axios.post("/apis/user/test", body).then((res) => {
+    axios.post("/apis/users/test", body).then((res) => {
       console.log(res);
     });
   };
