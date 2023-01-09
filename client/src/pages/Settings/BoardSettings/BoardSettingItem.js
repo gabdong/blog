@@ -56,7 +56,7 @@ function BoardSettingItem({ text, edit, depth, idx = 0, parent = 0, boardList, b
       className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
       id={`boardSettingItem_${idx}`}
     >
-      {editing ? <input type="text" id={`boardEditInput_${idx}`} value={editingText} onChange={editingTextHandler} ref={boardEditInput}/> : <p className="normalText">{text}</p>}
+      {editing ? <input type="text" className="inputText" id={`boardEditInput_${idx}`} value={editingText} onChange={editingTextHandler} ref={boardEditInput} autocomplete="off"/> : <p className="normalText">{editingText}</p>}
 
       {/* //* 버튼영역 */}
       <SettingBtnWrapSt>
