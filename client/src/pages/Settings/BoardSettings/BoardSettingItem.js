@@ -77,6 +77,7 @@ const BoardSettingItemSt = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   height: 40px;
   padding: 0 14px;
   border-radius: var(--border-radius);
@@ -88,6 +89,7 @@ const BoardSettingItemSt = styled.div`
   }
 
   &.child {
+    width: calc(100% - 20px);
     margin-left: 20px;
   }
 

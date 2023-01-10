@@ -6,7 +6,7 @@ const token = () => {
   return {
     access(idx) {
       return jwt.sign({ idx }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "15m",
       });
     },
     refresh(idx) {

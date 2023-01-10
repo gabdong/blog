@@ -120,10 +120,10 @@ const BoardSettingSection = styled.section`
 const BoardSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   max-width: 860px;
-  height: 300px;
   padding: 0 14px 0 0;
   border-radius: var(--border-radius);
 `;
