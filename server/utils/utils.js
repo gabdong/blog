@@ -1,5 +1,5 @@
 /**
- * @category Get HTTP header cookie
+ * * Get HTTP header cookie
  *
  * @param {String} str : cookie string
  * @param {String} target : target key

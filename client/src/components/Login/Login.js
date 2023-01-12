@@ -23,10 +23,10 @@ function Login({ wrapHandler }) {
 
   /**
    * * login
-   * 
-   * @param {Event} e 
-   * @param {String} id 
-   * @param {String} password 
+   *
+   * @param {Event} e
+   * @param {String} id
+   * @param {String} password
    */
   const loginFn = async (e, id, password) => {
     e.preventDefault();

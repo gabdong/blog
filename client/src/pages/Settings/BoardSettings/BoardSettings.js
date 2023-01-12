@@ -41,7 +41,7 @@ function BoardSettings() {
     const renderList = [];
 
     /**
-     * * depth1,2의 position은 별도이지만 출력배열은 하나이기때문에 
+     * * depth1,2의 position은 별도이지만 출력배열은 하나이기때문에
      * * index 계산을 하기위한 변수
      */
     let childTotalCnt = 0;
@@ -78,7 +78,8 @@ function BoardSettings() {
 
           if (parent === Number(boardIdx)) {
             // parent menu가 있기때문에 +1 해줌
-            const newChildPosition = position + childPosition + childTotalCnt + 1;
+            const newChildPosition =
+              position + childPosition + childTotalCnt + 1;
 
             renderList[newChildPosition] = (
               <BoardSettingItem
@@ -107,7 +108,12 @@ function BoardSettings() {
         <BoardSettingSection className="scroll">
           <h2 className="normalText mb15">게시판 메뉴설정</h2>
           <BoardSettingWrap className="scroll">
-            <BoardSettingItem text="메뉴 추가" edit={false} boardListHandler={setBoardList} boardList={boardList}/>
+            <BoardSettingItem
+              text="메뉴 추가"
+              edit={false}
+              boardListHandler={setBoardList}
+              boardList={boardList}
+            />
             {renderBoardList(boardList)}
           </BoardSettingWrap>
         </BoardSettingSection>

@@ -20,9 +20,9 @@ function Header() {
    *
    * @param {Event} e
    */
-  const loginWrapHandler =(e) => {
+  const loginWrapHandler = (e) => {
     e.preventDefault();
-    
+
     setloginView(!loginView);
   };
 
