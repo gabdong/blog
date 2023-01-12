@@ -3,14 +3,17 @@ import { MdDelete as Delete } from "react-icons/md";
 import { MdModeEditOutline as Edit } from "react-icons/md";
 import { MdDone as Done }from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
-import { axios } from "../../../utils/axios"
 import styled from "styled-components";
+import { axios } from "../../../utils/axios"
+
 
 //TODO auth설정 추가
 function BoardSettingItem({ text, edit, depth, idx = 0, parent = 0, boardList, boardListHandler }) {
   const [editing, setEditing] = useState(false);
   const [editingText, setEditingText] = useState(text);
   const boardEditInput = useRef(null);
+
+  //* 게시판 이름 변경
   const editingTextHandler = (e) => {
     const { value } = e.target;
 
@@ -56,7 +59,7 @@ function BoardSettingItem({ text, edit, depth, idx = 0, parent = 0, boardList, b
       className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
       id={`boardSettingItem_${idx}`}
     >
-      {editing ? <input type="text" className="inputText" id={`boardEditInput_${idx}`} value={editingText} onChange={editingTextHandler} ref={boardEditInput} autocomplete="off"/> : <p className="normalText">{editingText}</p>}
+      {editing ? <input type="text" className="inputText" id={`boardEditInput_${idx}`} value={editingText} onChange={editingTextHandler} ref={boardEditInput} autoComplete="off"/> : <p className="normalText">{editingText}</p>}
 
       {/* //* 버튼영역 */}
       <SettingBtnWrapSt>

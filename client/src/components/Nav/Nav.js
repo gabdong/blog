@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import NavBtn from "./NavBtn.js";
 import { useSelector } from "react-redux";
+
+import NavBtn from "./NavBtn.js";
 
 function Nav() {
   const user = useSelector((store) => store.user);

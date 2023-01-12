@@ -5,6 +5,8 @@ const instance = axios.create({
   timeout: 1000,
   withCredentials: true,
 });
+
+//* axios instance로 token 검증 요청시 무한루프 문제가 생겨 token검증용 axios instance 생성
 export const authCheckAxios = axios.create({
   timeout: 1000,
   withCredentials: true,
@@ -31,10 +33,10 @@ instance.interceptors.request.use(
 
         return config;
       } else if (status === 401) {
-        const authError = new Error(msg);
-        authError.code = 401;
+        const error = new Error(msg);
+        error.code = 401;
 
-        throw authError;
+        throw error;
       }
     }
 

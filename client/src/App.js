@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+
+import { checkToken } from "./apis/tokens";
+import { loginUser } from "./modules/user";
+
 import "./App.css";
 import Nav from "./components/Nav/Nav.js";
 import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
-import { checkToken } from "./apis/tokens";
-import { useDispatch } from "react-redux";
-import { loginUser } from "./modules/user";
 
 function App() {
   const dispatch = useDispatch();

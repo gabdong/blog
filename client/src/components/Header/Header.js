@@ -1,12 +1,14 @@
 import { FaSearch as Search } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import Login from "../Login/Login";
-import { logoutUser } from "../../modules/user";
-import { removeToken } from "../../apis/tokens";
 import axios from "../../utils/axios";
+
+import { removeToken } from "../../apis/tokens";
+import { logoutUser } from "../../modules/user";
+
+import Login from "../Login/Login";
 
 function Header() {
   const dispatch = useDispatch();
@@ -18,9 +20,9 @@ function Header() {
    *
    * @param {Event} e
    */
-  const loginWrapHandler = (e) => {
+  const loginWrapHandler =(e) => {
     e.preventDefault();
-
+    
     setloginView(!loginView);
   };
 

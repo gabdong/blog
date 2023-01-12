@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+
 import BoardSettingItem from "./BoardSettingItem";
 
 function BoardSettings() {
@@ -8,6 +9,7 @@ function BoardSettings() {
   const [loading, setLoading] = useState(true);
 
   /**
+   * TODO apis 로 옮기기
    * * 게시판 메뉴리스트 요청함수
    */
   const getBoardList = async () => {

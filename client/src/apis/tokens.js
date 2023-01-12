@@ -20,8 +20,9 @@ export async function checkToken() {
 
     return result;
   } catch (err) {
-    const error = { status: err.response.status, msg: err.response.data.msg };
+    const error = new Error(err.response.data.msg);
+    error.code = err.response.status;
 
-    return error;
+    throw error;
   }
 }

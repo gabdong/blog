@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../modules/user";
-import Button from "../Button/Button";
+import { authCheckAxios } from "../../utils/axios"; // token 검증용 axios
 import axios from "../../utils/axios";
-import { authCheckAxios } from "../../utils/axios";
+
+import { loginUser } from "../../modules/user";
+
+import Button from "../Button/Button";
 
 function Login({ wrapHandler }) {
   const dispatch = useDispatch();
