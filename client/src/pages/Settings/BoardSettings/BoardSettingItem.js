@@ -15,8 +15,10 @@ function BoardSettingItem({
   parent = 0,
   boardList,
   boardListHandler,
+  child,
 }) {
   const [editing, setEditing] = useState(false);
+  const [prevTitle, setPrevTitle] = useState(title);
   const [editedTitle, setEditedTitle] = useState(title);
   const boardEditInput = useRef(null);
 
@@ -35,6 +37,8 @@ function BoardSettingItem({
 
   //* 게시판 수정 적용
   const updateBoard = (e) => {
+    if (e.type === "keyup" && e.code !== "Enter") return;
+
     const item = e.target.closest(".boardSettingItem");
     const { idx, prevTitle } = item.dataset;
 
@@ -42,6 +46,7 @@ function BoardSettingItem({
       const body = { idx, title: editedTitle, checkAuth: true };
 
       axios.post("/apis/boards/", body).then(() => {
+        setPrevTitle(editedTitle);
         setEditing(!editing);
       });
     }
@@ -66,54 +71,70 @@ function BoardSettingItem({
   }, [editing]);
 
   return (
-    <BoardSettingItemSt
-      data-prev-title={title}
-      data-idx={idx}
-      className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
-      id={`boardSettingItem_${idx}`}
-    >
-      {editing ? (
-        <input
-          type="text"
-          className="inputText"
-          id={`boardEditInput_${idx}`}
-          value={editedTitle}
-          onChange={editingTextHandler}
-          ref={boardEditInput}
-          autoComplete="off"
-        />
-      ) : (
-        <p className="normalText">{editedTitle}</p>
-      )}
+    <BoardSttingItemWrap className="boardSttingItemWrap">
+      <BoardSettingItemSt
+        data-prev-title={prevTitle}
+        data-idx={idx}
+        className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
+        id={`boardSettingItem_${idx}`}
+      >
+        {editing ? (
+          <input
+            type="text"
+            className="inputText"
+            id={`boardEditInput_${idx}`}
+            value={editedTitle}
+            onChange={editingTextHandler}
+            onKeyUp={updateBoard}
+            ref={boardEditInput}
+            autoComplete="off"
+          />
+        ) : (
+          <p className="normalText">{editedTitle}</p>
+        )}
 
-      {/* //* 버튼영역 */}
-      <SettingBtnWrapSt>
-        {/* //* 게시판 설정아이템 추가버튼 */}
-        {depth !== 2 ? (
-          <Plus
-            className="boardSettingBtn addBoardSettingItemBtn"
-            onClick={addBoardSettingItem}
-          />
-        ) : null}
-        {/* //* 게시판 수정버튼 */}
-        {edit && !editing ? (
-          <Edit className="boardSettingBtn editBoardBtn" onClick={editBoard} />
-        ) : null}
-        {/* //* 게시판 수정적용 */}
-        {edit && editing ? (
-          <Done className="boardSettingBtn addBoardBtn" onClick={updateBoard} />
-        ) : null}
-        {/* //* 게시판 삭제버튼 */}
-        {edit ? (
-          <Delete
-            className="boardSettingBtn deleteBoardBtn"
-            onClick={deleteBoard}
-          />
-        ) : null}
-      </SettingBtnWrapSt>
-    </BoardSettingItemSt>
+        {/* //* 버튼영역 */}
+        <SettingBtnWrapSt>
+          {/* //* 게시판 설정아이템 추가버튼 */}
+          {depth !== 2 ? (
+            <Plus
+              className="boardSettingBtn addBoardSettingItemBtn"
+              onClick={addBoardSettingItem}
+            />
+          ) : null}
+          {/* //* 게시판 수정버튼 */}
+          {edit && !editing ? (
+            <Edit
+              className="boardSettingBtn editBoardBtn"
+              onClick={editBoard}
+            />
+          ) : null}
+          {/* //* 게시판 수정적용 */}
+          {edit && editing ? (
+            <Done
+              className="boardSettingBtn addBoardBtn"
+              onClick={updateBoard}
+            />
+          ) : null}
+          {/* //* 게시판 삭제버튼 */}
+          {edit ? (
+            <Delete
+              className="boardSettingBtn deleteBoardBtn"
+              onClick={deleteBoard}
+            />
+          ) : null}
+        </SettingBtnWrapSt>
+      </BoardSettingItemSt>
+      {child ? child : null}
+    </BoardSttingItemWrap>
   );
 }
+
+const BoardSttingItemWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 const BoardSettingItemSt = styled.div`
   display: flex;

@@ -45,12 +45,45 @@ function BoardSettings() {
      * * index 계산을 하기위한 변수
      */
     let childTotalCnt = 0;
-
+    let childWrapKey = 0;
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
       const { position, title, child, depth } = boardData;
-      const childCnt = Object.keys(child).length;
       const newPosition = position + childTotalCnt;
+
+      //* depth2
+      const childArr = [];
+      const childTmp = (
+        <div className="boardChildWrap" key={`childWrap_${childWrapKey}`}>
+          {Object.entries(child).map((childDataArr) => {
+            const [childIdx, childData] = childDataArr;
+            const {
+              position: childPosition,
+              parent,
+              // auth: childAuth,
+              depth: childDepth,
+              title: childTitle,
+            } = childData;
+
+            if (parent === Number(boardIdx)) {
+              childArr[childPosition] = (
+                <BoardSettingItem
+                  key={childIdx}
+                  title={childTitle}
+                  edit={true}
+                  depth={childDepth}
+                  idx={childIdx}
+                  boardList={boardList}
+                  boardListHandler={setBoardList}
+                />
+              );
+            }
+            return true;
+          })}
+
+          {childArr}
+        </div>
+      );
 
       //* depth1
       renderList[newPosition] = (
@@ -62,41 +95,11 @@ function BoardSettings() {
           idx={boardIdx}
           boardList={boardList}
           boardListHandler={setBoardList}
+          child={childTmp}
         />
       );
 
-      //* depth2
-      if (childCnt > 0) {
-        for (const [childIdx, childData] of Object.entries(child)) {
-          const {
-            position: childPosition,
-            parent,
-            // auth: childAuth,
-            depth: childDepth,
-            title: childTitle,
-          } = childData;
-
-          if (parent === Number(boardIdx)) {
-            // parent menu가 있기때문에 +1 해줌
-            const newChildPosition =
-              position + childPosition + childTotalCnt + 1;
-
-            renderList[newChildPosition] = (
-              <BoardSettingItem
-                key={childIdx}
-                title={childTitle}
-                edit={true}
-                depth={childDepth}
-                idx={childIdx}
-                boardList={boardList}
-                boardListHandler={setBoardList}
-              />
-            );
-          }
-        }
-
-        childTotalCnt += childCnt;
-      }
+      childWrapKey++;
     }
 
     return renderList;
