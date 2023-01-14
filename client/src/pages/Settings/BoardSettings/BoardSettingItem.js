@@ -47,9 +47,10 @@ function BoardSettingItem({
 
       axios.post("/apis/boards/", body).then(() => {
         setPrevTitle(editedTitle);
-        setEditing(!editing);
       });
     }
+
+    setEditing(!editing);
   };
 
   //* 게시판 수정
