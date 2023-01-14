@@ -14,6 +14,7 @@ apis.post("/login", (req, res) => {
   const { id, password } = req.body;
 
   //* 로그인 정보 확인
+  //TODO 보안처리
   db.query(
     `SELECT idx, id, name, phone, email 
     FROM members 
@@ -66,7 +67,7 @@ apis.post("/login", (req, res) => {
                     maxAge: 1000 * 60 * 60 * 24,
                     httpOnly: true,
                   });
-                  res.json({ user, accessToken });
+                  res.json({ msg: "SUCCESS", user, accessToken });
                 }
               );
             } else {
@@ -99,7 +100,7 @@ apis.post("/login", (req, res) => {
                         maxAge: 1000 * 60 * 60 * 24,
                         httpOnly: true,
                       });
-                      res.json({ user, accessToken });
+                      res.json({ msg: "SUCCESS", user, accessToken });
                     }
                   );
                 }
@@ -128,7 +129,7 @@ apis.get("/:id", (req, res) => {
       } else if (data.length !== 0) {
         const user = data[0];
 
-        res.json({ user });
+        res.json({ msg: "SUCCESS", user });
       }
     }
   );

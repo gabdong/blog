@@ -22,7 +22,7 @@ apis.delete("/", (req, res) => {
         httpOnly: true,
         maxAge: 0,
       });
-      res.send("Logout");
+      res.json({ msg: "SUCCESS" });
     }
   );
 });
@@ -96,7 +96,13 @@ apis.get("/check-token", (req, res) => {
                       maxAge: 1000 * 60 * 60 * 24,
                       httpOnly: true,
                     });
-                    res.json({ status: 200, newAccessToken, auth: true, user });
+                    res.json({
+                      msg: "SUCCESS",
+                      status: 200,
+                      newAccessToken,
+                      auth: true,
+                      user,
+                    });
                   }
                 );
               }
@@ -106,7 +112,7 @@ apis.get("/check-token", (req, res) => {
       }
     );
   } else {
-    res.json({ status: 200, auth: true });
+    res.json({ msg: "SUCCESS", status: 200, auth: true });
   }
 });
 

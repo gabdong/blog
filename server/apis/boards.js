@@ -52,4 +52,25 @@ apis.get("/", (req, res) => {
   );
 });
 
+//* 게시판 메뉴 추가
+//TODO 보안처리
+apis.post("/", (req, res) => {
+  const { idx, title } = req.body;
+
+  let updateQuery = "";
+
+  if (title) updateQuery = `title='${title}'`;
+
+  if (!updateQuery) res.status(204).json({ msg: "수정사항이 없습니다." });
+
+  db.query(
+    `UPDATE boards SET 
+    ${updateQuery} 
+    WHERE idx=${idx}`,
+    (err, data) => {
+      res.json({ msg: "SUCCESS" });
+    }
+  );
+});
+
 module.exports = apis;

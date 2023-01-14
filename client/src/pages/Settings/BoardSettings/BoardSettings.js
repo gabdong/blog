@@ -56,7 +56,7 @@ function BoardSettings() {
       renderList[newPosition] = (
         <BoardSettingItem
           key={boardIdx}
-          text={title}
+          title={title}
           edit={true}
           depth={depth}
           idx={boardIdx}
@@ -84,7 +84,7 @@ function BoardSettings() {
             renderList[newChildPosition] = (
               <BoardSettingItem
                 key={childIdx}
-                text={childTitle}
+                title={childTitle}
                 edit={true}
                 depth={childDepth}
                 idx={childIdx}
@@ -109,7 +109,7 @@ function BoardSettings() {
           <h2 className="normalText mb15">게시판 메뉴설정</h2>
           <BoardSettingWrap className="scroll">
             <BoardSettingItem
-              text="메뉴 추가"
+              title="메뉴 추가"
               edit={false}
               boardListHandler={setBoardList}
               boardList={boardList}

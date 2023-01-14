@@ -4,11 +4,11 @@ import { MdModeEditOutline as Edit } from "react-icons/md";
 import { MdDone as Done } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { axios } from "../../../utils/axios";
+import axios from "../../../utils/axios";
 
 //TODO auth설정 추가
 function BoardSettingItem({
-  text,
+  title,
   edit,
   depth,
   idx = 0,
@@ -17,14 +17,14 @@ function BoardSettingItem({
   boardListHandler,
 }) {
   const [editing, setEditing] = useState(false);
-  const [editingText, setEditingText] = useState(text);
+  const [editedTitle, setEditedTitle] = useState(title);
   const boardEditInput = useRef(null);
 
-  //* 게시판 이름 변경
+  //* 게시판 이름 handler
   const editingTextHandler = (e) => {
     const { value } = e.target;
 
-    setEditingText(value);
+    setEditedTitle(value);
   };
 
   //* 게시판 설정아이템 추가
@@ -33,12 +33,18 @@ function BoardSettingItem({
     btn.disabled = true;
   };
 
-  //* 게시판 추가
-  const addBoard = (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
+  //* 게시판 수정 적용
+  const updateBoard = (e) => {
+    const item = e.target.closest(".boardSettingItem");
+    const { idx, prevTitle } = item.dataset;
 
-    setEditing(!editing);
+    if (prevTitle !== editedTitle) {
+      const body = { idx, title: editedTitle, checkAuth: true };
+
+      axios.post("/apis/boards/", body).then(() => {
+        setEditing(!editing);
+      });
+    }
   };
 
   //* 게시판 수정
@@ -61,6 +67,8 @@ function BoardSettingItem({
 
   return (
     <BoardSettingItemSt
+      data-prev-title={title}
+      data-idx={idx}
       className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
       id={`boardSettingItem_${idx}`}
     >
@@ -69,13 +77,13 @@ function BoardSettingItem({
           type="text"
           className="inputText"
           id={`boardEditInput_${idx}`}
-          value={editingText}
+          value={editedTitle}
           onChange={editingTextHandler}
           ref={boardEditInput}
           autoComplete="off"
         />
       ) : (
-        <p className="normalText">{editingText}</p>
+        <p className="normalText">{editedTitle}</p>
       )}
 
       {/* //* 버튼영역 */}
@@ -91,9 +99,9 @@ function BoardSettingItem({
         {edit && !editing ? (
           <Edit className="boardSettingBtn editBoardBtn" onClick={editBoard} />
         ) : null}
-        {/* //* 게시판 추가버튼 */}
+        {/* //* 게시판 수정적용 */}
         {edit && editing ? (
-          <Done className="boardSettingBtn addBoardBtn" onClick={addBoard} />
+          <Done className="boardSettingBtn addBoardBtn" onClick={updateBoard} />
         ) : null}
         {/* //* 게시판 삭제버튼 */}
         {edit ? (
