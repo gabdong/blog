@@ -52,10 +52,10 @@ apis.get("/", (req, res) => {
   );
 });
 
-//* 게시판 메뉴 추가
-//TODO 보안처리
-apis.post("/", (req, res) => {
-  const { idx, title } = req.body;
+//* 게시판 메뉴 수정
+apis.post("/:idx", (req, res) => {
+  const { idx } = req.params;
+  const { title } = req.body;
 
   let updateQuery = "";
 

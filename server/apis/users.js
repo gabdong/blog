@@ -114,26 +114,26 @@ apis.post("/login", (req, res) => {
 });
 
 //* get user info
-apis.get("/:id", (req, res) => {
-  const { id } = req.params;
+// apis.get("/:id", (req, res) => {
+//   const { id } = req.params;
 
-  db.query(
-    `SELECT idx, name, id, phone, email 
-    FROM members 
-    WHERE id='${id}'`,
-    (err, data) => {
-      if (err) return res.status(500).json({ msg: err });
+//   db.query(
+//     `SELECT idx, name, id, phone, email 
+//     FROM members 
+//     WHERE id='${id}'`,
+//     (err, data) => {
+//       if (err) return res.status(500).json({ msg: err });
 
-      if (data.length === 0) {
-        res.status(404).json({ msg: "회원 정보를 찾을 수 없습니다." });
-      } else if (data.length !== 0) {
-        const user = data[0];
+//       if (data.length === 0) {
+//         res.status(404).json({ msg: "회원 정보를 찾을 수 없습니다." });
+//       } else if (data.length !== 0) {
+//         const user = data[0];
 
-        res.json({ msg: "SUCCESS", user });
-      }
-    }
-  );
-});
+//         res.json({ msg: "SUCCESS", user });
+//       }
+//     }
+//   );
+// });
 
 //! TEST
 apis.post("/test", (req, res) => {

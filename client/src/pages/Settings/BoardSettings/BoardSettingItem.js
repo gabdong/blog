@@ -37,15 +37,15 @@ function BoardSettingItem({
 
   //* 게시판 수정 적용
   const updateBoard = (e) => {
-    if (e.type === "keyup" && e.code !== "Enter") return;
+    if (e.type === "keyup" && (e.code !== "Enter" && e.code !== "NumpadEnter")) return;
 
     const item = e.target.closest(".boardSettingItem");
     const { idx, prevTitle } = item.dataset;
 
     if (prevTitle !== editedTitle) {
-      const body = { idx, title: editedTitle, checkAuth: true };
+      const body = { title: editedTitle, checkAuth: true };
 
-      axios.post("/apis/boards/", body).then(() => {
+      axios.post(`/apis/boards/${idx}`, body).then(() => {
         setPrevTitle(editedTitle);
       });
     }
@@ -65,6 +65,8 @@ function BoardSettingItem({
   const deleteBoard = (e) => {
     const btn = e.currentTarget;
     btn.disabled = true;
+
+    axios.delete('/apis/boards/:idx');
   };
 
   useEffect(() => {
