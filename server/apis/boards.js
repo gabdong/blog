@@ -16,7 +16,7 @@ apis.get("/", (req, res) => {
     ORDER BY depth ASC`,
     (err, data) => {
       if (err)
-        res
+        return res
           .status(500)
           .json({ msg: "게시판 메뉴리스트 요청을 실패하였습니다." });
 
@@ -61,13 +61,37 @@ apis.post("/:idx", (req, res) => {
 
   if (title) updateQuery = `title='${title}'`;
 
-  if (!updateQuery) res.status(204).json({ msg: "수정사항이 없습니다." });
+  if (!updateQuery) return res.status(204).json({ msg: "수정사항이 없습니다." });
 
   db.query(
     `UPDATE boards SET 
     ${updateQuery} 
     WHERE idx=${idx}`,
     (err, data) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ msg: "게시판 수정을 실패하였습니다." });
+
+      res.json({ msg: "SUCCESS" });
+    }
+  );
+});
+
+//* 게시판 메뉴 제거
+apis.delete(`/:idx`, (req, res) => {
+  const { idx } = req.params;
+
+  db.query(
+    `UPDATE boards SET 
+    delete_datetime=CURRENT_TIMESTAMP() 
+    WHERE idx=${idx}`, 
+    (err, data) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ msg: "게시판 제거를 실패하였습니다." });
+
       res.json({ msg: "SUCCESS" });
     }
   );

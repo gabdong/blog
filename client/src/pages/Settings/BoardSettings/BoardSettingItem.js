@@ -29,10 +29,18 @@ function BoardSettingItem({
     setEditedTitle(value);
   };
 
+  //* 게시판 수정모드 handler
+  const editingHandler = () => {
+    setEditing(!editing);
+  }
+
   //* 게시판 설정아이템 추가
   const addBoardSettingItem = (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
+    const item = e.target.closest(".boardSettingItem");
+    const childWrap = item.querySelector(".boardChildWrap");
+    const settingItem = (<BoardSettingItem />);
+
+    console.log(settingItem);
   };
 
   //* 게시판 수정 적용
@@ -53,20 +61,22 @@ function BoardSettingItem({
     setEditing(!editing);
   };
 
-  //* 게시판 수정
-  const editBoard = (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
-
-    setEditing(!editing);
-  };
-
   //* 게시판 삭제
   const deleteBoard = (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
+    if (!window.confirm('하위 게시판까지 삭제됩니다. 진행하시겠습니까?')) return;
 
-    axios.delete('/apis/boards/:idx');
+    const item = e.target.closest('.boardSettingItem');
+    const { idx } = item.dataset;
+
+    axios.delete(`/apis/boards/${idx}`, {
+      data: {
+        checkAuth: true
+      }
+    }).then((data) => {
+      item.remove();
+    }).catch((err) => {
+      console.error(err.response.data.msg);
+    });
   };
 
   useEffect(() => {
@@ -78,6 +88,7 @@ function BoardSettingItem({
       <BoardSettingItemSt
         data-prev-title={prevTitle}
         data-idx={idx}
+        data-parent={parent}
         className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
         id={`boardSettingItem_${idx}`}
       >
@@ -109,7 +120,7 @@ function BoardSettingItem({
           {edit && !editing ? (
             <Edit
               className="boardSettingBtn editBoardBtn"
-              onClick={editBoard}
+              onClick={editingHandler}
             />
           ) : null}
           {/* //* 게시판 수정적용 */}

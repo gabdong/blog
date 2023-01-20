@@ -73,8 +73,6 @@ function BoardSettings() {
                   edit={true}
                   depth={childDepth}
                   idx={childIdx}
-                  boardList={boardList}
-                  boardListHandler={setBoardList}
                 />
               );
             }
@@ -93,8 +91,6 @@ function BoardSettings() {
           edit={true}
           depth={depth}
           idx={boardIdx}
-          boardList={boardList}
-          boardListHandler={setBoardList}
           child={childTmp}
         />
       );
@@ -106,7 +102,7 @@ function BoardSettings() {
   };
 
   return (
-    <div className="h100">
+    <>
       {loading ? null : (
         <BoardSettingSection className="scroll">
           <h2 className="normalText mb15">게시판 메뉴설정</h2>
@@ -121,7 +117,7 @@ function BoardSettings() {
           </BoardSettingWrap>
         </BoardSettingSection>
       )}
-    </div>
+    </>
   );
 }
 
