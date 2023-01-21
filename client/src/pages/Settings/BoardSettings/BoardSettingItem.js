@@ -32,20 +32,21 @@ function BoardSettingItem({
   //* 게시판 수정모드 handler
   const editingHandler = () => {
     setEditing(!editing);
-  }
+  };
 
   //* 게시판 설정아이템 추가
   const addBoardSettingItem = (e) => {
     const item = e.target.closest(".boardSettingItem");
     const childWrap = item.querySelector(".boardChildWrap");
-    const settingItem = (<BoardSettingItem />);
+    const settingItem = <BoardSettingItem />;
 
     console.log(settingItem);
   };
 
   //* 게시판 수정 적용
   const updateBoard = (e) => {
-    if (e.type === "keyup" && (e.code !== "Enter" && e.code !== "NumpadEnter")) return;
+    if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter")
+      return;
 
     const item = e.target.closest(".boardSettingItem");
     const { idx, prevTitle } = item.dataset;
@@ -63,20 +64,24 @@ function BoardSettingItem({
 
   //* 게시판 삭제
   const deleteBoard = (e) => {
-    if (!window.confirm('하위 게시판까지 삭제됩니다. 진행하시겠습니까?')) return;
+    if (!window.confirm("하위 게시판까지 삭제됩니다. 진행하시겠습니까?"))
+      return;
 
-    const item = e.target.closest('.boardSettingItem');
+    const item = e.target.closest(".boardSettingItem");
     const { idx } = item.dataset;
 
-    axios.delete(`/apis/boards/${idx}`, {
-      data: {
-        checkAuth: true
-      }
-    }).then((data) => {
-      item.remove();
-    }).catch((err) => {
-      console.error(err.response.data.msg);
-    });
+    axios
+      .delete(`/apis/boards/${idx}`, {
+        data: {
+          checkAuth: true,
+        },
+      })
+      .then((data) => {
+        item.remove();
+      })
+      .catch((err) => {
+        console.error(err.response.data.msg);
+      });
   };
 
   useEffect(() => {

@@ -61,7 +61,8 @@ apis.post("/:idx", (req, res) => {
 
   if (title) updateQuery = `title='${title}'`;
 
-  if (!updateQuery) return res.status(204).json({ msg: "수정사항이 없습니다." });
+  if (!updateQuery)
+    return res.status(204).json({ msg: "수정사항이 없습니다." });
 
   db.query(
     `UPDATE boards SET 
@@ -69,9 +70,7 @@ apis.post("/:idx", (req, res) => {
     WHERE idx=${idx}`,
     (err, data) => {
       if (err)
-        return res
-          .status(500)
-          .json({ msg: "게시판 수정을 실패하였습니다." });
+        return res.status(500).json({ msg: "게시판 수정을 실패하였습니다." });
 
       res.json({ msg: "SUCCESS" });
     }
@@ -85,12 +84,10 @@ apis.delete(`/:idx`, (req, res) => {
   db.query(
     `UPDATE boards SET 
     delete_datetime=CURRENT_TIMESTAMP() 
-    WHERE idx=${idx}`, 
+    WHERE idx=${idx}`,
     (err, data) => {
       if (err)
-        return res
-          .status(500)
-          .json({ msg: "게시판 제거를 실패하였습니다." });
+        return res.status(500).json({ msg: "게시판 제거를 실패하였습니다." });
 
       res.json({ msg: "SUCCESS" });
     }
