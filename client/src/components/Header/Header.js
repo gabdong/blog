@@ -1,6 +1,6 @@
 import { FaSearch as Search } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import axios from "../../utils/axios";
@@ -17,7 +17,6 @@ function Header() {
 
   /**
    * * login modal control
-   *
    * @param {Event} e
    */
   const loginWrapHandler = (e) => {

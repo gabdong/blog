@@ -13,11 +13,12 @@ function BoardSettingItem({
   depth,
   idx = 0,
   parent = 0,
-  boardList,
-  boardListHandler,
+  boardList, // 게시판 리스트
+  boardListHandler, // 게시판 리스트 handler
   child,
+  isEditing, // 수정모드 활성화
 }) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(isEditing ? true : false);
   const [prevTitle, setPrevTitle] = useState(title);
   const [editedTitle, setEditedTitle] = useState(title);
   const boardEditInput = useRef(null);
@@ -34,16 +35,45 @@ function BoardSettingItem({
     setEditing(!editing);
   };
 
-  //* 게시판 설정아이템 추가
+  /**
+   * * 게시판 설정아이템 추가함수
+   * @param {Event} e
+   */
   const addBoardSettingItem = (e) => {
     const item = e.target.closest(".boardSettingItem");
-    const childWrap = item.querySelector(".boardChildWrap");
-    const settingItem = <BoardSettingItem />;
+    const parentIdx = Number(item.dataset.idx);
+    const targetObj = parentIdx === 0 ? boardList : boardList[parentIdx].child;
+    const depth = parentIdx === 0 ? 1 : 2;
+    const position = Object.keys(targetObj).length;
 
-    console.log(settingItem);
+    const body = { parentIdx, depth, position, checkAuth: true };
+    axios
+      .post("/apis/boards", body)
+      .then((data) => {
+        const { newIdx } = data.data;
+
+        targetObj[newIdx] = {
+          parent: parentIdx,
+          position: position,
+          auth: 0,
+          title: "새로운 게시판",
+          depth: depth,
+          isEditing: true,
+        };
+
+        if (parentIdx === 0) targetObj[newIdx].child = {};
+
+        boardListHandler({ ...boardList });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
-  //* 게시판 수정 적용
+  /**
+   * * 게시판 수정내용 적용 함수
+   * @param {Event} e
+   */
   const updateBoard = (e) => {
     if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter")
       return;
@@ -54,15 +84,23 @@ function BoardSettingItem({
     if (prevTitle !== editedTitle) {
       const body = { title: editedTitle, checkAuth: true };
 
-      axios.post(`/apis/boards/${idx}`, body).then(() => {
-        setPrevTitle(editedTitle);
-      });
+      axios
+        .post(`/apis/boards/${idx}`, body)
+        .then(() => {
+          setPrevTitle(editedTitle);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
 
     setEditing(!editing);
   };
 
-  //* 게시판 삭제
+  /**
+   * * 게시판 삭제 함수
+   * @param {Event} e
+   */
   const deleteBoard = (e) => {
     if (!window.confirm("하위 게시판까지 삭제됩니다. 진행하시겠습니까?"))
       return;
@@ -94,6 +132,7 @@ function BoardSettingItem({
         data-prev-title={prevTitle}
         data-idx={idx}
         data-parent={parent}
+        data-depth={depth}
         className={`boardSettingItem ${depth !== 1 && edit ? "child" : ""}`}
         id={`boardSettingItem_${idx}`}
       >
@@ -152,7 +191,6 @@ function BoardSettingItem({
 const BoardSttingItemWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
 `;
 
 const BoardSettingItemSt = styled.div`

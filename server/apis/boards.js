@@ -7,6 +7,27 @@ const db = require("../config/db");
 apis.use(bodyParser.json());
 apis.use(bodyParser.urlencoded({ extended: true }));
 
+apis.post("/", (req, res) => {
+  const { parentIdx, depth, position } = req.body;
+  const parentCond = parentIdx ? `parent=${parentIdx},` : "";
+
+  db.query(
+    `INSERT INTO boards SET 
+    depth=${depth},
+    ${parentCond} 
+    title='새로운 게시판', 
+    position=${position}`,
+    (err, data) => {
+      if (err)
+        return res.status(500).json({ msg: "게시판 추가를 실패하였습니다." });
+
+      const { insertId } = data;
+
+      res.json({ msg: "SUCCESS", newIdx: insertId });
+    }
+  );
+});
+
 //* 게시판 메뉴리스트 요청
 apis.get("/", (req, res) => {
   db.query(

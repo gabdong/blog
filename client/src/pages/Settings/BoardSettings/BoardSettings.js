@@ -30,11 +30,8 @@ function BoardSettings() {
 
   /**
    * * 게시판 순서에 맞게 랜더링 해주는 함수
-   *
    * @param {Object} data
-   *
    * @return {String}
-   *
    * TODO auth 적용
    */
   const renderBoardList = (data) => {
@@ -48,7 +45,7 @@ function BoardSettings() {
     let childWrapKey = 0;
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
-      const { position, title, child, depth } = boardData;
+      const { position, title, child, depth, isEditing } = boardData;
       const newPosition = position + childTotalCnt;
 
       //* depth2
@@ -63,6 +60,7 @@ function BoardSettings() {
               // auth: childAuth,
               depth: childDepth,
               title: childTitle,
+              isEditing: childIsEditing,
             } = childData;
 
             if (parent === Number(boardIdx)) {
@@ -73,6 +71,9 @@ function BoardSettings() {
                   edit={true}
                   depth={childDepth}
                   idx={childIdx}
+                  boardList={boardList}
+                  boardListHandler={setBoardList}
+                  isEditing={childIsEditing}
                 />
               );
             }
@@ -92,6 +93,9 @@ function BoardSettings() {
           depth={depth}
           idx={boardIdx}
           child={childTmp}
+          boardList={boardList}
+          boardListHandler={setBoardList}
+          isEditing={isEditing}
         />
       );
 
