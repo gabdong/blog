@@ -36,7 +36,7 @@ function BoardSettingItem({
   };
 
   /**
-   * * 게시판 설정아이템 추가함수
+   * * 게시판 설정아이템 추가
    * @param {Event} e
    */
   const addBoardSettingItem = (e) => {
@@ -71,7 +71,7 @@ function BoardSettingItem({
   };
 
   /**
-   * * 게시판 수정내용 적용 함수
+   * * 게시판 수정내용 적용
    * @param {Event} e
    */
   const updateBoard = (e) => {
@@ -79,10 +79,10 @@ function BoardSettingItem({
       return;
 
     const item = e.target.closest(".boardSettingItem");
-    const { idx, prevTitle } = item.dataset;
+    const { idx, prevTitle, parent } = item.dataset;
 
     if (prevTitle !== editedTitle) {
-      const body = { title: editedTitle, checkAuth: true };
+      const body = { title: editedTitle, checkAuth: true, parent };
 
       axios
         .post(`/apis/boards/${idx}`, body)
@@ -98,7 +98,7 @@ function BoardSettingItem({
   };
 
   /**
-   * * 게시판 삭제 함수
+   * * 게시판 삭제
    * @param {Event} e
    */
   const deleteBoard = (e) => {
@@ -191,6 +191,7 @@ function BoardSettingItem({
 const BoardSttingItemWrap = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 5px;
 `;
 
 const BoardSettingItemSt = styled.div`
@@ -223,4 +224,5 @@ const SettingBtnWrapSt = styled.div`
   display: flex;
   gap: 5px;
 `;
+
 export default BoardSettingItem;

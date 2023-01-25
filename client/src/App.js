@@ -37,13 +37,15 @@ function App() {
   return (
     <Wrapper id="wrapper">
       {loading ? null : (
-        <Router basename={process.env.PUBLIC_URL}>
+        <>
           <Header />
-          <Main>
-            <Nav />
-            <Pages />
-          </Main>
-        </Router>
+          <Router basename={process.env.PUBLIC_URL}>
+            <Main>
+              <Nav />
+              <Pages />
+            </Main>
+          </Router>
+        </>
       )}
     </Wrapper>
   );

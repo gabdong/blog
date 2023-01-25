@@ -51,7 +51,7 @@ function BoardSettings() {
       //* depth2
       const childArr = [];
       const childTmp = (
-        <div className="boardChildWrap" key={`childWrap_${childWrapKey}`}>
+        <div className="boardChildWrap" key={`childWrap_${childWrapKey}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
           {Object.entries(child).map((childDataArr) => {
             const [childIdx, childData] = childDataArr;
             const {
@@ -74,6 +74,7 @@ function BoardSettings() {
                   boardList={boardList}
                   boardListHandler={setBoardList}
                   isEditing={childIsEditing}
+                  parent={parent}
                 />
               );
             }
@@ -132,7 +133,7 @@ const BoardSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
   max-width: 860px;
   padding: 0 14px 0 0;

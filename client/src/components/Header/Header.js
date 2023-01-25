@@ -45,9 +45,7 @@ function Header() {
   return (
     <HeaderSt id="header">
       {/* //* Logo */}
-      <Link to="/">
-        <Logo id="logo">Gabdong</Logo>
-      </Link>
+      <Logo id="logo">Gabdong</Logo>
       <HeaderBtnWrap>
         {/* //* Search Btn */}
         <HeaderBtn className="buttonText">
@@ -87,14 +85,11 @@ const HeaderBtn = styled.button`
   font-size: 1rem;
 `;
 const Logo = styled.h1`
-  font-family: "SUIT-Bold";
-  font-size: 21px;
+  font-family: "EBGaramond-Bold";
+  font-size: 24px;
   letter-spacing: 0.15px;
   transition: var(--transition);
-  cursor: pointer;
-  &:hover {
-    color: var(--primary-color);
-  }
+  color: var(--primary-color);
 `;
 
 export default Header;
