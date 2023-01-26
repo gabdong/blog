@@ -11,7 +11,6 @@ export function removeToken() {
 
 /**
  * * api요청의 accessToken 유효성을 검사, 재발급해주는 함수
- *
  * @return status, user 정보, check auth result
  */
 export async function checkToken() {

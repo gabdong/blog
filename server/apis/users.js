@@ -113,11 +113,4 @@ apis.post("/login", (req, res) => {
   );
 });
 
-//! TEST
-apis.post("/test", (req, res) => {
-  // console.log(req.headers);
-  // console.log(req.headers.cookie);
-  res.send("TEST");
-});
-
 module.exports = apis;

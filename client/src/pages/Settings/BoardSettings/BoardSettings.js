@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
+
+import { getBoardList } from "../../../apis/boards"
 
 import BoardSettingItem from "./BoardSettingItem";
 
@@ -8,24 +9,8 @@ function BoardSettings() {
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
 
-  /**
-   * TODO apis 로 옮기기
-   * * 게시판 메뉴리스트 요청함수
-   */
-  const getBoardList = async () => {
-    try {
-      const json = await axios.get("/apis/boards");
-      const boardData = json.data;
-
-      setBoardList(boardData);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    getBoardList();
+    getBoardList(setBoardList, setLoading);
   }, []);
 
   /**

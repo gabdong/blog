@@ -1,9 +1,7 @@
 import { FaSearch as Search } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import axios from "../../utils/axios";
 
 import { removeToken } from "../../apis/tokens";
 import { logoutUser } from "../../modules/user";
@@ -33,15 +31,6 @@ function Header() {
     dispatch(logoutUser());
   };
 
-  //! test
-  const test = () => {
-    window.localStorage.clear();
-    const body = { test: "test", checkAuth: true };
-    axios.post("/apis/users/test", body).then((res) => {
-      console.log(res);
-    });
-  };
-
   return (
     <HeaderSt id="header">
       {/* //* Logo */}
@@ -57,9 +46,6 @@ function Header() {
           onClick={!user.isLogin ? loginWrapHandler : logoutFn}
         >
           {!user.isLogin ? "로그인" : "로그아웃"}
-        </HeaderBtn>
-        <HeaderBtn className="buttonText" onClick={test}>
-          테스트
         </HeaderBtn>
       </HeaderBtnWrap>
       {/* //* loginWrap */}
@@ -86,7 +72,7 @@ const HeaderBtn = styled.button`
 `;
 const Logo = styled.h1`
   font-family: "EBGaramond-Bold";
-  font-size: 24px;
+  font-size: 21px;
   letter-spacing: 0.15px;
   transition: var(--transition);
   color: var(--primary-color);
