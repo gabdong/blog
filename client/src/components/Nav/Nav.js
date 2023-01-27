@@ -16,8 +16,61 @@ function Nav() {
     getBoardList(setBoardList, setLoading);
   }, []);
 
+  /**
+   * 
+   * @param {Object} data 
+   * @returns 
+   */
   const renderNavBoardList = (data) => {
     const renderList = [];
+
+    for (const [boardIdx, boardData] of Object.entries(data)) {
+      // const { position, auth, title, child } = boardData;
+      const { position, title, child, depth } = boardData;
+
+      //* depth2
+      const childArr = [];
+      const childTmp = (
+        <div className="navBoardChildWrap" key={`childWrap_${boardIdx}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+          {Object.entries(child).map((childDataArr) => {
+            const [childIdx, childData] = childDataArr;
+            const {
+              position: childPosition,
+              parent,
+              // auth: childAuth,
+              depth: childDepth,
+              title: childTitle,
+            } = childData;
+
+            if (parent === Number(boardIdx)) {
+              childArr[childPosition] = (
+                <NavBtn
+                  key={childIdx}
+                  text={childTitle}
+                  depth={childDepth}
+                  idx={childIdx}
+                  parent={parent}
+                />
+              );
+            }
+            return true;
+          })}
+
+          {childArr}
+        </div>
+      );
+
+      //* depth1
+      renderList[position] = (
+        <NavBtn
+          key={boardIdx}
+          text={title}
+          depth={depth}
+          idx={boardIdx}
+          child={childTmp}
+        />
+      );
+    }
 
     return renderList;
   };
