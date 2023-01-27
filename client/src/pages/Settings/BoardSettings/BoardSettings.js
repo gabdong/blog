@@ -22,21 +22,14 @@ function BoardSettings() {
   const renderBoardList = (data) => {
     const renderList = [];
 
-    /**
-     * * depth1,2의 position은 별도이지만 출력배열은 하나이기때문에
-     * * index 계산을 하기위한 변수
-     */
-    let childTotalCnt = 0;
-    let childWrapKey = 0;
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
       const { position, title, child, depth, isEditing } = boardData;
-      const newPosition = position + childTotalCnt;
 
       //* depth2
       const childArr = [];
       const childTmp = (
-        <div className="boardChildWrap" key={`childWrap_${childWrapKey}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+        <div className="boardChildWrap" key={`childWrap_${boardIdx}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
           {Object.entries(child).map((childDataArr) => {
             const [childIdx, childData] = childDataArr;
             const {
@@ -71,7 +64,7 @@ function BoardSettings() {
       );
 
       //* depth1
-      renderList[newPosition] = (
+      renderList[position] = (
         <BoardSettingItem
           key={boardIdx}
           title={title}
@@ -84,8 +77,6 @@ function BoardSettings() {
           isEditing={isEditing}
         />
       );
-
-      childWrapKey++;
     }
 
     return renderList;

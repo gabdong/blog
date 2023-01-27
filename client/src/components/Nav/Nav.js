@@ -16,7 +16,11 @@ function Nav() {
     getBoardList(setBoardList, setLoading);
   }, []);
 
-  const renderBoardList = () => {};
+  const renderNavBoardList = (data) => {
+    const renderList = [];
+
+    return renderList;
+  };
 
   return (
     <>
@@ -24,6 +28,7 @@ function Nav() {
         <NavSt id="nav">
           <NavBtn path="/" text="Home" />
           <NavBtn path="/board" text="Board" />
+          {renderNavBoardList(boardList)}
           {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
         </NavSt>
       )}
