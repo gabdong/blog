@@ -6,16 +6,11 @@ import axios from "axios";
  * @param {Number} parentBoardIdx
  * @param {Function} loadingHandler
  */
-export async function getPostList(
-  boardIdx,
-  parentBoardIdx,
-  loadingHandler = null
-) {
+export async function getPostList(boardIdx, parentBoardIdx) {
   const parentQuery = parentBoardIdx ? `?parent=${parentBoardIdx}` : "";
 
   try {
     const json = await axios.get(`/apis/posts/${boardIdx}${parentQuery}`);
-    // if (loadingHandler) loadingHandler(false);
 
     return json;
   } catch (err) {
