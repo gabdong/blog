@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { getBoardList } from "../../../apis/boards"
+import { getBoardList } from "../../../apis/boards";
 
 import BoardSettingItem from "./BoardSettingItem";
 
@@ -14,9 +14,9 @@ function BoardSettings() {
   }, []);
 
   /**
-   * * 게시판 순서에 맞게 랜더링 해주는 함수
+   * * 게시판 순서에 맞게 랜더링
    * @param {Object} data
-   * @return {String}
+   * @return {Array}
    * TODO auth 적용
    */
   const renderBoardList = (data) => {
@@ -29,7 +29,11 @@ function BoardSettings() {
       //* depth2
       const childArr = [];
       const childTmp = (
-        <div className="boardChildWrap" key={`childWrap_${boardIdx}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+        <div
+          className="boardChildWrap"
+          key={`childWrap_${boardIdx}`}
+          style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+        >
           {Object.entries(child).map((childDataArr) => {
             const [childIdx, childData] = childDataArr;
             const {

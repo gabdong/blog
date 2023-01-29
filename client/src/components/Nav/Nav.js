@@ -17,28 +17,31 @@ function Nav() {
   }, []);
 
   /**
-   * 
-   * @param {Object} data 
-   * @returns 
+   * * Nav 게시판 리스트 렌더링
+   * @param {Object} data
+   * @returns {Array}
    */
   const renderNavBoardList = (data) => {
     const renderList = [];
 
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
-      const { position, title, child, depth } = boardData;
+      const { position, title, child } = boardData;
 
       //* depth2
       const childArr = [];
       const childTmp = (
-        <div className="navBoardChildWrap" key={`childWrap_${boardIdx}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+        <div
+          className="navBoardChildWrap"
+          key={`childWrap_${boardIdx}`}
+          style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+        >
           {Object.entries(child).map((childDataArr) => {
             const [childIdx, childData] = childDataArr;
             const {
               position: childPosition,
               parent,
               // auth: childAuth,
-              depth: childDepth,
               title: childTitle,
             } = childData;
 
@@ -47,9 +50,8 @@ function Nav() {
                 <NavBtn
                   key={childIdx}
                   text={childTitle}
-                  depth={childDepth}
-                  idx={childIdx}
-                  parent={parent}
+                  path={`/board/${childIdx}`}
+                  depth={2}
                 />
               );
             }
@@ -65,8 +67,7 @@ function Nav() {
         <NavBtn
           key={boardIdx}
           text={title}
-          depth={depth}
-          idx={boardIdx}
+          path={`/board/${boardIdx}`}
           child={childTmp}
         />
       );
@@ -80,7 +81,6 @@ function Nav() {
       {loading ? null : (
         <NavSt id="nav">
           <NavBtn path="/" text="Home" />
-          <NavBtn path="/board" text="Board" />
           {renderNavBoardList(boardList)}
           {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
         </NavSt>
