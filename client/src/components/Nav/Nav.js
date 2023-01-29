@@ -26,7 +26,7 @@ function Nav() {
 
     for (const [boardIdx, boardData] of Object.entries(data)) {
       // const { position, auth, title, child } = boardData;
-      const { position, title, child } = boardData;
+      const { position, title, child, depth } = boardData;
 
       //* depth2
       const childArr = [];
@@ -43,6 +43,7 @@ function Nav() {
               parent,
               // auth: childAuth,
               title: childTitle,
+              depth: childDepth,
             } = childData;
 
             if (parent === Number(boardIdx)) {
@@ -50,8 +51,8 @@ function Nav() {
                 <NavBtn
                   key={childIdx}
                   text={childTitle}
-                  path={`/board/${childIdx}`}
-                  depth={2}
+                  path={`/board/${childIdx}?parent=${boardIdx}`}
+                  depth={childDepth}
                 />
               );
             }
@@ -69,6 +70,7 @@ function Nav() {
           text={title}
           path={`/board/${boardIdx}`}
           child={childTmp}
+          depth={depth}
         />
       );
     }

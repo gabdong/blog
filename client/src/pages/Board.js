@@ -1,14 +1,21 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "../utils/axios";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+
+import { getPostList } from "../apis/posts";
 
 function Board() {
   const params = useParams();
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
 
   //TODO 게시판 글 리스트 요청
   useEffect(() => {
-    const { boardIdx } = params;
-  });
+    console.log("hi");
+
+    (async function () {
+      const parentBoardIdx = searchParams.get("parent");
+    })();
+  }, [params.boardIdx, searchParams]);
 
   return (
     <div>

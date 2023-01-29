@@ -1,14 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-const apis = express();
+const router = express.Router();
 const bodyParser = require("body-parser");
 const db = require("../config/db");
 
-apis.use(bodyParser.json());
-apis.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 게시판 추가
-apis.post("/", (req, res) => {
+router.post("/", (req, res) => {
   const { parentIdx: parent, depth, position } = req.body;
 
   db.query(
@@ -30,7 +30,7 @@ apis.post("/", (req, res) => {
 });
 
 //* 게시판 리스트 요청
-apis.get("/", (req, res) => {
+router.get("/", (req, res) => {
   db.query(
     `SELECT idx, depth, parent, position, auth, title 
     FROM boards 
@@ -75,18 +75,21 @@ apis.get("/", (req, res) => {
 });
 
 //* 게시판 수정
-apis.post("/:idx", (req, res) => {
+router.post("/:idx", (req, res) => {
   const { idx } = req.params;
   const { title, parent } = req.body;
 
-  db.query( // 삭제된 게시판중 변경하려는 제목과 같은 게시판이있을경우 재사용
+  db.query(
+    // 삭제된 게시판중 변경하려는 제목과 같은 게시판이있을경우 재사용
     `SELECT idx FROM boards 
     WHERE parent=${parent} 
     AND title='${title}' 
-    AND delete_datetime IS NOT NULL`, 
+    AND delete_datetime IS NOT NULL`,
     (err, data) => {
       if (err)
-        return res.status(500).json({ msg: "게시판 중복확인을 실패하였습니다." });
+        return res
+          .status(500)
+          .json({ msg: "게시판 중복확인을 실패하였습니다." });
 
       let targetIdx = idx;
       if (data.length > 0) {
@@ -96,19 +99,21 @@ apis.post("/:idx", (req, res) => {
           `DELETE FROM boards 
           WHERE idx=${idx}`,
           (err, data) => {
-            if (err) 
-              return res.status(500).json({ msg: "중복 게시판 제거를 실패하였습니다." });
+            if (err)
+              return res
+                .status(500)
+                .json({ msg: "중복 게시판 제거를 실패하였습니다." });
           }
         );
       }
 
       let updateQuery = "";
-    
+
       if (title) updateQuery = `title='${title}'`;
-    
+
       if (!updateQuery)
         return res.status(204).json({ msg: "수정사항이 없습니다." });
-    
+
       db.query(
         `UPDATE boards SET 
         delete_datetime=NULL, 
@@ -116,8 +121,10 @@ apis.post("/:idx", (req, res) => {
         WHERE idx=${targetIdx}`,
         (err, data) => {
           if (err)
-            return res.status(500).json({ msg: "게시판 수정을 실패하였습니다." });
-    
+            return res
+              .status(500)
+              .json({ msg: "게시판 수정을 실패하였습니다." });
+
           res.json({ msg: "SUCCESS" });
         }
       );
@@ -126,7 +133,7 @@ apis.post("/:idx", (req, res) => {
 });
 
 //* 게시판 제거
-apis.delete(`/:idx`, (req, res) => {
+router.delete(`/:idx`, (req, res) => {
   const { idx } = req.params;
 
   db.query(
@@ -142,4 +149,4 @@ apis.delete(`/:idx`, (req, res) => {
   );
 });
 
-module.exports = apis;
+module.exports = router;
