@@ -15,7 +15,7 @@ export async function getPostList(
 
   try {
     const json = await axios.get(`/apis/posts/${boardIdx}${parentQuery}`);
-    if (loadingHandler) loadingHandler(false);
+    // if (loadingHandler) loadingHandler(false);
 
     return json;
   } catch (err) {
