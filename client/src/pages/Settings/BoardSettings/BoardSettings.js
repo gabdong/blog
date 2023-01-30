@@ -16,7 +16,7 @@ function BoardSettings() {
   /**
    * * 게시판 순서에 맞게 랜더링 해주는 함수
    * @param {Object} data
-   * @return {String}
+   * @return {Symbol}
    * TODO auth 적용
    */
   const renderBoardList = (data) => {
