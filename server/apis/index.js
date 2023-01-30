@@ -1,8 +1,9 @@
 const express = require("express");
-const apis = express();
+const router = express.Router();
 
-apis.use("/users", require("./users.js"));
-apis.use("/tokens", require("./tokens.js"));
-apis.use("/boards", require("./boards.js"));
+router.use("/users", require("./users.js"));
+router.use("/tokens", require("./tokens.js"));
+router.use("/boards", require("./boards.js"));
+router.use("/posts", require("./posts.js"));
 
-module.exports = apis;
+module.exports = router;

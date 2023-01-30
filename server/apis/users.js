@@ -1,16 +1,16 @@
 require("dotenv").config();
 const express = require("express");
-const apis = express();
+const router = express.Router();
 const bodyParser = require("body-parser");
 const db = require("../config/db");
 const token = require("../config/jwt");
 const md5 = require("md5");
 
-apis.use(bodyParser.json());
-apis.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 로그인
-apis.post("/login", (req, res) => {
+router.post("/login", (req, res) => {
   const { id, password } = req.body;
 
   //* 로그인 정보 확인
@@ -113,4 +113,4 @@ apis.post("/login", (req, res) => {
   );
 });
 
-module.exports = apis;
+module.exports = router;

@@ -1,15 +1,15 @@
 const express = require("express");
-const apis = express();
+const router = express.Router();
 const bodyParser = require("body-parser");
 const db = require("../config/db");
 const { getCookie } = require("../utils/utils");
 const token = require("../config/jwt");
 
-apis.use(bodyParser.json());
-apis.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //* refresh token 삭제
-apis.delete("/", (req, res) => {
+router.delete("/", (req, res) => {
   const hashIdx = getCookie(req.headers.cookie, "refreshToken");
 
   db.query(
@@ -28,7 +28,7 @@ apis.delete("/", (req, res) => {
 });
 
 //* token 유효성 검사, refreshToken만 있는경우 token 재발급
-apis.get("/check-token", (req, res) => {
+router.get("/check-token", (req, res) => {
   const { authorization } = req.headers;
   const accessToken = authorization?.split(" ")[1];
   const checkAccessToken = token().check(accessToken, "access");
@@ -116,4 +116,4 @@ apis.get("/check-token", (req, res) => {
   }
 });
 
-module.exports = apis;
+module.exports = router;

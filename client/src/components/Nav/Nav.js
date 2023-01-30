@@ -17,9 +17,9 @@ function Nav() {
   }, []);
 
   /**
-   * 
-   * @param {Object} data 
-   * @returns 
+   * * Nav 게시판 리스트 렌더링
+   * @param {Object} data
+   * @returns {Array}
    */
   const renderNavBoardList = (data) => {
     const renderList = [];
@@ -31,15 +31,19 @@ function Nav() {
       //* depth2
       const childArr = [];
       const childTmp = (
-        <div className="navBoardChildWrap" key={`childWrap_${boardIdx}`} style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+        <div
+          className="navBoardChildWrap"
+          key={`childWrap_${boardIdx}`}
+          style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+        >
           {Object.entries(child).map((childDataArr) => {
             const [childIdx, childData] = childDataArr;
             const {
               position: childPosition,
               parent,
               // auth: childAuth,
-              depth: childDepth,
               title: childTitle,
+              depth: childDepth,
             } = childData;
 
             if (parent === Number(boardIdx)) {
@@ -47,9 +51,8 @@ function Nav() {
                 <NavBtn
                   key={childIdx}
                   text={childTitle}
+                  path={`/board/${childIdx}?parent=${boardIdx}`}
                   depth={childDepth}
-                  idx={childIdx}
-                  parent={parent}
                 />
               );
             }
@@ -65,9 +68,9 @@ function Nav() {
         <NavBtn
           key={boardIdx}
           text={title}
-          depth={depth}
-          idx={boardIdx}
+          path={`/board/${boardIdx}`}
           child={childTmp}
+          depth={depth}
         />
       );
     }
@@ -80,7 +83,6 @@ function Nav() {
       {loading ? null : (
         <NavSt id="nav">
           <NavBtn path="/" text="Home" />
-          <NavBtn path="/board" text="Board" />
           {renderNavBoardList(boardList)}
           {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
         </NavSt>

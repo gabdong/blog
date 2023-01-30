@@ -11,7 +11,7 @@ function Pages() {
     <PagesSt>
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
-        <Route path="/board" element={<Board />} />
+        <Route path="/board/:boardIdx" element={<Board />} />
         <Route
           path="/settings"
           element={<PrivateRoute component={<Settings />} />}
