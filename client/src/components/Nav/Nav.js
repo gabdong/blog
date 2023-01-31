@@ -30,38 +30,40 @@ function Nav() {
 
       //* depth2
       const childArr = [];
-      const childTmp = (
-        <div
-          className="navBoardChildWrap"
-          key={`childWrap_${boardIdx}`}
-          style={{ display: "flex", flexDirection: "column", gap: "5px" }}
-        >
-          {Object.entries(child).map((childDataArr) => {
-            const [childIdx, childData] = childDataArr;
-            const {
-              position: childPosition,
-              parent,
-              // auth: childAuth,
-              title: childTitle,
-              depth: childDepth,
-            } = childData;
+      const childTmp =
+        Object.keys(child).length > 0 ? (
+          <div
+            className="navBoardChildWrap"
+            key={`childWrap_${boardIdx}`}
+            style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+          >
+            {Object.entries(child).map((childDataArr) => {
+              const [childIdx, childData] = childDataArr;
+              const {
+                position: childPosition,
+                parent,
+                // auth: childAuth,
+                title: childTitle,
+                depth: childDepth,
+              } = childData;
 
-            if (parent === Number(boardIdx)) {
-              childArr[childPosition] = (
-                <NavBtn
-                  key={childIdx}
-                  text={childTitle}
-                  path={`/board/${childIdx}?parent=${boardIdx}`}
-                  depth={childDepth}
-                />
-              );
-            }
-            return true;
-          })}
+              //* 게시판 순서를 맞추기위해 배열로 출력
+              if (parent === Number(boardIdx)) {
+                childArr[childPosition] = (
+                  <NavBtn
+                    key={childIdx}
+                    text={childTitle}
+                    path={`/board/${childIdx}?parent=${boardIdx}`}
+                    depth={childDepth}
+                  />
+                );
+              }
+              return true;
+            })}
 
-          {childArr}
-        </div>
-      );
+            {childArr}
+          </div>
+        ) : null;
 
       //* depth1
       renderList[position] = (

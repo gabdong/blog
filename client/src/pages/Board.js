@@ -1,4 +1,5 @@
 import { useParams, useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
 import PostList from "../components/PostList/PostList";
 
@@ -9,10 +10,10 @@ function Board() {
   const parentBoardIdx = searchParams.get("parent");
 
   return (
-    <div>
-      <h2>Board</h2>
+    <>
+      <h2 className="mb20">Board</h2>
       <PostList boardIdx={boardIdx} parentBoardIdx={parentBoardIdx} />
-    </div>
+    </>
   );
 }
 
