@@ -4,7 +4,7 @@ import styled from "styled-components";
 function NavBtn({ text, path, depth, child }) {
   return (
     <>
-      <NavBtnSt to={path} className="subTitle" depth={depth}>
+      <NavBtnSt to={path} depth={depth}>
         {text}
       </NavBtnSt>
       {child}
@@ -13,6 +13,9 @@ function NavBtn({ text, path, depth, child }) {
 }
 
 const NavBtnSt = styled(NavLink)`
+  font-family: 'SUIT-Regular';
+  font-size: 14px;
+  letter-spacing: 0.15px;
   cursor: pointer;
   transition: var(--transition);
 
