@@ -12,20 +12,18 @@ router.get("/:boardIdx", (req, res) => {
   const { parent } = req.query;
   
   const joinCond = parent 
-                  ? `INNER JOIN board_post_maps maps ON maps.board=boards.idx
-                    INNER JOIN posts posts ON posts.idx=maps.post `
-                  : `INNER JOIN boards child_boards ON child_boards.parent=boards.idx 
-                    INNER JOIN board_post_maps maps ON maps.board=child_boards.idx
-                    INNER JOIN posts posts ON posts.idx=maps.post `;
+                  ? `INNER JOIN board_post_maps maps ON maps.board=${boardIdx}
+                  INNER JOIN boards boards ON boards.idx=maps.board `
+                  : `INNER JOIN boards child_boards ON child_boards.parent=${boardIdx}
+                  INNER JOIN board_post_maps maps ON maps.board=child_boards.idx `;
 
-  const sql = `SELECT boards.title, posts.idx, posts.subject 
-              FROM boards boards 
+  const sql = `SELECT posts.idx, posts.subject 
+              FROM posts posts 
               ${joinCond}
-              WHERE boards.idx=${boardIdx}`;
+              WHERE posts.idx=maps.post`;
 
   db.query(sql, (err, data) => {
       if (err) console.log(err.sql);
-      console.log(data);
 
       res.json({ msg: "SUCCESS", postList: data });
     }

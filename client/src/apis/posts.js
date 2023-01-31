@@ -12,7 +12,7 @@ export async function getPostList(boardIdx, parentBoardIdx) {
   try {
     const json = await axios.get(`/apis/posts/${boardIdx}${parentQuery}`);
 
-    return json;
+    return json.data.postList;
   } catch (err) {
     throw err;
   }

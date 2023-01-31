@@ -1,16 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getPostList } from "../../apis/posts";
 
 function PostList({ boardIdx, parentBoardIdx }) {
+  const [loading, setLoading] = useState(true);
+  const [postList, setPostList] = useState([]);
+
   useEffect(() => {
     (async function () {
-      const postList = await getPostList(boardIdx, parentBoardIdx);
-
-      console.log(postList);
+      setPostList(await getPostList(boardIdx, parentBoardIdx));
+      setLoading(false);
     })();
   }, [boardIdx, parentBoardIdx]);
-  return <div></div>;
+
+  return (<>
+    {loading ? null : (<section>
+      {postList.map((postData) => {
+        console.log(postData);
+        return true;
+      })}
+    </section>)}
+  </>);
 }
 
 export default React.memo(PostList);
