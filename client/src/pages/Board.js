@@ -6,7 +6,7 @@ function Board() {
   const params = useParams();
   const location = useLocation();
   const { boardIdx } = params;
-  const {title, parent: parentBoardIdx} = location.state;
+  const { title, parent: parentBoardIdx } = location.state;
 
   return (
     <>

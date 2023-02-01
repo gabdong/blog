@@ -21,7 +21,9 @@ function PostList({ boardIdx, parentBoardIdx }) {
         <PostListUl>
           {postList.map((postData) => {
             const { idx, subject, updateDatetime } = postData;
-            const updateDatetimeFormat = new Date(updateDatetime).toLocaleDateString()
+            const updateDatetimeFormat = new Date(
+              updateDatetime
+            ).toLocaleDateString();
             return (
               <PostListLi key={idx}>
                 <PostLink to={`/post/${idx}`}>

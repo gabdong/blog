@@ -57,7 +57,7 @@ function Nav() {
                     depth={childDepth}
                     state={{
                       title: childTitle,
-                      parent: boardIdx
+                      parent: boardIdx,
                     }}
                   />
                 );
@@ -78,7 +78,7 @@ function Nav() {
           child={childTmp}
           depth={depth}
           state={{
-            title
+            title,
           }}
         />
       );
