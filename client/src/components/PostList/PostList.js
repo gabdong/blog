@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import { getPostList } from "../../apis/posts";
 
@@ -19,8 +20,15 @@ function PostList({ boardIdx, parentBoardIdx }) {
       {loading ? null : (
         <PostListUl>
           {postList.map((postData) => {
+            const { idx, subject, updateDatetime } = postData;
+            const updateDatetimeFormat = new Date(updateDatetime).toLocaleDateString()
             return (
-              <PostListLi key={postData.idx}>{postData.subject}</PostListLi>
+              <PostListLi key={idx}>
+                <PostLink to={`/post/${idx}`}>
+                  <p className="normalText">{subject}</p>
+                  <p className="caption">{updateDatetimeFormat}</p>
+                </PostLink>
+              </PostListLi>
             );
           })}
         </PostListUl>
@@ -33,7 +41,6 @@ const PostListUl = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 860px;
 `;
 const PostListLi = styled.li`
   padding-bottom: 5px;
@@ -44,6 +51,11 @@ const PostListLi = styled.li`
   &:hover {
     border-bottom: 1px solid var(--primary-color);
   }
+`;
+const PostLink = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export default React.memo(PostList);

@@ -54,7 +54,9 @@ function App() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  align-items: center;
+
+  width: 1600px;
   max-width: 90%;
   height: 100%;
   margin: 0 auto;
@@ -64,8 +66,10 @@ const Wrapper = styled.div`
 `;
 const Main = styled.main`
   display: flex;
-  flex: 1;
-  height: calc(100% - var(--header-height) - var(--main-gap));
+
+  width: 1024px;
+  height: calc(100% - var(--header-height));
+  padding-top: 40px;
   padding-bottom: 60px;
 `;
 

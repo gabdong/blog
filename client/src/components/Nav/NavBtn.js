@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-function NavBtn({ text, path, depth, child }) {
+function NavBtn({ text, path, depth, child, state }) {
   return (
     <>
-      <NavBtnSt to={path} depth={depth}>
+      <NavBtnSt to={path} depth={depth} state={state}>
         {text}
       </NavBtnSt>
       {child}

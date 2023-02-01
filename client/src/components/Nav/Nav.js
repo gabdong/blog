@@ -53,8 +53,12 @@ function Nav() {
                   <NavBtn
                     key={childIdx}
                     text={childTitle}
-                    path={`/board/${childIdx}?parent=${boardIdx}`}
+                    path={`/board/${childIdx}`}
                     depth={childDepth}
+                    state={{
+                      title: childTitle,
+                      parent: boardIdx
+                    }}
                   />
                 );
               }
@@ -73,6 +77,9 @@ function Nav() {
           path={`/board/${boardIdx}`}
           child={childTmp}
           depth={depth}
+          state={{
+            title
+          }}
         />
       );
     }

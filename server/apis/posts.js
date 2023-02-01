@@ -17,7 +17,7 @@ router.get("/:boardIdx", (req, res) => {
                   : `INNER JOIN boards child_boards ON child_boards.parent=${boardIdx}
                   INNER JOIN board_post_maps maps ON maps.board=child_boards.idx `;
 
-  const sql = `SELECT posts.idx, posts.subject 
+  const sql = `SELECT posts.idx, posts.subject, posts.update_datetime AS updateDatetime
               FROM posts posts 
               ${joinCond}
               WHERE posts.idx=maps.post`;
