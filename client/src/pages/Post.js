@@ -8,6 +8,7 @@ function Posts() {
   const { postIdx } = params;
   const [loading, setLoading] = useState(true);
   const [postData, setPostData] = useState({});
+
   let subject, content, idx, tags;
   if (!loading) {
     subject = postData[0].subject;

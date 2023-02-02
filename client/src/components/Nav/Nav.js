@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { getBoardList } from "../../apis/boards.js";
 
 import NavBtn from "./NavBtn.js";
-import { useEffect, useState } from "react";
 
 function Nav() {
   const user = useSelector((store) => store.user);
   const { isLogin } = user;
+  const location = useLocation();
+  const activeBoardIdx = location.state?.activeBoardIdx;
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +38,7 @@ function Nav() {
           <div
             className="navBoardChildWrap"
             key={`childWrap_${boardIdx}`}
-            style={{ display: "flex", flexDirection: "column", gap: "5px" }}
+            style={{ display: "flex", flexDirection: "column", gap: "8px" }}
           >
             {Object.entries(child).map((childDataArr) => {
               const [childIdx, childData] = childDataArr;
@@ -59,6 +62,8 @@ function Nav() {
                       title: childTitle,
                       parent: boardIdx,
                     }}
+                    idx={childIdx}
+                    active={activeBoardIdx === childIdx ? true : false}
                   />
                 );
               }
@@ -80,6 +85,8 @@ function Nav() {
           state={{
             title,
           }}
+          idx={boardIdx}
+          active={activeBoardIdx === boardIdx ? true : false}
         />
       );
     }
@@ -103,7 +110,7 @@ function Nav() {
 const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   width: 200px;
 `;
 
