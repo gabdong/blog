@@ -89,7 +89,7 @@ function BoardSettings() {
   return (
     <>
       {loading ? null : (
-        <BoardSettingSection className="scroll">
+        <BoardSettingSection>
           <h2 className="normalText mb15">게시판 메뉴설정</h2>
           <BoardSettingWrap className="scroll">
             <BoardSettingItem
@@ -107,13 +107,17 @@ function BoardSettings() {
 }
 
 const BoardSettingSection = styled.section`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  height: 50%;
 `;
 const BoardSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 15px;
+
   width: 100%;
   max-width: 860px;
   padding: 0 14px 0 0;

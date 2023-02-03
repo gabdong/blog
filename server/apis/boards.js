@@ -69,7 +69,7 @@ router.get("/", (req, res) => {
         }
       }
 
-      res.json(boardData);
+      res.json({msg: "SUCCESS", boardData});
     }
   );
 });
@@ -133,7 +133,7 @@ router.post("/:idx", (req, res) => {
 });
 
 //* 게시판 제거
-router.delete(`/:idx`, (req, res) => {
+router.delete("/:idx", (req, res) => {
   const { idx } = req.params;
 
   db.query(
@@ -145,6 +145,24 @@ router.delete(`/:idx`, (req, res) => {
         return res.status(500).json({ msg: "게시판 제거를 실패하였습니다." });
 
       res.json({ msg: "SUCCESS" });
+    }
+  );
+});
+
+router.get("/:idx", (req, res) => {
+  const { idx } = req.params;
+
+  db.query(
+    `SELECT title, parent 
+    FROM boards 
+    WHERE idx=${idx} 
+    AND delete_datetime IS NULL`,
+    (err, data) => {
+      if (err)
+        return res.status(500).json({ msg: "게시판 정보 불러오기를 실패하였습니다." });
+
+      //TODO 없을경우 404
+      res.json({ msg: "SUCCESS", boardData: data[0] });
     }
   );
 });

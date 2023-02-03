@@ -1,12 +1,14 @@
 import { FaSearch as Search } from "react-icons/fa";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { removeToken } from "../../apis/tokens";
 import { logoutUser } from "../../modules/user";
 
 import Login from "../Login/Login";
+import LinkButton from "../LinkButton/LinkButton";
 
 function Header() {
   const dispatch = useDispatch();
@@ -34,18 +36,23 @@ function Header() {
   return (
     <HeaderSt id="header">
       {/* //* Logo */}
-      <Logo id="logo">Gabdong</Logo>
+      <Link to="/">
+        <Logo id="logo">Gabdong</Logo>
+      </Link>
       <HeaderBtnWrap>
         {/* //* Search Btn */}
         <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
+        {
+          !user.isLogin ? null : <LinkButton text="New Post" path="/"/>
+        }
         {/* //* login Btn */}
         <HeaderBtn
           className="buttonText"
           onClick={!user.isLogin ? loginWrapHandler : logoutFn}
         >
-          {!user.isLogin ? "로그인" : "로그아웃"}
+          {!user.isLogin ? "Login" : "Logout"}
         </HeaderBtn>
       </HeaderBtnWrap>
       {/* //* loginWrap */}
@@ -59,8 +66,7 @@ const HeaderSt = styled.header`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 60px;
-  background: #000000;
+  height: var(--header-height);
 `;
 const HeaderBtnWrap = styled.div`
   display: flex;
@@ -76,6 +82,7 @@ const Logo = styled.h1`
   letter-spacing: 0.15px;
   transition: var(--transition);
   color: var(--primary-color);
+  cursor: pointer;
 `;
 
 export default Header;

@@ -65,7 +65,7 @@ function Login({ wrapHandler }) {
             loginFn(e, id, password);
           }}
         >
-          <h2 className="headline">Sign In</h2>
+          <h2 className="headline">Welcome</h2>
           <input
             className="inputText"
             placeholder="Username"
@@ -79,7 +79,7 @@ function Login({ wrapHandler }) {
             value={password}
             onChange={passwordHandler}
           />
-          <Button text="Log In" classname="mt10" />
+          <Button text="Login" classname="mt10" />
         </LoginForm>
       </LoginContent>
     </LoginWrap>
@@ -118,7 +118,6 @@ const LoginContent = styled.div`
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
@@ -143,6 +142,10 @@ const LoginForm = styled.form`
   h2 {
     align-self: flex-start;
     margin-bottom: 24px;
+  }
+
+  button {
+    align-self: flex-end;
   }
 `;
 

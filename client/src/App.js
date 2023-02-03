@@ -37,15 +37,13 @@ function App() {
   return (
     <Wrapper id="wrapper">
       {loading ? null : (
-        <>
+        <Router basename={process.env.PUBLIC_URL}>
           <Header />
-          <Router basename={process.env.PUBLIC_URL}>
-            <Main>
-              <Nav />
-              <Pages />
-            </Main>
-          </Router>
-        </>
+          <Main>
+            <Nav />
+            <Pages />
+          </Main>
+        </Router>
       )}
     </Wrapper>
   );
@@ -60,7 +58,6 @@ const Wrapper = styled.div`
   max-width: 90%;
   height: 100%;
   margin: 0 auto;
-  background: #000000;
   overflow: hidden;
   user-select: none;
 `;
@@ -69,8 +66,8 @@ const Main = styled.main`
 
   width: 1024px;
   height: calc(100% - var(--header-height));
-  padding-top: 40px;
-  padding-bottom: 60px;
+  padding-top: var(--header-main-space);
+  padding-bottom: var(--main-footer-space);
 `;
 
 export default App;

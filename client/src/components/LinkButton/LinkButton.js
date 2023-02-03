@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-function Button({ text, classname, as }) {
-  return <ButtonSt className={`${classname} buttonText`} as={as}>{text}</ButtonSt>;
+function LinkButton({ text, classname, path }) {
+  return <LinkButtonSt className={`${classname} buttonText`} to={path}>{text}</LinkButtonSt>;
 }
 
-const ButtonSt = styled.button`
+const LinkButtonSt = styled(Link)`
   padding: 8px 12px;
   background-color: var(--gray);
   color: #ffffff;
@@ -17,4 +18,4 @@ const ButtonSt = styled.button`
   }
 `;
 
-export default Button;
+export default LinkButton;

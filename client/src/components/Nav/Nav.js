@@ -98,7 +98,6 @@ function Nav() {
     <>
       {loading ? null : (
         <NavSt id="nav">
-          <NavBtn path="/" text="Home" />
           {renderNavBoardList(boardList)}
           {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
         </NavSt>

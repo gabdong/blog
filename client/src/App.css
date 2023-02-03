@@ -1,15 +1,19 @@
 :root {
-    --primary-color: #1950f8;
+    --primary-color: #1561F0;
     --primary-color-d: #061238;
     --primary-color-d-o: rgba(6, 18, 56, 0.5);
     --primary-color-l: #6389F9;
     --primary-color-d-text: #ffffff;
 
-    --dark-l: #121212;
+    --dark: #131313;
+    --dark-l: #2B2B2B;
+    --gray: #86868B;
+    
     --transition: 0.2s;
     --border-radius: 4px;
-    --header-height: 60px;
-    --main-gap: 40px;
+    --header-height: 80px;
+    --header-main-space: 40px;
+    --main-footer-space: 60px;
 }
 @font-face {
     font-family: "SUIT-Regular";
@@ -62,7 +66,7 @@ footer, header, hgroup, menu, nav, section {
 html, body {
     width: 100%;
     height: 100%;
-    background: #000000;
+    background: var(--dark);
     color: #ffffff;
     overflow-y: auto;
 }
