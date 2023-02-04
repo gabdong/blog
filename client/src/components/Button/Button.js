@@ -1,7 +1,16 @@
 import styled from "styled-components";
 
-function Button({ text, classname, as }) {
-  return <ButtonSt className={`${classname} buttonText`} as={as}>{text}</ButtonSt>;
+function Button({ text, classname = "", as, style = {}, onClick }) {
+  return (
+    <ButtonSt
+      className={`${classname} buttonText`}
+      as={as}
+      style={style}
+      onClick={onClick}
+    >
+      {text}
+    </ButtonSt>
+  );
 }
 
 const ButtonSt = styled.button`

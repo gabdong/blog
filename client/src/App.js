@@ -64,7 +64,8 @@ const Wrapper = styled.div`
 const Main = styled.main`
   display: flex;
 
-  width: 1024px;
+  width: 1200px;
+  max-width: 100%;
   height: calc(100% - var(--header-height));
   padding-top: var(--header-main-space);
   padding-bottom: var(--main-footer-space);

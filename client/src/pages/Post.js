@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { getPost } from "../apis/posts";
 
-function Posts() {
+function Post() {
   const params = useParams();
   const { postIdx } = params;
   const [loading, setLoading] = useState(true);
@@ -25,11 +25,11 @@ function Posts() {
   }, [postIdx]);
 
   return loading ? null : (
-    <>
+    <div className="scroll h100">
       <h2 className="headline">{subject}</h2>
-      <div>{content}</div>
-    </>
+      <p style={{ wordBreak: "break-all" }}>{content}</p>
+    </div>
   );
 }
 
-export default Posts;
+export default Post;

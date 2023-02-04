@@ -19,7 +19,7 @@ export async function getBoardList(boardListHandler, loadingHandler = null) {
 
 /**
  * * 게시판 정보요청
- * @param {Number} boardIdx 
+ * @param {Number} boardIdx
  */
 export async function getBoardData(boardIdx) {
   try {
@@ -31,3 +31,14 @@ export async function getBoardData(boardIdx) {
     throw err;
   }
 }
+
+/**
+ * * 뎁스1 게시판 리스트 요청
+ */
+export async function getFirstDepthBoardList() {}
+
+/**
+ * * 자식 게시판 리스트 요청
+ * @param Number parentBoardIDx
+ */
+export async function getChildBoardList(parentBoardIdx) {}

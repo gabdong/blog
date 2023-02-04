@@ -7,6 +7,7 @@ import axios from "../../utils/axios";
 import { loginUser } from "../../modules/user";
 
 import Button from "../Button/Button";
+import Input from "../Input/Input";
 
 function Login({ wrapHandler }) {
   const dispatch = useDispatch();
@@ -66,18 +67,18 @@ function Login({ wrapHandler }) {
           }}
         >
           <h2 className="headline">Welcome</h2>
-          <input
-            className="inputText"
+          <Input
             placeholder="Username"
             value={id}
             onChange={idHandler}
+            style={{ width: "100%" }}
           />
-          <input
-            className="inputText"
-            type="password"
+          <Input
             placeholder="Password"
+            type="password"
             value={password}
             onChange={passwordHandler}
+            style={{ width: "100%" }}
           />
           <Button text="Login" classname="mt10" />
         </LoginForm>
@@ -123,21 +124,6 @@ const LoginForm = styled.form`
   width: 100%;
   height: 100%;
   color: #ffffff;
-
-  input {
-    width: 100%;
-    padding: 8px 0px;
-    border: none;
-    border-bottom: 2px solid #ddd;
-    cursor: pointer;
-    transition: var(--transition);
-
-    &:active,
-    &:focus,
-    &:hover {
-      border-bottom: 2px solid var(--primary-color);
-    }
-  }
 
   h2 {
     align-self: flex-start;

@@ -193,3 +193,23 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .mr10 { margin-right: 10px; }
 .mr15 { margin-right: 15px; }
 .mr20 { margin-right: 20px; }
+
+.gap0 { gap: 0px; }
+.gap5 { gap: 5px; }
+.gap10 { gap: 10px; }
+.gap15 { gap: 15px; }
+.gap20 { gap: 20px; }
+
+.disFlex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: flex;
+}
+.alignItemCenter {
+    -webkit-box-align: center;
+    -moz-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}

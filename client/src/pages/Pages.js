@@ -15,7 +15,10 @@ function Pages() {
         <Route exact={true} path="/" element={<Home />} />
         <Route path="/board/:boardIdx" element={<Board />} />
         <Route path="/post/:postIdx" element={<Post />} />
-        <Route path="/post/write" element={<WritePost />} />
+        <Route
+          path="/post/write"
+          element={<PrivateRoute component={<WritePost />} />}
+        />
         <Route
           path="/settings"
           element={<PrivateRoute component={<Settings />} />}
