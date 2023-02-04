@@ -49,4 +49,12 @@ router.get("/:postIdx", (req, res) => {
   );
 });
 
+//* 게시글 업로드 요청
+router.post("/", (req, res) => {
+  const { mardkDown, title } = req.body;
+
+  db.query();
+  res.send("hi");
+});
+
 module.exports = router;
