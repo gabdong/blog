@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -14,11 +14,13 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-clojure";
 
 import axios from "../utils/axios";
+import { getFirstDepthBoardList } from "../apis/boards";
+import { getChildBoardList } from "../apis/boards";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 
-function WritePost() {
+function PostEditor() {
   const toolbarItems = [
     ["heading", "bold"],
     ["hr"],
@@ -28,6 +30,10 @@ function WritePost() {
   ];
   const editorRef = useRef(null);
   const [title, setTitle] = useState("");
+  const [firstDepthLoading, setFirstDepthLoading] = useState(true);
+  const [firstDepthBoardList, setFirstDepthBoardList] = useState([]);
+  const [childBoardListLoading, setChidBoardListLoading] = useState(true);
+  const [childBoardList, setChildBoardList] = useState([]);
 
   //* title handler
   const titleHandler = (e) => {
@@ -49,12 +55,67 @@ function WritePost() {
     });
   };
 
+  /**
+   * * 하위 게시판 리스트 요청
+   * @param {Event} e
+   */
+  const changeFirstDepth = async (e) => {
+    setChidBoardListLoading(true);
+    setChildBoardList(await getChildBoardList(e.target.value));
+    setChidBoardListLoading(false);
+  };
+
+  useEffect(() => {
+    (async function () {
+      //* 1차 게시판 리스트 요청
+      setFirstDepthBoardList(await getFirstDepthBoardList());
+      setFirstDepthLoading(false);
+    })();
+  }, []);
+
   return (
     <WriteWrap>
       <h2 className="subTitle">게시글 작성</h2>
+
+      {/* //* 1차 메뉴 선택 */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <h3 className="smallTitle">1차 메뉴 :</h3>
+        <select onChange={changeFirstDepth}>
+          <option value="none">선택없음</option>
+          {firstDepthLoading
+            ? null
+            : firstDepthBoardList.map((data) => {
+                const { idx, title } = data;
+                return (
+                  <option key={idx} value={idx}>
+                    {title}
+                  </option>
+                );
+              })}
+        </select>
+      </div>
+
+      {/* //* 2차 메뉴 선택 */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <h3 className="smallTitle">2차 메뉴 :</h3>
+        <select>
+          <option value="none">선택없음</option>
+          {childBoardListLoading
+            ? null
+            : childBoardList.map((data) => {
+                const { idx, title } = data;
+                return (
+                  <option key={idx} value={idx}>
+                    {title}
+                  </option>
+                );
+              })}
+        </select>
+      </div>
+
       {/* //* 제목 설정 */}
-      <div className="disFlex alignItemCenter gap10">
-        <p className="smallTitle">제목 : </p>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <h3 className="smallTitle">제목 :</h3>
         <Input style={{ flex: 1 }} onChange={titleHandler} />
       </div>
 
@@ -96,4 +157,4 @@ const EditorWrap = styled.div`
   max-height: 800px;
 `;
 
-export default WritePost;
+export default PostEditor;

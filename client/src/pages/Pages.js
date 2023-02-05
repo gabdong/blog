@@ -6,7 +6,7 @@ import Board from "./Board.js";
 import Settings from "./Settings/Settings.js";
 import Post from "./Post.js";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute.js";
-import WritePost from "./WritePost.js";
+import PostEditor from "./PostEditor.js";
 
 function Pages() {
   return (
@@ -17,7 +17,7 @@ function Pages() {
         <Route path="/post/:postIdx" element={<Post />} />
         <Route
           path="/post/write"
-          element={<PrivateRoute component={<WritePost />} />}
+          element={<PrivateRoute component={<PostEditor />} />}
         />
         <Route
           path="/settings"

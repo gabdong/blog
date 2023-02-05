@@ -11,6 +11,10 @@ function Nav() {
   const user = useSelector((store) => store.user);
   const { isLogin } = user;
   const location = useLocation();
+  const { pathname } = location;
+  //TODO nav 언제 안나오게할지 정하기
+  const navRendering = pathname === "/post/write" ? false : true;
+
   const activeBoardIdx = location.state?.activeBoardIdx;
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
@@ -96,7 +100,7 @@ function Nav() {
 
   return (
     <>
-      {loading ? null : (
+      {loading || !navRendering ? null : (
         <NavSt id="nav">
           {renderNavBoardList(boardList)}
           {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}

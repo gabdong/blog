@@ -37,7 +37,7 @@ function Header() {
     <HeaderSt id="header">
       {/* //* Logo */}
       <Link to="/">
-        <Logo id="logo">Gabdong</Logo>
+        <Logo id="logo">GABDONG</Logo>
       </Link>
       <HeaderBtnWrap>
         {/* //* Search Btn */}
@@ -65,6 +65,7 @@ const HeaderSt = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   width: 100%;
   height: var(--header-height);
 `;
@@ -77,7 +78,7 @@ const HeaderBtn = styled.button`
   font-size: 1rem;
 `;
 const Logo = styled.h1`
-  font-family: "EBGaramond-Bold";
+  font-family: "SUIT-ExtraBold";
   font-size: 21px;
   letter-spacing: 0.15px;
   transition: var(--transition);

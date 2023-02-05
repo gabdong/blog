@@ -69,7 +69,7 @@ router.get("/", (req, res) => {
         }
       }
 
-      res.json({msg: "SUCCESS", boardData});
+      res.json({ msg: "SUCCESS", boardData });
     }
   );
 });
@@ -149,6 +149,7 @@ router.delete("/:idx", (req, res) => {
   );
 });
 
+//* 게시판 정보 요청
 router.get("/:idx", (req, res) => {
   const { idx } = req.params;
 
@@ -159,10 +160,49 @@ router.get("/:idx", (req, res) => {
     AND delete_datetime IS NULL`,
     (err, data) => {
       if (err)
-        return res.status(500).json({ msg: "게시판 정보 불러오기를 실패하였습니다." });
+        return res
+          .status(500)
+          .json({ msg: "게시판 정보 불러오기를 실패하였습니다." });
 
       //TODO 없을경우 404
       res.json({ msg: "SUCCESS", boardData: data[0] });
+    }
+  );
+});
+
+//* depth1 게시판 리스트 요청
+router.get("/list/firstDepth", (req, res) => {
+  db.query(
+    `SELECT idx, title 
+    FROM boards 
+    WHERE depth=1 
+    AND delete_datetime IS NULL`,
+    (err, data) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ msg: "1차 게시판 리스트 불러오기를 실패하였습니다." });
+
+      res.json({ msg: "SUCCESS", boardData: data });
+    }
+  );
+});
+
+//* 하위 게시판리스트 요청
+router.get("/list/childBoard/:parentBoardIdx", (req, res) => {
+  const { parentBoardIdx } = req.params;
+
+  db.query(
+    `SELECT idx, title 
+  FROM boards 
+  WHERE parent=${parentBoardIdx}`,
+    (err, data) => {
+      if (err)
+        return res
+          .status(500)
+          .json({ msg: "하위 게시판 리스트 불러오기를 실패하였습니다." });
+
+      res.json({ msg: "SUCCESS", boardData: data });
     }
   );
 });

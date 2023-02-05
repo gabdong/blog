@@ -32,13 +32,10 @@
     src: url("./assets/font/SUIT-Medium.woff2");
 }
 @font-face {
-    font-family: "DancingScript-Bold";
-    src: url("./assets/font/DancingScript-Bold.ttf");
+    font-family: "SUIT-ExtraBold";
+    src: url("./assets/font/SUIT-ExtraBold.woff2");
 }
-@font-face {
-    font-family: "EBGaramond-Bold";
-    src: url("./assets/font/EBGaramond-Bold.ttf");
-}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -199,17 +196,3 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .gap10 { gap: 10px; }
 .gap15 { gap: 15px; }
 .gap20 { gap: 20px; }
-
-.disFlex {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: -moz-box;
-    display: flex;
-}
-.alignItemCenter {
-    -webkit-box-align: center;
-    -moz-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
