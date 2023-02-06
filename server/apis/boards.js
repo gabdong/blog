@@ -195,7 +195,8 @@ router.get("/list/childBoard/:parentBoardIdx", (req, res) => {
   db.query(
     `SELECT idx, title 
   FROM boards 
-  WHERE parent=${parentBoardIdx}`,
+  WHERE parent=${parentBoardIdx} 
+  AND delete_datetime IS NULL`,
     (err, data) => {
       if (err)
         return res
