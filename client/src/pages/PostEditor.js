@@ -19,6 +19,7 @@ import { getChildBoardList } from "../apis/boards";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import { useSelector } from "react-redux";
 
 function PostEditor() {
   const toolbarItems = [
@@ -29,15 +30,22 @@ function PostEditor() {
     ["image"],
   ];
   const editorRef = useRef(null);
-  const [title, setTitle] = useState("");
+  const user = useSelector((store) => store.user.idx);
+  const [subject, setsubject] = useState("");
   const [firstDepthLoading, setFirstDepthLoading] = useState(true);
   const [firstDepthBoardList, setFirstDepthBoardList] = useState([]);
   const [childBoardListLoading, setChidBoardListLoading] = useState(true);
   const [childBoardList, setChildBoardList] = useState([]);
+  const [board, setBoard] = useState();
 
-  //* title handler
-  const titleHandler = (e) => {
-    setTitle(e.target.value);
+  //* subject handler
+  const subjectHandler = (e) => {
+    setsubject(e.target.value);
+  };
+
+  //* board handler
+  const boardHandler = (e) => {
+    setBoard(e.target.value);
   };
 
   /**
@@ -46,9 +54,9 @@ function PostEditor() {
   const uploadPost = () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
 
-    if (!title) return alert("제목을 입력해주세요.");
+    if (!subject) return alert("제목을 입력해주세요.");
 
-    const body = { markDown, title, checkAuth: true };
+    const body = { markDown, subject, board, user, checkAuth: true };
 
     axios.post("/apis/posts/", body).then((data) => {
       console.log(data);
@@ -98,7 +106,7 @@ function PostEditor() {
       {/* //* 2차 메뉴 선택 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <h3 className="smallTitle">2차 메뉴 :</h3>
-        <select>
+        <select onChange={boardHandler}>
           <option value="none">선택없음</option>
           {childBoardListLoading
             ? null
@@ -116,7 +124,7 @@ function PostEditor() {
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <h3 className="smallTitle">제목 :</h3>
-        <Input style={{ flex: 1 }} onChange={titleHandler} />
+        <Input style={{ flex: 1 }} onChange={subjectHandler} />
       </div>
 
       {/* //* mark down editor */}

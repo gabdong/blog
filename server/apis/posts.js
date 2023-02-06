@@ -51,9 +51,15 @@ router.get("/:postIdx", (req, res) => {
 
 //* 게시글 업로드 요청
 router.post("/", (req, res) => {
-  const { mardkDown, title } = req.body;
+  const { markDown, title, board, user } = req.body;
 
-  db.query();
+  console.log(markDown, title, board);
+  db.query(
+    `INSERT INTO posts 
+    SET 
+  `,
+    (err, data) => {}
+  );
   res.send("hi");
 });
 
