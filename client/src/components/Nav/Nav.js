@@ -20,7 +20,12 @@ function Nav() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getBoardList(setBoardList, setLoading);
+    (async function() {
+      const boardData = await getBoardList();
+
+      setBoardList(boardData);
+      setLoading(false);
+    })();
   }, []);
 
   /**
