@@ -13,25 +13,23 @@ import Pages from "./pages/Pages.js";
 
 function App() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); //TODO true로 변경
 
   useEffect(() => {
-    (async () => {
-      //* 권한 확인
-      try {
-        const authCheck = await checkToken();
-        const accessToken = authCheck.data.newAccessToken;
-        const user = authCheck.data.user;
-        user.accessToken = accessToken;
-        user.isLogin = true;
-
-        dispatch(loginUser(user));
-      } catch (err) {
-        console.error(err);
-      }
-
-      setLoading(false);
-    })();
+    // (async () => {
+    //   //* 권한 확인
+    //   try {
+    //     const authCheck = await checkToken();
+    //     const accessToken = authCheck.data.newAccessToken;
+    //     const user = authCheck.data.user;
+    //     user.accessToken = accessToken;
+    //     user.isLogin = true;
+    //     dispatch(loginUser(user));
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    //   setLoading(false);
+    // })();
   }, [dispatch]);
 
   return (
