@@ -56,8 +56,9 @@ router.post("/", (req, res) => {
   console.log(markDown, title, board);
   db.query(
     `INSERT INTO posts 
-    SET 
-  `,
+    (member, subject, content) 
+    VALUES
+    (${user}, )`,
     (err, data) => {}
   );
   res.send("hi");
