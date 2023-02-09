@@ -7,29 +7,7 @@ const db = require("../config/db");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-//* 게시판 추가
-// router.post("/", (req, res) => {
-//   const { parentIdx: parent, depth, position } = req.body;
-
-//   db.query(
-//     `INSERT INTO boards SET
-//     depth=${depth},
-//     parent=${parent},
-//     title='새로운 게시판',
-//     position=${position},
-//     auth=0`,
-//     (err, data) => {
-//       if (err)
-//         return res.status(500).json({ msg: "게시판 추가를 실패하였습니다." });
-
-//       const { insertId } = data;
-
-//       res.json({ msg: "SUCCESS", newIdx: insertId });
-//     }
-//   );
-// });
-
-//* 게시판 리스트 요청 - mysql2
+//* 게시판 리스트 요청
 router.get("/", async (req, res) => {
   const sql = `
     SELECT idx, depth, parent, position, auth, title 
@@ -70,9 +48,31 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", boardData });
   } catch (err) {
-    throw err;
+    throw new Error(err);
   }
 });
+
+//* 게시판 추가
+// router.post("/", (req, res) => {
+//   const { parentIdx: parent, depth, position } = req.body;
+
+//   db.query(
+//     `INSERT INTO boards SET
+//     depth=${depth},
+//     parent=${parent},
+//     title='새로운 게시판',
+//     position=${position},
+//     auth=0`,
+//     (err, data) => {
+//       if (err)
+//         return res.status(500).json({ msg: "게시판 추가를 실패하였습니다." });
+
+//       const { insertId } = data;
+
+//       res.json({ msg: "SUCCESS", newIdx: insertId });
+//     }
+//   );
+// });
 
 //* 게시판 수정
 // router.post("/:idx", (req, res) => {

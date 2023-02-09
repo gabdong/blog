@@ -9,6 +9,25 @@ const md5 = require("md5");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+//* 로그인 - mysql2
+router.post("/login", async (req, res) => {
+  const { id, password } = req.body;
+
+  try {
+    const [user] = await db.query(`
+      SELECT idx, id, name, phone, email 
+      FROM members 
+      WHERE id='${id}' 
+      AND password='${password}'
+    `);
+
+    console.log(user);
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 //* 로그인
 router.post("/login", (req, res) => {
   const { id, password } = req.body;
