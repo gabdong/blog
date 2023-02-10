@@ -1,4 +1,4 @@
-//g INITIAL STATE
+//* INITIAL STATE
 const INITIAL_STATE = {
   idx: 0,
   id: "",
@@ -8,11 +8,11 @@ const INITIAL_STATE = {
   isLogin: false,
 };
 
-//g TYPE
+//* TYPE
 export const LOGIN_USER = "user/LOGIN_USER";
 export const LOGOUT_USER = "user/LOGOUT_USER";
 
-//g ACTION
+//* ACTION
 export const loginUser = (dataToSubmit) => {
   const payload = dataToSubmit;
   payload.isLogin = true;
@@ -29,7 +29,7 @@ export const logoutUser = () => {
   };
 };
 
-//g REDUCER
+//* REDUCER
 function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case LOGIN_USER:

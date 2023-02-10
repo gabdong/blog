@@ -23,7 +23,6 @@ function Nav() {
     (async function () {
       const boardData = await getBoardList();
 
-      console.log(boardData);
       setBoardList(boardData);
       setLoading(false);
     })();
