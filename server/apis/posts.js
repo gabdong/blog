@@ -7,29 +7,36 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 게시글 리스트 요청
-router.get("/list/:boardIdx", (req, res) => {
+router.get("/list/:boardIdx", async (req, res) => {
   const { boardIdx } = req.params;
   const { parentBoardIdx } = req.query;
 
-  const joinCond = parentBoardIdx
-    ? `INNER JOIN board_post_maps maps ON maps.board=${boardIdx}
-                  INNER JOIN boards boards ON boards.idx=maps.board `
-    : `INNER JOIN boards child_boards ON child_boards.parent=${boardIdx}
-                  INNER JOIN board_post_maps maps ON maps.board=child_boards.idx `;
+  try {
+    let joinCond = "";
+    let searchCond = "";
+    if (parentBoardIdx) {
+      searchCond = `AND posts.board=${boardIdx}`;
+    } else {
+      joinCond = `INNER JOIN boards boards ON boards.parent=${boardIdx}`;
+      searchCond = "AND posts.board=boards.idx";
+    }
 
-  const sql = `SELECT posts.idx, posts.subject, posts.update_datetime AS updateDatetime
-              FROM posts posts 
-              ${joinCond}
-              WHERE posts.idx=maps.post`;
+    const [postListRes] = await db.query(`
+      SELECT posts.idx, posts.subject, posts.update_datetime AS updateDatetime 
+      FROM posts posts 
+      ${joinCond}
+      WHERE posts.delete_datetime IS NULL 
+      ${searchCond}
+    `);
 
-  db.query(sql, (err, data) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ msg: "게시글 리스트를 불러오지 못했습니다." });
-
-    res.json({ msg: "SUCCESS", postList: data });
-  });
+    res.json({ msg: "SUCCESS", postList: postListRes });
+  } catch (err) {
+    if (err.statusCode) {
+      res.status(err.statusCode).json({ msg: err.message });
+    } else {
+      res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
+    }
+  }
 });
 
 //* 게시글 요청

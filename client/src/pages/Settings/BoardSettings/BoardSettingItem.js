@@ -85,7 +85,7 @@ function BoardSettingItem({
       const body = { title: editedTitle, checkAuth: true, parent };
 
       axios
-        .post(`/apis/boards/${idx}`, body)
+        .put(`/apis/boards/${idx}`, body)
         .then(() => {
           setPrevTitle(editedTitle);
         })

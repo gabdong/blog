@@ -46,12 +46,14 @@ router.post("/login", async (req, res) => {
       //* 이미 refreshToken 정보 있을경우 update
       hashIdx = refreshTokenRes[0].hashIdx;
 
+      //TODO error
       await db.query(`
         UPDATE tokens SET 
         refresh_token='${refreshToken}' 
         WHERE hash_idx='${hashIdx}'
       `);
     } else {
+      //TODO error
       //*  refreshToken 정보 없을경우 insert
       const [insertTokenRes] = await db.query(`
         INSERT INTO tokens SET 
@@ -63,6 +65,7 @@ router.post("/login", async (req, res) => {
 
       hashIdx = md5(`${process.env.REFRESH_TOKEN_HASH_IDX_KEY}${insertId}`);
 
+      //TODO error
       await db.query(`
         UPDATE tokens SET
         hash_idx='${hashIdx}'
@@ -76,7 +79,11 @@ router.post("/login", async (req, res) => {
     });
     res.json({ msg: "SUCCESS", user, accessToken });
   } catch (err) {
-    res.status(err.statusCode).json({ msg: err.message });
+    if (err.statusCode) {
+      res.status(err.statusCode).json({ msg: err.message });
+    } else {
+      throw err;
+    }
   }
 });
 

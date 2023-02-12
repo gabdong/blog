@@ -46,164 +46,158 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", boardData });
   } catch (err) {
-    throw new Error(err);
+    res.status(500).json({ msg: "게시판 리스트를 불러오지 못했습니다." });
   }
 });
 
 //* 게시판 추가
-// router.post("/", (req, res) => {
-//   const { parentIdx: parent, depth, position } = req.body;
+router.post("/", async (req, res) => {
+  const { parentIdx: parent, depth, position } = req.body;
 
-//   db.query(
-//     `INSERT INTO boards SET
-//     depth=${depth},
-//     parent=${parent},
-//     title='새로운 게시판',
-//     position=${position},
-//     auth=0`,
-//     (err, data) => {
-//       if (err)
-//         return res.status(500).json({ msg: "게시판 추가를 실패하였습니다." });
+  try {
+    const insertBoardRes = await db.query(`
+      INSERT INTO boards SET
+      depth=${depth},
+      parent=${parent},
+      title='새로운 게시판',
+      position=${position},
+      auth=0
+    `);
 
-//       const { insertId } = data;
+    const { insertId } = insertBoardRes;
 
-//       res.json({ msg: "SUCCESS", newIdx: insertId });
-//     }
-//   );
-// });
+    res.json({ msg: "SUCCESS", newIdx: insertId });
+  } catch (err) {
+    res.status(500).json({ msg: "게시판 추가를 실패하였습니다." });
+  }
+});
 
 //* 게시판 수정
-// router.post("/:idx", (req, res) => {
-//   const { idx } = req.params;
-//   const { title, parent } = req.body;
+router.put("/:idx", async (req, res) => {
+  const { idx } = req.params;
+  const { title, parent } = req.body;
 
-//   db.query(
-//     // 삭제된 게시판중 변경하려는 제목과 같은 게시판이있을경우 재사용
-//     `SELECT idx FROM boards
-//     WHERE parent=${parent}
-//     AND title='${title}'
-//     AND delete_datetime IS NOT NULL`,
-//     (err, data) => {
-//       if (err)
-//         return res
-//           .status(500)
-//           .json({ msg: "게시판 중복확인을 실패하였습니다." });
+  try {
+    //* 중복 게시판 검사
+    const [selectBoardRes] = await db.query(`
+      SELECT idx FROM boards
+      WHERE parent=${parent}
+      AND title='${title}'
+      AND delete_datetime IS NOT NULL
+    `);
 
-//       let targetIdx = idx;
-//       if (data.length > 0) {
-//         targetIdx = data[0].idx;
+    let updateQuery = "";
 
-//         db.query(
-//           `DELETE FROM boards
-//           WHERE idx=${idx}`,
-//           (err, data) => {
-//             if (err)
-//               return res
-//                 .status(500)
-//                 .json({ msg: "중복 게시판 제거를 실패하였습니다." });
-//           }
-//         );
-//       }
+    //TODO 이외 수정사항 추가(권한 등)
+    if (title) updateQuery += `title='${title}'`;
 
-//       let updateQuery = "";
+    if (!updateQuery)
+      return res.status(204).json({ msg: "수정사항이 없습니다." });
 
-//       if (title) updateQuery = `title='${title}'`;
+    let targetIdx = idx;
+    if (selectBoardRes.length !== 0) {
+      //* 삭제된 게시판중 중복된 게시판이있을경우 재사용
+      targetIdx = selectBoardRes[0].idx;
 
-//       if (!updateQuery)
-//         return res.status(204).json({ msg: "수정사항이 없습니다." });
+      await db.query(`
+        DELETE FROM boards
+        WHERE idx=${idx}
+      `);
+    }
 
-//       db.query(
-//         `UPDATE boards SET
-//         delete_datetime=NULL,
-//         ${updateQuery}
-//         WHERE idx=${targetIdx}`,
-//         (err, data) => {
-//           if (err)
-//             return res
-//               .status(500)
-//               .json({ msg: "게시판 수정을 실패하였습니다." });
+    //* 게시판 업데이트
+    await db.query(`
+      UPDATE boards SET
+      delete_datetime=NULL,
+      ${updateQuery}
+      WHERE idx=${targetIdx}
+    `);
 
-//           res.json({ msg: "SUCCESS" });
-//         }
-//       );
-//     }
-//   );
-// });
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    //TODO error
+    throw err;
+  }
+});
 
 //* 게시판 제거
-// router.delete("/:idx", (req, res) => {
-//   const { idx } = req.params;
+//TODO 게시판 같이 제거
+router.delete("/:idx", async (req, res) => {
+  const { idx } = req.params;
 
-//   db.query(
-//     `UPDATE boards SET
-//     delete_datetime=CURRENT_TIMESTAMP()
-//     WHERE idx=${idx}`,
-//     (err, data) => {
-//       if (err)
-//         return res.status(500).json({ msg: "게시판 제거를 실패하였습니다." });
+  try {
+    await db.query(`
+      UPDATE boards SET
+      delete_datetime=CURRENT_TIMESTAMP()
+      WHERE idx=${idx}
+    `);
 
-//       res.json({ msg: "SUCCESS" });
-//     }
-//   );
-// });
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    res.status(500).json({ msg: "게시판 제거를 실패하였습니다." });
+  }
+});
 
 //* 게시판 정보 요청
-// router.get("/:idx", (req, res) => {
-//   const { idx } = req.params;
+router.get("/:idx", async (req, res) => {
+  const { idx } = req.params;
 
-//   db.query(
-//     `SELECT title, parent
-//     FROM boards
-//     WHERE idx=${idx}
-//     AND delete_datetime IS NULL`,
-//     (err, data) => {
-//       if (err)
-//         return res
-//           .status(500)
-//           .json({ msg: "게시판 정보 불러오기를 실패하였습니다." });
+  try {
+    const boardRes = await db.query(`
+      SELECT title, parent
+      FROM boards
+      WHERE idx=${idx}
+      AND delete_datetime IS NULL
+    `);
 
-//       //TODO 없을경우 404
-//       res.json({ msg: "SUCCESS", boardData: data[0] });
-//     }
-//   );
-// });
+    if (boardRes.length === 0) {
+      const err = new Error("게시판 정보를 불러오지 못했습니다.");
+      err.statusCode(404);
+      throw err;
+    }
+
+    res.json({ msg: "SUCCESS", boardData: boardRes[0] });
+  } catch (err) {
+    if (err.statusCode) {
+      res.status(err.statusCode).json({ msg: err.message });
+    } else {
+      throw err;
+    }
+  }
+});
 
 //* depth1 게시판 리스트 요청
-// router.get("/list/firstDepth", (req, res) => {
-//   db.query(
-//     `SELECT idx, title
-//     FROM boards
-//     WHERE depth=1
-//     AND delete_datetime IS NULL`,
-//     (err, data) => {
-//       if (err)
-//         return res
-//           .status(500)
-//           .json({ msg: "1차 게시판 리스트 불러오기를 실패하였습니다." });
+router.get("/list/firstDepth", async (req, res) => {
+  try {
+    const boardListRes = await db.query(`
+      SELECT idx, title
+      FROM boards
+      WHERE depth=1
+      AND delete_datetime IS NULL
+    `);
 
-//       res.json({ msg: "SUCCESS", boardData: data });
-//     }
-//   );
-// });
+    res.json({ msg: "SUCCESS", boardData: boardListRes });
+  } catch (err) {
+    res.status(500).json({ msg: "1차 게시판 리스트를 불러오지 못했습니다." });
+  }
+});
 
 //* 하위 게시판리스트 요청
-// router.get("/list/childBoard/:parentBoardIdx", (req, res) => {
-//   const { parentBoardIdx } = req.params;
+router.get("/list/childBoard/:parentBoardIdx", async (req, res) => {
+  const { parentBoardIdx } = req.params;
 
-//   db.query(
-//     `SELECT idx, title
-//   FROM boards
-//   WHERE parent=${parentBoardIdx}
-//   AND delete_datetime IS NULL`,
-//     (err, data) => {
-//       if (err)
-//         return res
-//           .status(500)
-//           .json({ msg: "하위 게시판 리스트 불러오기를 실패하였습니다." });
+  try {
+    const childBoardListRes = await db.query(`
+      SELECT idx, title
+      FROM boards
+      WHERE parent=${parentBoardIdx}
+      AND delete_datetime IS NULL
+    `);
 
-//       res.json({ msg: "SUCCESS", boardData: data });
-//     }
-//   );
-// });
+    res.json({ msg: "SUCCESS", boardData: childBoardListRes });
+  } catch (err) {
+    res.status(500).json({ msg: "하위게시판 리스트를 불러오지 못했습니다." });
+  }
+});
 
 module.exports = router;
