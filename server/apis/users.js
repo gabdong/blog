@@ -21,9 +21,7 @@ router.post("/login", async (req, res) => {
       AND password='${password}'
     `);
 
-    const isLogin = userRes.length !== 0;
-
-    if (!isLogin) {
+    if (userRes.length === 0) {
       const err = new Error("잘못된 아이디 또는 비밀번호입니다.");
       err.statusCode = 404;
       throw err;
@@ -38,7 +36,7 @@ router.post("/login", async (req, res) => {
 
     //* refreshToken 저장
     const [refreshTokenRes] = await db.query(`
-      SELECT hash_idx as hashIdx
+      SELECT hash_idx AS hashIdx
       FROM tokens
       WHERE member='${idx}'
     `);
@@ -53,11 +51,6 @@ router.post("/login", async (req, res) => {
         refresh_token='${refreshToken}' 
         WHERE hash_idx='${hashIdx}'
       `);
-
-      res.cookie("refreshToken", hashIdx, {
-        maxAge: 1000 * 60 * 60 * 24,
-        httpOnly: true,
-      });
     } else {
       //*  refreshToken 정보 없을경우 insert
       const [insertTokenRes] = await db.query(`
@@ -77,6 +70,10 @@ router.post("/login", async (req, res) => {
       `);
     }
 
+    res.cookie("refreshToken", hashIdx, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    });
     res.json({ msg: "SUCCESS", user, accessToken });
   } catch (err) {
     res.status(err.statusCode).json({ msg: err.message });

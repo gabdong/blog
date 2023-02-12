@@ -19,7 +19,7 @@ instance.interceptors.request.use(
     const { checkAuth } = config.data;
 
     if (checkAuth === true) {
-      //g check auth
+      //* check auth
       const checkAuthResult = await checkToken();
       const { status, msg } = checkAuthResult;
 

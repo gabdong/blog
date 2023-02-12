@@ -9,15 +9,13 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 게시판 리스트 요청
 router.get("/", async (req, res) => {
-  const sql = `
-    SELECT idx, depth, parent, position, auth, title 
-    FROM boards 
-    WHERE delete_datetime IS NULL 
-    ORDER BY depth ASC
-  `;
-
   try {
-    const [data] = await db.query(sql);
+    const [data] = await db.query(`
+      SELECT idx, depth, parent, position, auth, title 
+      FROM boards 
+      WHERE delete_datetime IS NULL 
+      ORDER BY depth ASC
+    `);
 
     const boardData = {};
     for (const menu of data) {
