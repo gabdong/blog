@@ -40,20 +40,29 @@ router.get("/list/:boardIdx", async (req, res) => {
 });
 
 //* 게시글 요청
-router.get("/:postIdx", (req, res) => {
+router.get("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
 
-  db.query(
-    `SELECT subject, content, idx, tags 
-    FROM posts 
-    WHERE idx=${postIdx}`,
-    (err, data) => {
-      if (err)
-        return res.status(500).json({ msg: "게시글을 불러오지 못했습니다." });
+  try {
+    const [postDataRes] = await db.query(`
+      SELECT subject, content, idx, tags 
+      FROM posts 
+      WHERE idx=${postIdx}
+    `);
 
-      res.json({ msg: "SUCCESS", postData: data });
+    if (postDataRes.length === 0) {
+      const err = new Error("게시글을 불러오지 못했습니다.");
+      err.statusCode(500);
     }
-  );
+
+    res.json({ msg: "SUCCESS", postData: postDataRes });
+  } catch (err) {
+    if (err.statusCode) {
+      res.status(err.statusCode).json({ msg: err.message });
+    } else {
+      throw err;
+    }
+  }
 });
 
 //* 게시글 업로드 요청
