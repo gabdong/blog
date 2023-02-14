@@ -26,7 +26,10 @@ function PostList({ boardIdx, parentBoardIdx }) {
             ).toLocaleDateString();
             return (
               <PostListLi key={idx}>
-                <PostLink to={`/post/${idx}`} state={{ activeBoardIdx: boardIdx }}>
+                <PostLink
+                  to={`/post/${idx}`}
+                  state={{ activeBoardIdx: boardIdx }}
+                >
                   <p className="normalText">{subject}</p>
                   <p className="caption">{updateDatetimeFormat}</p>
                 </PostLink>
