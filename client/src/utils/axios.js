@@ -25,6 +25,8 @@ instance.interceptors.request.use(
 
       if (status === 200) {
         const { newAccessToken } = checkAuthResult.data;
+        const { user } = checkAuthResult.data;
+        config.data.user = user;
 
         if (newAccessToken) {
           authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;

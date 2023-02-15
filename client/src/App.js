@@ -13,7 +13,7 @@ import Pages from "./pages/Pages.js";
 
 function App() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false); //TODO true로 변경
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -21,14 +21,16 @@ function App() {
       try {
         const authCheck = await checkToken();
         const accessToken = authCheck.data.newAccessToken;
-        const user = authCheck.data.user;
+        const { user } = authCheck.data;
         user.accessToken = accessToken;
         user.isLogin = true;
+
         dispatch(loginUser(user));
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     })();
   }, [dispatch]);
 

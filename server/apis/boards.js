@@ -51,8 +51,10 @@ router.get("/", async (req, res) => {
 });
 
 //* 게시판 추가
+//TODO user 추가
 router.post("/", async (req, res) => {
-  const { parentIdx: parent, depth, position } = req.body;
+  const { parentIdx: parent, depth, position, user } = req.body;
+  const { idx: userIdx } = user;
 
   try {
     const insertBoardRes = await db.query(`
@@ -61,10 +63,11 @@ router.post("/", async (req, res) => {
       parent=${parent},
       title='새로운 게시판',
       position=${position},
-      auth=0
+      auth=0,
+      member=${userIdx}
     `);
 
-    const { insertId } = insertBoardRes;
+    const { insertId } = insertBoardRes[0];
 
     res.json({ msg: "SUCCESS", newIdx: insertId });
   } catch (err) {
@@ -121,7 +124,7 @@ router.put("/:idx", async (req, res) => {
 });
 
 //* 게시판 제거
-//TODO 게시판 같이 제거
+//TODO 게시글 같이 제거
 router.delete("/:idx", async (req, res) => {
   const { idx } = req.params;
 
@@ -169,7 +172,7 @@ router.get("/:idx", async (req, res) => {
 //* depth1 게시판 리스트 요청
 router.get("/list/firstDepth", async (req, res) => {
   try {
-    const boardListRes = await db.query(`
+    const [boardListRes] = await db.query(`
       SELECT idx, title
       FROM boards
       WHERE depth=1
@@ -187,7 +190,7 @@ router.get("/list/childBoard/:parentBoardIdx", async (req, res) => {
   const { parentBoardIdx } = req.params;
 
   try {
-    const childBoardListRes = await db.query(`
+    const [childBoardListRes] = await db.query(`
       SELECT idx, title
       FROM boards
       WHERE parent=${parentBoardIdx}

@@ -196,3 +196,11 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .gap10 { gap: 10px; }
 .gap15 { gap: 15px; }
 .gap20 { gap: 20px; }
+
+/** mark down editor **/
+.toastui-editor-file-select-button,
+.toastui-editor-close-button,
+.toastui-editor-ok-button,
+.toastui-editor-popup-body button {
+    text-align: center;
+}

@@ -68,7 +68,6 @@ function PostEditor() {
    * @param {Event} e
    */
   const changeFirstDepth = async (e) => {
-    setChidBoardListLoading(true);
     setChildBoardList(await getChildBoardList(e.target.value));
     setChidBoardListLoading(false);
   };

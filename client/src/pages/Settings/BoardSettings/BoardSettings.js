@@ -10,7 +10,7 @@ function BoardSettings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async function() {
+    (async function () {
       const boardData = await getBoardList();
 
       setBoardList(boardData);
@@ -115,7 +115,7 @@ const BoardSettingSection = styled.section`
   display: flex;
   flex-direction: column;
 
-  height: 50%;
+  height: 100%;
 `;
 const BoardSettingWrap = styled.div`
   display: flex;

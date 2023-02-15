@@ -7,8 +7,11 @@ import Settings from "./Settings/Settings.js";
 import Post from "./Post.js";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute.js";
 import PostEditor from "./PostEditor.js";
+import { useSelector } from "react-redux";
 
 function Pages() {
+  const user = useSelector((state) => state.user);
+
   return (
     <PagesSt>
       <Routes>
@@ -17,11 +20,11 @@ function Pages() {
         <Route path="/post/:postIdx" element={<Post />} />
         <Route
           path="/post/write"
-          element={<PrivateRoute component={<PostEditor />} />}
+          element={<PrivateRoute user={user} component={<PostEditor />} />}
         />
         <Route
           path="/settings"
-          element={<PrivateRoute component={<Settings />} />}
+          element={<PrivateRoute user={user} component={<Settings />} />}
         />
       </Routes>
     </PagesSt>
