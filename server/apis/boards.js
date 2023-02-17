@@ -124,7 +124,7 @@ router.put("/:idx", async (req, res) => {
 });
 
 //* 게시판 제거
-//TODO 게시글 같이 제거
+//TODO 게시글, 하위게시판 같이 제거할지
 router.delete("/:idx", async (req, res) => {
   const { idx } = req.params;
 

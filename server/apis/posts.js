@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
       board=${board}, 
       auth=0, 
       subject='${subject}', 
-      content='${markDown}'
+      content='${markDown.replace(/'/g, "\\'")}'
     `);
 
     res.json({ msg: "SUCCESS" });

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Viewer } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import codeSyntax from "@toast-ui/editor-plugin-code-syntax-highlight";
+import "@toast-ui/editor/dist/i18n/ko-kr";
+
+import Prism from "prismjs";
+import "prismjs/themes/prism.css";
+import "prismjs/components/prism-clojure";
 
 import { getPost } from "../apis/posts";
 
@@ -27,7 +35,10 @@ function Post() {
   return loading ? null : (
     <div className="scroll h100">
       <h2 className="headline mb20">{subject}</h2>
-      <p style={{ wordBreak: "break-all" }}>{content}</p>
+      <Viewer
+        initialValue={content}
+        plugins={[[codeSyntax, { highlighter: Prism }]]}
+      />
     </div>
   );
 }
