@@ -59,6 +59,7 @@ function PostEditor() {
 
     const body = { markDown, subject, board, user, checkAuth: true };
 
+    console.log(body);
     axios.post("/apis/posts/", body).then((data) => {
       console.log(data);
     });
@@ -140,6 +141,13 @@ function PostEditor() {
           hideModeSwitch={true}
           toolbarItems={toolbarItems}
           theme="dark"
+          hooks={{
+            //TODO 이미지 저장
+            addImageBlobHook: async (blob, callback) => {
+              console.log(blob);
+              callback(blob);
+            },
+          }}
         />
       </EditorWrap>
 

@@ -207,3 +207,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .toastui-editor-md-tab-container .tab-item {
     margin-top: 12px !important;
 }
+.tab-item {
+    font-family: 'SUIT-Regular';
+    font-size: 14px;
+}

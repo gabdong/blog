@@ -19,7 +19,7 @@ function Pages() {
         <Route path="/board/:boardIdx" element={<Board />} />
         <Route path="/post/:postIdx" element={<Post />} />
         <Route
-          path="/post/write"
+          path="/post/new"
           element={<PrivateRoute user={user} component={<PostEditor />} />}
         />
         <Route

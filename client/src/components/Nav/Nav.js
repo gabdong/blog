@@ -13,7 +13,7 @@ function Nav() {
   const location = useLocation();
   const { pathname } = location;
   //TODO nav 언제 안나오게할지 정하기
-  const navRendering = pathname === "/post/write" ? false : true;
+  const navRendering = pathname === "/post/new" ? false : true;
 
   const activeBoardIdx = location.state?.activeBoardIdx;
   const [boardList, setBoardList] = useState({});

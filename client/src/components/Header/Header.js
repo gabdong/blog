@@ -44,9 +44,7 @@ function Header() {
         <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
-        {!user.isLogin ? null : (
-          <LinkButton text="New Post" path="/post/write" />
-        )}
+        {!user.isLogin ? null : <LinkButton text="New Post" path="/post/new" />}
         {/* //* login Btn */}
         <HeaderBtn
           className="buttonText"
