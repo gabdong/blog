@@ -27,10 +27,11 @@ function PostEditor() {
     ["hr"],
     ["ul", "ol", "task"],
     ["table", "link"],
-    ["image"],
+    ["image", "code", "codeblock"],
   ];
   const editorRef = useRef(null);
   const user = useSelector((store) => store.user.idx);
+
   const [subject, setsubject] = useState("");
   const [firstDepthLoading, setFirstDepthLoading] = useState(true);
   const [firstDepthBoardList, setFirstDepthBoardList] = useState([]);
@@ -129,7 +130,7 @@ function PostEditor() {
       {/* //* mark down editor */}
       <EditorWrap className="scroll" style={{ wordBreak: "break-word" }}>
         <Editor
-          previewStyle="vertical"
+          previewStyle="tab"
           height="auto"
           initialEditType="markdown"
           useCommandShortcut={false}

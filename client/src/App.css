@@ -204,3 +204,6 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .toastui-editor-popup-body button {
     text-align: center;
 }
+.toastui-editor-md-tab-container .tab-item {
+    margin-top: 12px !important;
+}
