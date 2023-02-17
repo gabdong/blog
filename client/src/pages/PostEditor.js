@@ -59,7 +59,6 @@ function PostEditor() {
 
     const body = { markDown, subject, board, user, checkAuth: true };
 
-    console.log(body);
     axios.post("/apis/posts/", body).then((data) => {
       console.log(data);
     });

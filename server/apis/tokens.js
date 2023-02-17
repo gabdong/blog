@@ -107,7 +107,21 @@ router.get("/check-token", async (req, res) => {
         user,
       });
     } else {
-      res.json({ msg: "SUCCESS", status: 200, auth: true });
+      const { idx } = checkAccessToken;
+      const [userRes] = await db.query(`
+        SELECT idx, id, name, phone, email
+        FROM members
+        WHERE idx=${idx}
+      `);
+
+      if (userRes.length === 0) {
+        const err = new Error("유저정보를 찾을 수 없습니다.");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      const user = userRes[0];
+      res.json({ msg: "SUCCESS", status: 200, auth: true, user });
     }
   } catch (err) {
     res.status(err.statusCode).json({ msg: err.message });

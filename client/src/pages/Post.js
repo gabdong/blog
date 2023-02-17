@@ -26,7 +26,7 @@ function Post() {
 
   return loading ? null : (
     <div className="scroll h100">
-      <h2 className="headline">{subject}</h2>
+      <h2 className="headline mb20">{subject}</h2>
       <p style={{ wordBreak: "break-all" }}>{content}</p>
     </div>
   );

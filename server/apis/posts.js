@@ -66,13 +66,24 @@ router.get("/:postIdx", async (req, res) => {
 });
 
 //* 게시글 업로드 요청
-router.post("/", (req, res) => {
-  console.log(req.body);
+router.post("/", async (req, res) => {
   const { markDown, subject, board, user } = req.body;
+  const userIdx = user.idx;
 
-  console.log(markDown, subject, board, user);
+  try {
+    await db.query(`
+      INSERT INTO posts SET
+      member=${userIdx}, 
+      board=${board}, 
+      auth=0, 
+      subject='${subject}', 
+      content='${markDown}'
+    `);
 
-  res.send("hi");
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    res.status(500).json({ msg: "게시판 업로드를 실패하였습니다." });
+  }
 });
 
 module.exports = router;
