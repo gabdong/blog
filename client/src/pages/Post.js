@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Viewer } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+// import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import codeSyntax from "@toast-ui/editor-plugin-code-syntax-highlight";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 

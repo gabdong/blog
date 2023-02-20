@@ -211,6 +211,9 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Regular';
     font-size: 14px;
 }
-.toastui-editor-contents * {
-    color: #ffffff;
+.toastui-editor-contents p {
+    color: inherit !important;
+}
+.toastui-editor-contents pre {
+    background: var(--dark-l) !important;
 }

@@ -135,7 +135,7 @@ function PostEditor() {
           height="auto"
           initialEditType="markdown"
           useCommandShortcut={false}
-          plugins={[colorSyntax, [codeSyntax, { highlighter: Prism }]]}
+          plugins={[[colorSyntax], [codeSyntax, { highlighter: Prism }]]}
           ref={editorRef}
           language="ko-KR"
           hideModeSwitch={true}
