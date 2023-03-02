@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 //* markdown editor
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -20,9 +22,9 @@ import { getChildBoardList } from "../apis/boards";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
-import { useSelector } from "react-redux";
 
 function PostEditor() {
+  const navigate = useNavigate();
   const toolbarItems = [
     ["heading", "bold"],
     ["hr"],
@@ -57,11 +59,14 @@ function PostEditor() {
     const markDown = editorRef.current.getInstance().getMarkdown();
 
     if (!subject) return alert("제목을 입력해주세요.");
+    if (!board) return alert('게시판을 선택해주세요.');
 
     const body = { markDown, subject, board, user, checkAuth: true };
 
     axios.post("/apis/posts/", body).then((data) => {
-      console.log(data);
+      const { postIdx } = data.data;
+
+      navigate(`/post/${postIdx}`);
     });
   };
 

@@ -33,7 +33,6 @@ instance.interceptors.request.use(
           instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         }
 
-        console.log(checkAuthResult);
         return config;
       } else if (status === 401) {
         const error = new Error(msg);

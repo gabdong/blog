@@ -211,6 +211,18 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Regular';
     font-size: 14px;
 }
+.toastui-editor {
+    height: calc(100vh - 500px) !important;
+}
+.ProseMirror {
+    height: 100%;
+}
+.toastui-editor-contents h1,
+.toastui-editor-contents h2,
+.toastui-editor-contents h3,
+.toastui-editor-contents h4,
+.toastui-editor-contents h5,
+.toastui-editor-contents h6,
 .toastui-editor-contents p {
     color: inherit !important;
 }
