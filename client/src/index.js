@@ -6,7 +6,10 @@ import store from "./utils/store.js";
 
 import App from "./App.js";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+
+rootEl.classList.add("scroll");
 root.render(
   <Provider store={store}>
     <App />

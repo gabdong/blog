@@ -66,6 +66,11 @@ const HeaderSt = styled.header`
 
   width: 100%;
   height: var(--header-height);
+  background: var(--dark);
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 1;
 `;
 const HeaderBtnWrap = styled.div`
   display: flex;

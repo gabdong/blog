@@ -124,7 +124,11 @@ router.get("/check-token", async (req, res) => {
       res.json({ msg: "SUCCESS", status: 200, auth: true, user });
     }
   } catch (err) {
-    res.status(err.statusCode).json({ msg: err.message });
+    if (err.statusCode) {
+      res.status(err.statusCode).json({ msg: err.message });
+    } else {
+      throw new Error(err);
+    }
   }
 });
 

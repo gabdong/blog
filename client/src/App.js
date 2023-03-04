@@ -53,12 +53,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--header-main-space);
 
   width: 1600px;
   max-width: 90%;
-  height: 100%;
   margin: 0 auto;
-  overflow: hidden;
   user-select: none;
 `;
 const Main = styled.main`
@@ -66,8 +65,6 @@ const Main = styled.main`
 
   width: 1200px;
   max-width: 100%;
-  height: calc(100% - var(--header-height));
-  padding-top: var(--header-main-space);
   padding-bottom: var(--main-footer-space);
 `;
 

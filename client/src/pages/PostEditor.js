@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 //* markdown editor
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -19,6 +19,7 @@ import "prismjs/components/prism-clojure";
 import axios from "../utils/axios";
 import { getFirstDepthBoardList } from "../apis/boards";
 import { getChildBoardList } from "../apis/boards";
+import { uploadImage } from "../apis/images";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
@@ -54,12 +55,14 @@ function PostEditor() {
 
   /**
    * * 게시글 업로드
+   *
+   * TODO apis로 이동
    */
   const uploadPost = () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
 
     if (!subject) return alert("제목을 입력해주세요.");
-    if (!board) return alert('게시판을 선택해주세요.');
+    if (!board) return alert("게시판을 선택해주세요.");
 
     const body = { markDown, subject, board, user, checkAuth: true };
 
@@ -148,9 +151,16 @@ function PostEditor() {
           theme="dark"
           hooks={{
             //TODO 이미지 저장
-            addImageBlobHook: async (blob, callback) => {
-              console.log(blob);
-              callback(blob);
+            addImageBlobHook: async (blob, callback, { ...dtd }) => {
+              const altText = document.getElementById(
+                "toastuiAltTextInput"
+              ).value;
+
+              if (!altText) return alert("이미지 설명을 입력해주세요.");
+
+              const url = await uploadImage(blob, altText);
+
+              callback(url, altText);
             },
           }}
         />
