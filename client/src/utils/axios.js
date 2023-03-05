@@ -16,7 +16,16 @@ instance.interceptors.request.use(
   async (config) => {
     if (!config.data) return config;
 
-    const { checkAuth } = config.data;
+    let checkAuth;
+    if (config.data instanceof FormData) {
+      config.headers["Content-Type"] = "multipart/form-data";
+
+      checkAuth = config.data.get("checkAuth");
+    } else {
+      config.headers["Content-Type"] = "application/json";
+
+      checkAuth = config.data.checkAuth;
+    }
 
     if (checkAuth === true) {
       //* check auth

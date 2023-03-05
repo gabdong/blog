@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const bodyParser = require("body-parser");
 const db = require("../config/db");
 const { getCookie } = require("../utils/utils");
 const token = require("../config/jwt");
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
 
 //* refresh token 삭제
 router.delete("/", async (req, res) => {

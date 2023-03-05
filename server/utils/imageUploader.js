@@ -17,7 +17,7 @@ const imageUploader = multer({
     bucket: process.env.AWS_S3_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, callback) => {
-      const uploadDirectory = req.query.directory ?? "image";
+      const uploadDirectory = req.query.directory ?? "images";
       const extention = path.extname(file.originalname).toLowerCase();
       if (!allowedExtensions.includes(extention))
         return callback(new Error("wrong extension"));

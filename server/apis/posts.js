@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bodyParser = require("body-parser");
 const db = require("../config/db");
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 게시글 리스트 요청
 router.get("/list/:boardIdx", async (req, res) => {

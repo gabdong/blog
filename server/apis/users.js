@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const bodyParser = require("body-parser");
 const db = require("../config/db");
 const token = require("../config/jwt");
 const md5 = require("md5");
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
 
 //* 로그인
 router.post("/login", async (req, res) => {

@@ -212,7 +212,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-size: 14px;
 }
 .ProseMirror {
-    height: 100%;
+    min-height: 300px;
 }
 .toastui-editor-contents h1,
 .toastui-editor-contents h2,
