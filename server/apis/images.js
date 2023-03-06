@@ -11,25 +11,47 @@ router.get("/", async (req, res) => {
   try {
     const [duplicatedImgRes] = await db.query(`
       SELECT url, alt FROM images 
-      WHERE org_name='${name}'
+      WHERE original_name='${name}'
       AND size=${size}
     `);
 
-    res.json({ msg: "SUCCESS" });
+    let url, alt;
+
+    if (duplicatedImgRes.length > 0) {
+      url = duplicatedImgRes[0].url;
+      alt = duplicatedImgRes[0].alt;
+    }
+
+    res.json({ msg: "SUCCESS", url, alt });
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 });
 
 //* 이미지 업로드
 router.post("/", imageUploader.single("image"), async (req, res) => {
-  const { alt } = req.body;
-  const { originalname, size, contentType, location, key } = req.file;
+  const { alt, user: userDataStr } = req.body;
+  const userData = JSON.parse(userDataStr);
+  const { idx: userIdx } = userData;
+  const { originalname, size, mimetype, location, key } = req.file;
+  const name = key.replace('images/', '');
 
-  console.log(req.body);
-  console.log(req.file);
-  console.log(alt);
-  res.json({ msg: "SUCCESS" });
+  try {
+    await db.query(`
+      INSERT INTO images SET 
+      member=${userIdx},
+      size=${size},
+      original_name='${originalname}',
+      name='${name}',
+      url='${location}',
+      alt='${alt}',
+      mime_type='${mimetype}'
+    `);
+  
+    res.json({ msg: "SUCCESS", url: location });
+  } catch (err) {
+    res.status(500).json({ msg: "이미지 업로드를 실패하였습니다." });
+  }
 });
 
 module.exports = router;

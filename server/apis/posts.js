@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
   const userIdx = user.idx;
 
   try {
-    const [createPostRes] = await db.query(`
+    const [insertPostRes] = await db.query(`
       INSERT INTO posts SET
       member=${userIdx}, 
       board=${board}, 
@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
       tags='[]'
     `);
 
-    res.json({ msg: "SUCCESS", postIdx: createPostRes.insertId });
+    res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });
   } catch (err) {
     res.status(500).json({ msg: "게시판 업로드를 실패하였습니다." });
   }

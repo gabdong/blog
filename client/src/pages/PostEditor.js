@@ -55,8 +55,6 @@ function PostEditor() {
 
   /**
    * * 게시글 업로드
-   *
-   * TODO apis로 이동
    */
   const uploadPost = () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
@@ -151,16 +149,16 @@ function PostEditor() {
           theme="dark"
           hooks={{
             //TODO 이미지 저장
-            addImageBlobHook: async (blob, callback, { ...dtd }) => {
+            addImageBlobHook: async (blob, callback) => {
               const altText = document.getElementById(
                 "toastuiAltTextInput"
               ).value;
 
               if (!altText) return alert("이미지 설명을 입력해주세요.");
 
-              const url = await uploadImage(blob, altText);
+              const { url, alt } = await uploadImage(blob, altText);
 
-              callback(url, altText);
+              callback(url, alt);
             },
           }}
         />
