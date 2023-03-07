@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { RiCloseFill as Close } from "react-icons/ri";
 
 import { getBoardList } from "../../apis/boards.js";
 
@@ -18,6 +19,17 @@ function Nav() {
   const activeBoardIdx = location.state?.activeBoardIdx;
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
+
+  /**
+   * * nav close
+   */
+  const navClose = () => {
+    const nav = document.getElementById('nav');
+    const background = document.getElementById('navBackground');
+
+    nav.classList.remove('active');
+    background.classList.remove('active');
+  }
 
   useEffect(() => {
     (async function () {
@@ -106,10 +118,15 @@ function Nav() {
   return (
     <>
       {loading || !navRendering ? null : (
-        <NavSt id="nav">
-          {renderNavBoardList(boardList)}
-          {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
-        </NavSt>
+        <>
+          {/* //TODO background 클릭시 nav닫기  */}
+          <NavBackgroundSt id="navBackground" onClick={navClose}/>
+          <NavSt id="nav">
+            <CloseBtnSt onClick={navClose}/>
+            {renderNavBoardList(boardList)}
+            {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
+          </NavSt>
+        </>
       )}
     </>
   );
@@ -120,6 +137,59 @@ const NavSt = styled.nav`
   flex-direction: column;
   gap: 8px;
   width: 200px;
+
+  @media all and (max-width: 479px) {
+    gap: 12px;
+
+    width: 80%;
+    height: 100%;
+    padding: 20px;
+    background: #000000;
+    overflow-y: auto;
+    position: fixed;
+    left: -80%;
+    top: 0;
+    z-index: 2;
+    transition: var(--transition);
+
+    &::-webkit-scrollbar {
+      width: 3px;
+      background: var(--dark-l);
+      border-radius: var(--border-radius);
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: var(--border-radius);
+    }
+
+    &.active {
+      left: 0;
+    }
+  }
+`;
+
+const NavBackgroundSt = styled.div`
+  @media all and (max-width: 479px) {
+    &.active {
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1;
+    }
+  }
+`;
+
+const CloseBtnSt = styled(Close)`
+  display: none;
+
+  @media all and (max-width: 479px) {
+    display: block;
+    font-size: 32px;
+    
+  }
 `;
 
 export default Nav;

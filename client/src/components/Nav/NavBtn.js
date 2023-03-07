@@ -25,9 +25,14 @@ const NavBtnSt = styled(NavLink)`
 
   ${(props) => {
     if (props.depth === 2) {
-      return `padding-left: 10px`;
+      return `padding-left: 10px;`;
     }
   }}
+
+  @media all and (max-width: 479px) {
+    font-size: 16px;
+  }
+
 `;
 
 export default NavBtn;

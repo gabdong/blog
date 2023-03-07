@@ -12,6 +12,7 @@
     --transition: 0.2s;
     --border-radius: 4px;
     --header-height: 80px;
+    --mo-header-height: 64px;
     --header-main-space: 40px;
     --main-footer-space: 60px;
 }
@@ -128,7 +129,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 }
 .buttonText {
     font-family: 'SUIT-Medium';
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 1.25px;
 }
 .normalText {

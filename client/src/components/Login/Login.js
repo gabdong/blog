@@ -109,9 +109,10 @@ const LoginOverlay = styled.div`
 `;
 const LoginContent = styled.div`
   width: 400px;
-  height: 300px;
+  height: 280px;
   max-width: 90%;
   padding: 0 20px;
+  border-radius: var(--border-radius);
   background: var(--dark-l);
   position: relative;
   z-index: 1;

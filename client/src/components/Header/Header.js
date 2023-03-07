@@ -1,4 +1,5 @@
 import { FaSearch as Search } from "react-icons/fa";
+import { FiMenu as Menu } from "react-icons/fi"
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -33,8 +34,20 @@ function Header() {
     dispatch(logoutUser());
   };
 
+  /**
+   * * nav open
+   */
+  const navOpen = () => {
+    const nav = document.getElementById('nav');
+    const background = document.getElementById('navBackground');
+
+    nav.classList.add('active');
+    background.classList.add('active');
+  }
+
   return (
     <HeaderSt id="header">
+      <MenuSt onClick={navOpen}/>
       {/* //* Logo */}
       <Link to="/">
         <Logo id="logo">GABDONG</Logo>
@@ -71,15 +84,30 @@ const HeaderSt = styled.header`
   left: 0;
   top: 0;
   z-index: 1;
+
+  @media all and (max-width: 479px) {
+    height: var(--mo-header-height);
+  }
 `;
+
 const HeaderBtnWrap = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  
+  @media all and (max-width: 479px) {
+    gap: 8px;
+  }
 `;
+
 const HeaderBtn = styled.button`
   font-size: 1rem;
+
+  @media all and (max-width: 479px) {
+    font-size: 0.9rem;
+  }
 `;
+
 const Logo = styled.h1`
   font-family: "SUIT-ExtraBold";
   font-size: 21px;
@@ -87,6 +115,23 @@ const Logo = styled.h1`
   transition: var(--transition);
   color: var(--primary-color);
   cursor: pointer;
+
+  @media all and (max-width: 479px) {
+    font-size: 26px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
+
+const MenuSt = styled(Menu)`
+  display: none;
+
+  @media all and (max-width: 479px) {
+    display: block;
+    font-size: 20px;
+  }
 `;
 
 export default Header;
