@@ -44,7 +44,7 @@ function Header() {
         <HeaderBtn className="buttonText">
           <Search />
         </HeaderBtn>
-        {!user.isLogin ? null : <LinkButton text="New Post" path="/post/new" />}
+        {!user.isLogin ? null : <LinkButton text="새 글 작성" path="/post/new" />}
         {/* //* login Btn */}
         <HeaderBtn
           className="buttonText"
