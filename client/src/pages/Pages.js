@@ -33,6 +33,8 @@ function Pages() {
 
 const PagesSt = styled.div`
   flex: 1;
+
+  max-width: 100%;
 `;
 
 export default Pages;

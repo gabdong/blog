@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 //* markdown editor
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -11,6 +12,7 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import codeSyntax from "@toast-ui/editor-plugin-code-syntax-highlight";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 import { Editor } from "@toast-ui/react-editor";
+
 //* editor theme
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
