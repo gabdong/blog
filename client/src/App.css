@@ -228,6 +228,19 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .toastui-editor-contents pre {
     background: var(--dark-l) !important;
 }
+@media all and (max-width: 479px) {
+    .toastui-editor-dropdown-toolbar {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        height: auto !important;
+    }
+    .toastui-editor-popup:not(.toastui-editor-popup-add-heading) {
+        left: 50% !important;
+    }
+    .toastui-editor-popup.toastui-editor-popup-add-heading {
+        left: 90% !important;
+    }
+}
 
 /** mobile, pc only **/
 .mobileOnly {

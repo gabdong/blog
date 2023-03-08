@@ -125,7 +125,6 @@ const BoardSettingWrap = styled.div`
 
   width: 100%;
   max-width: 860px;
-  padding: 0 14px 0 0;
   border-radius: var(--border-radius);
 `;
 

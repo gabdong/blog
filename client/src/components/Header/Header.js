@@ -79,9 +79,10 @@ function Header() {
 
         <HeaderBtnWrapSt>
           {/* //* Search Btn */}
-          <HeaderBtnSt className="buttonText">
+          {/* //TODO 기능완성 후 살리기 */}
+          {/* <HeaderBtnSt className="buttonText">
             <Search className="pcOnly"/>
-          </HeaderBtnSt>
+          </HeaderBtnSt> */}
           {!user.isLogin ? null : <LinkButton classname="pcOnly" text="새 글 작성" path="/post/new" />}
           {/* //* login Btn */}
           <HeaderBtnSt
@@ -96,10 +97,11 @@ function Header() {
       </HeaderInnerSt>
 
       {/* //* mobile search wrap */}
-      <MobileSearchWrapSt className="mobileOnly">
+      {/* //TODO 기능완성 후 살리기 */}
+      {/* <MobileSearchWrapSt className="mobileOnly">
         <Input placeholder="전체 게시글 검색"/>
         <Search />
-      </MobileSearchWrapSt>
+      </MobileSearchWrapSt> */}
 
       {/* //* login modal */}
       {loginModalView ? <LoginModal wrapHandler={loginWrapHandler}></LoginModal> : null}

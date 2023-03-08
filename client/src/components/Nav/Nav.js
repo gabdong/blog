@@ -12,9 +12,10 @@ function Nav() {
   const user = useSelector((store) => store.user);
   const { isLogin } = user;
   const location = useLocation();
-  const { pathname } = location;
   //TODO nav 언제 안나오게할지 정하기
-  const navRendering = pathname === "/post/new" ? false : true;
+  // const { pathname } = location;
+  // const navRendering = pathname === "/post/new" ? false : true;
+  const navRendering = true;
 
   const activeBoardIdx = location.state?.activeBoardIdx;
   const [boardList, setBoardList] = useState({});
@@ -149,7 +150,7 @@ const NavSt = styled.nav`
     position: fixed;
     left: -80%;
     top: 0;
-    z-index: 2;
+    z-index: 32;
     transition: var(--transition);
 
     &::-webkit-scrollbar {
@@ -177,7 +178,7 @@ const NavBackgroundSt = styled.div`
       position: fixed;
       left: 0;
       top: 0;
-      z-index: 1;
+      z-index: 31;
     }
   }
 `;
