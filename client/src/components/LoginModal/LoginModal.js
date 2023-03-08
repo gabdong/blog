@@ -9,7 +9,7 @@ import { loginUser } from "../../modules/user";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 
-function Login({ wrapHandler }) {
+function LoginModal({ wrapHandler }) {
   const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -136,4 +136,4 @@ const LoginForm = styled.form`
   }
 `;
 
-export default Login;
+export default LoginModal;

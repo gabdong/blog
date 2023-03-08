@@ -17,6 +17,7 @@ function Input({
       style={style}
       value={value}
       onChange={onChange}
+      autoComplete="false"
     />
   );
 }

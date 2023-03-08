@@ -21,6 +21,7 @@ const NavBtnSt = styled(NavLink)`
 
   &.active {
     color: var(--primary-color);
+    font-weight: 700;
   }
 
   ${(props) => {
@@ -32,7 +33,6 @@ const NavBtnSt = styled(NavLink)`
   @media all and (max-width: 479px) {
     font-size: 16px;
   }
-
 `;
 
 export default NavBtn;

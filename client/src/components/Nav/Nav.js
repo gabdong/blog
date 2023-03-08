@@ -144,7 +144,7 @@ const NavSt = styled.nav`
     width: 80%;
     height: 100%;
     padding: 20px;
-    background: #000000;
+    background: rgba(0, 0, 0, 0.7);
     overflow-y: auto;
     position: fixed;
     left: -80%;
@@ -188,7 +188,6 @@ const CloseBtnSt = styled(Close)`
   @media all and (max-width: 479px) {
     display: block;
     font-size: 32px;
-    
   }
 `;
 

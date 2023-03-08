@@ -8,11 +8,12 @@
     --dark: #131313;
     --dark-l: #2B2B2B;
     --gray: #86868B;
+    --gray-l: #dddddd;
     
     --transition: 0.2s;
     --border-radius: 4px;
     --header-height: 80px;
-    --mo-header-height: 64px;
+    --mo-header-height: 56px;
     --header-main-space: 40px;
     --main-footer-space: 60px;
 }
@@ -226,4 +227,20 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 }
 .toastui-editor-contents pre {
     background: var(--dark-l) !important;
+}
+
+/** mobile, pc only **/
+.mobileOnly {
+    display: none;
+}
+.pcOnly {
+    display: block;
+}
+@media all and (max-width: 479px) {
+    .mobileOnly {
+        display: block;
+    }
+    .pcOnly {
+        display: none;
+    }
 }
