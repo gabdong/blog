@@ -18,36 +18,37 @@ function PostList({ boardIdx, parentBoardIdx }) {
   return (
     <>
       {loading ? null : (
-        <PostListUl>
+        <PostListUlSt>
           {postList.map((postData) => {
             const { idx, subject, updateDatetime } = postData;
             const updateDatetimeFormat = new Date(
               updateDatetime
             ).toLocaleDateString();
             return (
-              <PostListLi key={idx}>
-                <PostLink
+              <PostListLiSt key={idx}>
+                <PostLinkSt
                   to={`/post/${idx}`}
                   state={{ activeBoardIdx: boardIdx }}
                 >
                   <p className="normalText">{subject}</p>
                   <p className="caption">{updateDatetimeFormat}</p>
-                </PostLink>
-              </PostListLi>
+                </PostLinkSt>
+              </PostListLiSt>
             );
           })}
-        </PostListUl>
+        </PostListUlSt>
       )}
     </>
   );
 }
 
-const PostListUl = styled.ul`
+const PostListUlSt = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
-const PostListLi = styled.li`
+
+const PostListLiSt = styled.li`
   padding-bottom: 5px;
   border-bottom: 1px solid #ffffff;
   transition: var(--transition);
@@ -57,7 +58,8 @@ const PostListLi = styled.li`
     border-bottom: 1px solid var(--primary-color);
   }
 `;
-const PostLink = styled(Link)`
+
+const PostLinkSt = styled(Link)`
   display: flex;
   justify-content: space-between;
   align-items: center;

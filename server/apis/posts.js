@@ -14,7 +14,7 @@ router.get("/list/:boardIdx", async (req, res) => {
       searchCond = `AND posts.board=${boardIdx}`;
     } else {
       joinCond = `INNER JOIN boards boards ON boards.parent=${boardIdx}`;
-      searchCond = "AND posts.board=boards.idx";
+      searchCond = `AND (posts.board=boards.idx OR posts.board=${boardIdx})`;
     }
 
     const [postListRes] = await db.query(`

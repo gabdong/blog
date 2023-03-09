@@ -12,12 +12,16 @@ function Nav() {
   const user = useSelector((store) => store.user);
   const { isLogin } = user;
   const location = useLocation();
+  const { pathname } = location;
+
+  console.log(location);
   //TODO nav 언제 안나오게할지 정하기
   // const { pathname } = location;
   // const navRendering = pathname === "/post/new" ? false : true;
   const navRendering = true;
 
-  const activeBoardIdx = location.state?.activeBoardIdx;
+  // const activeBoardIdx = location.state?.activeBoardIdx;
+  const [activeBoardIdx, setActiveBoardIdx] = useState(null);
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -38,8 +42,19 @@ function Nav() {
 
       setBoardList(boardData);
       setLoading(false);
+
+      if (pathname.includes('/board') || pathname.includes('/post') || location.state) {
+        if (location.state && location.state.activeBoardIdx) {
+          setActiveBoardIdx(location.state.activeBoardIdx);
+        } else if (pathname.includes('/board')) {
+          setActiveBoardIdx(pathname.replace('/board/', ''));
+        } else {
+          //TODO 게시글로 게시판 알아내는 요청 없이 할수있을지 생각해보기
+          const postIdx = pathname.replace('/post/', '');
+        }
+      }
     })();
-  }, []);
+  }, [location.state, pathname]);
 
   /**
    * * Nav 게시판 리스트 렌더링

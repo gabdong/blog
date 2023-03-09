@@ -43,7 +43,8 @@ function PostEditor() {
   const [firstDepthBoardList, setFirstDepthBoardList] = useState([]);
   const [childBoardListLoading, setChidBoardListLoading] = useState(true);
   const [childBoardList, setChildBoardList] = useState([]);
-  const [board, setBoard] = useState();
+  const [firstDepthBoard, setFirstDepthBoard] = useState(null);
+  const [secondDepthBoard, setSecondDepthBoard] = useState(null);
 
   //* subject handler
   const subjectHandler = (e) => {
@@ -52,7 +53,7 @@ function PostEditor() {
 
   //* board handler
   const boardHandler = (e) => {
-    setBoard(e.target.value);
+    setSecondDepthBoard(e.target.value);
   };
 
   /**
@@ -60,11 +61,12 @@ function PostEditor() {
    */
   const uploadPost = () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
+    let targetBoard = secondDepthBoard ? secondDepthBoard : firstDepthBoard;
 
     if (!subject) return alert("제목을 입력해주세요.");
-    if (!board) return alert("게시판을 선택해주세요.");
+    if (!targetBoard) return alert("게시판을 선택해주세요.");
 
-    const body = { markDown, subject, board, user, checkAuth: true };
+    const body = { markDown, subject, board: targetBoard, user, checkAuth: true };
 
     axios.post("/apis/posts/", body).then((data) => {
       const { postIdx } = data.data;
@@ -78,7 +80,10 @@ function PostEditor() {
    * @param {Event} e
    */
   const changeFirstDepth = async (e) => {
-    setChildBoardList(await getChildBoardList(e.target.value));
+    const { value } = e.target;
+
+    setFirstDepthBoard(value);
+    setChildBoardList(await getChildBoardList(value));
     setChidBoardListLoading(false);
   };
 
@@ -96,7 +101,7 @@ function PostEditor() {
 
       {/* //* 1차 메뉴 선택 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <h3 className="smallTitle">1차 메뉴 :</h3>
+        <h3 className="smallTitle">1차 분류 :</h3>
         <select onChange={changeFirstDepth}>
           <option value="none">선택없음</option>
           {firstDepthLoading
@@ -114,7 +119,7 @@ function PostEditor() {
 
       {/* //* 2차 메뉴 선택 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <h3 className="smallTitle">2차 메뉴 :</h3>
+        <h3 className="smallTitle">2차 분류 :</h3>
         <select onChange={boardHandler}>
           <option value="none">선택없음</option>
           {childBoardListLoading

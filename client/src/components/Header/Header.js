@@ -48,7 +48,6 @@ function Header() {
     background.classList.add('active');
   }
 
-  
   useEffect(() => {
     /**
      * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기

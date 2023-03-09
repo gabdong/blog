@@ -8,7 +8,7 @@ function Board() {
   const params = useParams();
   const location = useLocation();
   const { boardIdx } = params;
-  const { title, parent: parentBoardIdx } =
+  const { parent: parentBoardIdx } =
     location.state ??
     (async function () {
       await getBoardData(boardIdx);
@@ -16,7 +16,6 @@ function Board() {
 
   return (
     <>
-      <h2 className="mb20 subTitle">{title}</h2>
       <PostList boardIdx={boardIdx} parentBoardIdx={parentBoardIdx} />
     </>
   );
