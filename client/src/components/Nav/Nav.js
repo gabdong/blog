@@ -14,7 +14,6 @@ function Nav() {
   const location = useLocation();
   const { pathname } = location;
 
-  console.log(location);
   //TODO nav 언제 안나오게할지 정하기
   // const { pathname } = location;
   // const navRendering = pathname === "/post/new" ? false : true;
@@ -41,7 +40,6 @@ function Nav() {
       const boardData = await getBoardList();
 
       setBoardList(boardData);
-      setLoading(false);
 
       if (pathname.includes('/board') || pathname.includes('/post') || location.state) {
         if (location.state && location.state.activeBoardIdx) {
@@ -53,9 +51,12 @@ function Nav() {
           const postIdx = pathname.replace('/post/', '');
         }
       }
+
+      setLoading(false);
     })();
   }, [location.state, pathname]);
 
+  console.log('hi');
   /**
    * * Nav 게시판 리스트 렌더링
    * @param {Object} data

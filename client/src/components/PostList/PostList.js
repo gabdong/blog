@@ -27,7 +27,7 @@ function PostList({ boardIdx, parentBoardIdx }) {
             return (
               <PostListLiSt key={idx}>
                 <PostLinkSt
-                  to={`/post/${idx}`}
+                  to={`/post/${idx}?board=${boardIdx}`}
                   state={{ activeBoardIdx: boardIdx }}
                 >
                   <p className="normalText">{subject}</p>
