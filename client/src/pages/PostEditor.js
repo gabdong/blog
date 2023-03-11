@@ -26,6 +26,7 @@ import { uploadImage } from "../apis/images";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 
+//TODO 썸네일 추가하기
 function PostEditor() {
   const navigate = useNavigate();
   const toolbarItems = [
@@ -66,7 +67,13 @@ function PostEditor() {
     if (!subject) return alert("제목을 입력해주세요.");
     if (!targetBoard) return alert("게시판을 선택해주세요.");
 
-    const body = { markDown, subject, board: targetBoard, user, checkAuth: true };
+    const body = {
+      markDown,
+      subject,
+      board: targetBoard,
+      user,
+      checkAuth: true,
+    };
 
     axios.post("/apis/posts/", body).then((data) => {
       const { postIdx } = data.data;

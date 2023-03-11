@@ -15,11 +15,9 @@ function Nav() {
   const { pathname } = location;
 
   //TODO nav 언제 안나오게할지 정하기
-  // const { pathname } = location;
   // const navRendering = pathname === "/post/new" ? false : true;
   const navRendering = true;
 
-  // const activeBoardIdx = location.state?.activeBoardIdx;
   const [activeBoardIdx, setActiveBoardIdx] = useState(null);
   const [boardList, setBoardList] = useState({});
   const [loading, setLoading] = useState(true);
@@ -28,12 +26,12 @@ function Nav() {
    * * nav close
    */
   const navClose = () => {
-    const nav = document.getElementById('nav');
-    const background = document.getElementById('navBackground');
+    const nav = document.getElementById("nav");
+    const background = document.getElementById("navBackground");
 
-    nav.classList.remove('active');
-    background.classList.remove('active');
-  }
+    nav.classList.remove("active");
+    background.classList.remove("active");
+  };
 
   useEffect(() => {
     (async function () {
@@ -41,22 +39,21 @@ function Nav() {
 
       setBoardList(boardData);
 
-      if (pathname.includes('/board') || pathname.includes('/post') || location.state) {
-        if (location.state && location.state.activeBoardIdx) {
+      if (pathname.includes("/board") || pathname.includes("/post")) {
+        if (location.state?.activeBoardIdx) {
           setActiveBoardIdx(location.state.activeBoardIdx);
-        } else if (pathname.includes('/board')) {
-          setActiveBoardIdx(pathname.replace('/board/', ''));
+        } else if (pathname.includes("/board")) {
+          setActiveBoardIdx(pathname.replace("/board/", ""));
         } else {
-          //TODO 게시글로 게시판 알아내는 요청 없이 할수있을지 생각해보기
-          const postIdx = pathname.replace('/post/', '');
+          const searchParams = new URLSearchParams(location.search);
+          setActiveBoardIdx(searchParams.get("board"));
         }
       }
 
       setLoading(false);
     })();
-  }, [location.state, pathname]);
+  }, [pathname, location]);
 
-  console.log('hi');
   /**
    * * Nav 게시판 리스트 렌더링
    * @param {Object} data
@@ -137,9 +134,9 @@ function Nav() {
       {loading || !navRendering ? null : (
         <>
           {/* //TODO background 클릭시 nav닫기  */}
-          <NavBackgroundSt id="navBackground" onClick={navClose}/>
+          <NavBackgroundSt id="navBackground" onClick={navClose} />
           <NavSt id="nav">
-            <CloseBtnSt onClick={navClose}/>
+            <CloseBtnSt onClick={navClose} />
             {renderNavBoardList(boardList)}
             {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
           </NavSt>
@@ -154,6 +151,7 @@ const NavSt = styled.nav`
   flex-direction: column;
   gap: 8px;
   width: 200px;
+  min-width: 200px;
 
   @media all and (max-width: 479px) {
     gap: 12px;
@@ -175,8 +173,8 @@ const NavSt = styled.nav`
       border-radius: var(--border-radius);
     }
     &::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: var(--border-radius);
+      background: var(--primary-color);
+      border-radius: var(--border-radius);
     }
 
     &.active {

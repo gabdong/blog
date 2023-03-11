@@ -1,5 +1,4 @@
-import { FaSearch as Search } from "react-icons/fa";
-import { FiMenu as NavIcon } from "react-icons/fi"
+import { FiMenu as NavIcon } from "react-icons/fi";
 import { AiFillCaretDown as DownIcon } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,8 +7,7 @@ import styled from "styled-components";
 
 import LoginModal from "../LoginModal/LoginModal";
 import LinkButton from "../LinkButton/LinkButton";
-import Input from "../Input/Input";
-import UserMenuWrap from './UserMenuWrap';
+import UserMenuWrap from "./UserMenuWrap";
 
 function Header() {
   const user = useSelector((store) => store.user);
@@ -35,41 +33,45 @@ function Header() {
     e.stopPropagation();
 
     setUserMenuWrapView(!userMenuWrapView);
-  }
+  };
 
   /**
    * * nav open
    */
   const navOpen = () => {
-    const nav = document.getElementById('nav');
-    const background = document.getElementById('navBackground');
+    const nav = document.getElementById("nav");
+    const background = document.getElementById("navBackground");
 
-    nav.classList.add('active');
-    background.classList.add('active');
-  }
+    nav.classList.add("active");
+    background.classList.add("active");
+  };
 
   useEffect(() => {
     /**
      * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
-     * @param {Event} e 
+     * @param {Event} e
      */
     const _closeUserMenuWrap = (e) => {
       e.preventDefault();
 
-      if (!e.target.closest('#userMenuWrap') || e.target.classList.contains('.menuWrapBtn') || e.target.closest('.menuWrapBtn')) {
+      if (
+        !e.target.closest("#userMenuWrap") ||
+        e.target.classList.contains(".menuWrapBtn") ||
+        e.target.closest(".menuWrapBtn")
+      ) {
         setUserMenuWrapView(false);
-        window.removeEventListener('click', _closeUserMenuWrap);
+        window.removeEventListener("click", _closeUserMenuWrap);
       }
-    }
+    };
 
-    if (userMenuWrapView) window.addEventListener('click', _closeUserMenuWrap);
+    if (userMenuWrapView) window.addEventListener("click", _closeUserMenuWrap);
   }, [userMenuWrapView]);
 
   return (
     <HeaderSt id="header">
       <HeaderInnerSt>
         {/* //* nav button */}
-        <NavIconSt className="mobileOnly" onClick={navOpen}/>
+        <NavIconSt className="mobileOnly" onClick={navOpen} />
 
         {/* //* Logo */}
         <Link to="/">
@@ -82,7 +84,9 @@ function Header() {
           {/* <HeaderBtnSt className="buttonText">
             <Search className="pcOnly"/>
           </HeaderBtnSt> */}
-          {!user.isLogin ? null : <LinkButton classname="pcOnly" text="새 글 작성" path="/post/new" />}
+          {!user.isLogin ? null : (
+            <LinkButton classname="pcOnly" text="새 글 작성" path="/post/new" />
+          )}
           {/* //* login Btn */}
           <HeaderBtnSt
             className="buttonText"
@@ -91,7 +95,7 @@ function Header() {
             {!user.isLogin ? "Login" : `${user.name} 님`}
             {!user.isLogin ? null : <DownIconSt />}
           </HeaderBtnSt>
-          {user.isLogin && userMenuWrapView ? < UserMenuWrap/> : null }
+          {user.isLogin && userMenuWrapView ? <UserMenuWrap /> : null}
         </HeaderBtnWrapSt>
       </HeaderInnerSt>
 
@@ -103,7 +107,9 @@ function Header() {
       </MobileSearchWrapSt> */}
 
       {/* //* login modal */}
-      {loginModalView ? <LoginModal wrapHandler={loginWrapHandler}></LoginModal> : null}
+      {loginModalView ? (
+        <LoginModal wrapHandler={loginWrapHandler}></LoginModal>
+      ) : null}
     </HeaderSt>
   );
 }
@@ -144,7 +150,7 @@ const HeaderBtnWrapSt = styled.div`
   gap: 12px;
 
   position: relative;
-  
+
   @media all and (max-width: 479px) {
     gap: 8px;
   }

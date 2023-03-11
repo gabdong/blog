@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import removeMd from "remove-markdown";
 
 import { getPostList } from "../../apis/posts";
 
@@ -20,18 +21,29 @@ function PostList({ boardIdx, parentBoardIdx }) {
       {loading ? null : (
         <PostListUlSt>
           {postList.map((postData) => {
-            const { idx, subject, updateDatetime } = postData;
-            const updateDatetimeFormat = new Date(
-              updateDatetime
-            ).toLocaleDateString();
+            const { idx, subject, content, datetime } = postData;
+            const datetimeFormat = new Date(datetime).toLocaleDateString(
+              "ko-KR",
+              {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              }
+            );
+
+            const contentStr = removeMd(content.replace(/<\/?[^>]+(>|$)/g, ""));
+
             return (
               <PostListLiSt key={idx}>
                 <PostLinkSt
                   to={`/post/${idx}?board=${boardIdx}`}
                   state={{ activeBoardIdx: boardIdx }}
                 >
-                  <p className="normalText">{subject}</p>
-                  <p className="caption">{updateDatetimeFormat}</p>
+                  <p className="subTitle">{subject}</p>
+                  <div>
+                    <p className="caption content">{contentStr}</p>
+                    <p className="caption date">{datetimeFormat}</p>
+                  </div>
                 </PostLinkSt>
               </PostListLiSt>
             );
@@ -45,11 +57,11 @@ function PostList({ boardIdx, parentBoardIdx }) {
 const PostListUlSt = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 `;
 
 const PostListLiSt = styled.li`
-  padding-bottom: 5px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #ffffff;
   transition: var(--transition);
   cursor: pointer;
@@ -61,8 +73,25 @@ const PostListLiSt = styled.li`
 
 const PostLinkSt = styled(Link)`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+
+  & > div .content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & > div .date {
+    flex-shrink: 0;
+  }
 `;
 
 export default React.memo(PostList);

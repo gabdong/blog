@@ -16,11 +16,12 @@ instance.interceptors.request.use(
   async (config) => {
     if (!config.data) return config;
 
-    let checkAuth, isFormData = false;
+    let checkAuth,
+      isFormData = false;
     if (config.data instanceof FormData) {
       config.headers["Content-Type"] = "multipart/form-data";
 
-      checkAuth = config.data.get("checkAuth") === 'true';
+      checkAuth = config.data.get("checkAuth") === "true";
       isFormData = true;
     } else {
       config.headers["Content-Type"] = "application/json";
@@ -38,7 +39,7 @@ instance.interceptors.request.use(
         const { user } = checkAuthResult.data;
 
         if (isFormData) {
-          config.data.append('user', JSON.stringify(user));
+          config.data.append("user", JSON.stringify(user));
         } else {
           config.data.user = user;
         }

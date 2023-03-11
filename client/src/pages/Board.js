@@ -7,7 +7,7 @@ import { getBoardData } from "../apis/boards";
 function Board() {
   const params = useParams();
   const location = useLocation();
-  
+
   const { boardIdx } = params;
   const { parent: parentBoardIdx } =
     location.state ??
