@@ -13,16 +13,18 @@ router.get("/list/:boardIdx", async (req, res) => {
     if (parentBoardIdx) {
       searchCond = `AND posts.board=${boardIdx}`;
     } else {
-      joinCond = `INNER JOIN boards boards ON boards.parent=${boardIdx}`;
-      searchCond = `AND (posts.board=boards.idx OR posts.board=${boardIdx})`;
+      //* 1차메뉴일경우 자식메뉴에 있는 게시글까지 요청
+      joinCond = `LEFT JOIN boards childBoards ON childBoards.parent=${boardIdx} AND posts.board=childBoards.idx `;
+      searchCond = `AND (posts.board=${boardIdx} OR posts.board=childBoards.idx)`;
     }
 
     const [postListRes] = await db.query(`
-      SELECT posts.idx, posts.subject, posts.update_datetime AS updateDatetime 
+      SELECT posts.idx, posts.subject, posts.content, posts.datetime 
       FROM posts posts 
       ${joinCond}
       WHERE posts.delete_datetime IS NULL 
       ${searchCond}
+      ORDER BY posts.datetime DESC
     `);
 
     res.json({ msg: "SUCCESS", postList: postListRes });

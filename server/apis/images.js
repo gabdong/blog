@@ -34,7 +34,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
   const userData = JSON.parse(userDataStr);
   const { idx: userIdx } = userData;
   const { originalname, size, mimetype, location, key } = req.file;
-  const name = key.replace('images/', '');
+  const name = key.replace("images/", "");
 
   try {
     await db.query(`
@@ -47,7 +47,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
       alt='${alt}',
       mime_type='${mimetype}'
     `);
-  
+
     res.json({ msg: "SUCCESS", url: location });
   } catch (err) {
     res.status(500).json({ msg: "이미지 업로드를 실패하였습니다." });
