@@ -5,16 +5,18 @@ const db = require("../config/db");
 //* 게시판 리스트 요청
 router.get("/", async (req, res) => {
   try {
-    const [data] = await db.query(`
-      SELECT idx, depth, parent, position, auth, title 
-      FROM boards 
-      WHERE delete_datetime IS NULL 
-      ORDER BY depth ASC
+    const [selectBoardListRes] = await db.query(`
+      SELECT boards.idx, boards.depth, boards.parent, boards.position, boards.auth, boards.title, COUNT(posts.idx) AS postCnt
+      FROM boards boards 
+      LEFT JOIN posts posts ON posts.board=boards.idx 
+      WHERE boards.delete_datetime IS NULL 
+      GROUP BY boards.idx, boards.depth, boards.parent, boards.position, boards.auth, boards.title
+      ORDER BY boards.depth ASC
     `);
 
     const boardData = {};
-    for (const menu of data) {
-      const { idx, depth, parent, position, auth, title } = menu;
+    for (const board of selectBoardListRes) {
+      const { idx, depth, parent, position, auth, title, postCnt } = board;
 
       if (depth === 1) {
         boardData[idx] = {
@@ -23,6 +25,7 @@ router.get("/", async (req, res) => {
           title,
           child: {},
           depth,
+          postCnt,
         };
       } else {
         const parentData = boardData[parent];
@@ -34,6 +37,7 @@ router.get("/", async (req, res) => {
             auth,
             title,
             depth,
+            postCnt,
           };
         }
       }

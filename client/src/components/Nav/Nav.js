@@ -48,6 +48,8 @@ function Nav() {
           const searchParams = new URLSearchParams(location.search);
           setActiveBoardIdx(searchParams.get("board"));
         }
+      } else {
+        setActiveBoardIdx(null);
       }
 
       setLoading(false);
@@ -83,14 +85,17 @@ function Nav() {
                 // auth: childAuth,
                 title: childTitle,
                 depth: childDepth,
+                postCnt: childPostCnt,
               } = childData;
+
+              boardData.postCnt = boardData.postCnt + childPostCnt;
 
               //* 게시판 순서를 맞추기위해 배열로 출력
               if (parent === Number(boardIdx)) {
                 childArr[childPosition] = (
                   <NavBtn
                     key={childIdx}
-                    text={childTitle}
+                    text={`${childTitle} (${childPostCnt})`}
                     path={`/board/${childIdx}`}
                     depth={childDepth}
                     state={{
@@ -113,7 +118,7 @@ function Nav() {
       renderList[position] = (
         <NavBtn
           key={boardIdx}
-          text={title}
+          text={`${title} (${boardData.postCnt})`}
           path={`/board/${boardIdx}`}
           child={childTmp}
           depth={depth}
@@ -125,7 +130,6 @@ function Nav() {
         />
       );
     }
-
     return renderList;
   };
 
