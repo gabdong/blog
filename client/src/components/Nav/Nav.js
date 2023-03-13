@@ -12,7 +12,7 @@ function Nav() {
   const user = useSelector((store) => store.user);
   const { isLogin } = user;
   const location = useLocation();
-  
+
   //TODO nav 언제 안나오게할지 정하기
   const { pathname } = location;
   // const navRendering = pathname === "/post/new" ? false : true;
@@ -53,7 +53,9 @@ function Nav() {
 
   return (
     <>
-      {loading || !navRendering ? <NavSt id="nav" /> : (
+      {loading || !navRendering ? (
+        <NavSt id="nav" />
+      ) : (
         <>
           <NavBackgroundSt id="navBackground" onClick={navClose} />
           <NavSt id="nav">
@@ -61,11 +63,16 @@ function Nav() {
             {tagList.map((tagData) => {
               const { idx: tagIdx, auth, name } = tagData;
 
-              const activeClass = activeTagIdx === tagIdx ? 'active' : '';
+              const activeClass = activeTagIdx === tagIdx ? "active" : "";
               //TODO 로그인계정 권한도 확인하기
-              if (auth === 1 && !isLogin) return '';
+              if (auth === 1 && !isLogin) return "";
               return (
-                <NavBtn key={tagIdx} text={name} path={`/tag/${tagIdx}`} active={activeClass}/>
+                <NavBtn
+                  key={tagIdx}
+                  text={name}
+                  path={`/tag/${tagIdx}`}
+                  active={activeClass}
+                />
               );
             })}
             {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}

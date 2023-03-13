@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-import BoardSettings from "./BoardSettings/BoardSettings";
+import TagSettings from "./TagSettings";
 
 function Settings() {
   return (
     <SettingArticle>
-      <BoardSettings />
+      <TagSettings />
     </SettingArticle>
   );
 }
