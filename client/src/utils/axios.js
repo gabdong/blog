@@ -18,6 +18,7 @@ instance.interceptors.request.use(
 
     let checkAuth,
       isFormData = false;
+
     if (config.data instanceof FormData) {
       config.headers["Content-Type"] = "multipart/form-data";
 
@@ -31,10 +32,8 @@ instance.interceptors.request.use(
 
     if (checkAuth === true) {
       //* check auth
-      const checkAuthResult = await checkToken();
-      const { status, msg } = checkAuthResult;
-
-      if (status === 200) {
+        const checkAuthResult = await checkToken();
+  
         const { newAccessToken } = checkAuthResult.data;
         const { user } = checkAuthResult.data;
 
@@ -48,14 +47,6 @@ instance.interceptors.request.use(
           authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
           instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         }
-
-        return config;
-      } else if (status === 401) {
-        const error = new Error(msg);
-        error.code = 401;
-
-        throw error;
-      }
     }
 
     return config;

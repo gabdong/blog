@@ -3,28 +3,16 @@ const router = express.Router();
 const db = require("../config/db");
 
 //* 게시글 리스트 요청
-router.get("/list/:boardIdx", async (req, res) => {
-  const { boardIdx } = req.params;
-  const { parentBoardIdx } = req.query;
+router.get("/list/:tagIdx", async (req, res) => {
+  const { tagIdx } = req.params;
 
   try {
-    let joinCond = "";
-    let searchCond = "";
-    if (parentBoardIdx) {
-      searchCond = `AND posts.board=${boardIdx}`;
-    } else {
-      //* 1차메뉴일경우 자식메뉴에 있는 게시글까지 요청
-      joinCond = `LEFT JOIN boards childBoards ON childBoards.parent=${boardIdx} AND posts.board=childBoards.idx `;
-      searchCond = `AND (posts.board=${boardIdx} OR posts.board=childBoards.idx)`;
-    }
-
     const [postListRes] = await db.query(`
-      SELECT posts.idx, posts.subject, posts.content, posts.datetime 
-      FROM posts posts 
-      ${joinCond}
-      WHERE posts.delete_datetime IS NULL 
-      ${searchCond}
-      ORDER BY posts.datetime DESC
+      SELECT idx, subject, content, datetime 
+      FROM posts
+      WHERE delete_datetime IS NULL 
+      AND JSON_CONTAINS(tags, '${tagIdx}')
+      ORDER BY datetime DESC
     `);
 
     res.json({ msg: "SUCCESS", postList: postListRes });
@@ -68,6 +56,7 @@ router.post("/", async (req, res) => {
   const { markDown, subject, board, user } = req.body;
   const userIdx = user.idx;
 
+  //TODO board없애기
   try {
     const [insertPostRes] = await db.query(`
       INSERT INTO posts SET

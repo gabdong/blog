@@ -1,13 +1,12 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-function NavBtn({ text, path, depth, child, state, idx, active }) {
+function NavBtn({ text, path, idx, active }) {
   return (
     <>
-      <NavBtnSt className={active ? 'active' : ''} to={path} depth={depth} state={state} data-idx={idx}>
+      <NavBtnSt className={active ? 'active' : ''} to={path}>
         {text}
       </NavBtnSt>
-      {child}
     </>
   );
 }
@@ -23,12 +22,6 @@ const NavBtnSt = styled(NavLink)`
     color: var(--primary-color);
     font-weight: 700;
   }
-
-  ${(props) => {
-    if (props.depth === 2) {
-      return `padding-left: 10px;`;
-    }
-  }}
 
   @media all and (max-width: 479px) {
     font-size: 16px;

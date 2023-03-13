@@ -27,7 +27,7 @@ function App() {
 
         dispatch(loginUser(user));
       } catch (err) {
-        console.error(err);
+        if (err.code !== 401) console.error(err);
       } finally {
         setLoading(false);
       }

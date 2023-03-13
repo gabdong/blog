@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import Home from "./Home.js";
-import Board from "./Board.js";
+import Tag from "./Tag.js";
 import Settings from "./Settings/Settings.js";
 import Post from "./Post.js";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute.js";
@@ -16,7 +16,7 @@ function Pages() {
     <PagesSt>
       <Routes>
         <Route exact={true} path="/" element={<Home />} />
-        <Route path="/board/:boardIdx" element={<Board />} />
+        <Route path="/tag/:tagIdx" element={<Tag />} />
         <Route path="/post/:postIdx" element={<Post />} />
         <Route
           path="/post/new"

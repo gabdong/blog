@@ -18,7 +18,7 @@ export async function checkToken() {
     const result = await authCheckAxios.get("/apis/tokens/check-token");
 
     return result;
-  } catch (err) {
+  } catch (err) { //TODO error handling
     const error = new Error(err.response.data.msg);
     error.code = err.response.status;
 

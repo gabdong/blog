@@ -5,16 +5,16 @@ import removeMd from "remove-markdown";
 
 import { getPostList } from "../../apis/posts";
 
-function PostList({ boardIdx, parentBoardIdx }) {
+function PostList({ tagIdx }) {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
     (async function () {
-      setPostList(await getPostList(boardIdx, parentBoardIdx));
+      setPostList(await getPostList(tagIdx));
       setLoading(false);
     })();
-  }, [boardIdx, parentBoardIdx]);
+  }, [tagIdx]);
 
   return (
     <>
@@ -36,8 +36,8 @@ function PostList({ boardIdx, parentBoardIdx }) {
             return (
               <PostListLiSt key={idx}>
                 <PostLinkSt
-                  to={`/post/${idx}?board=${boardIdx}`}
-                  state={{ activeBoardIdx: boardIdx }}
+                  to={`/post/${idx}?tag=${tagIdx}`}
+                  state={{ activeTagIdx: tagIdx }}
                 >
                   <p className="subTitle">{subject}</p>
                   <div>
