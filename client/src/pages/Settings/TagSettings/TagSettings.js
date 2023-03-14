@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getTagList, addTag } from "../../apis/tags";
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
+import { getTagList, addTag } from "../../../apis/tags";
+import Button from "../../../components/Button/Button";
+import Input from "../../../components/Input/Input";
+import TagSettingItem from "./TagSettingItem";
 
 
 function TagSettings() {
@@ -61,11 +62,7 @@ function TagSettings() {
             {tagList.map((tagData) => {
               const { idx: tagIdx, name } = tagData;
 
-              return (
-                <TagItemSt key={tagIdx} data-idx={tagIdx}>
-                  <p className="caption">{name}</p>
-                </TagItemSt>
-              );
+              return <TagSettingItem key={tagIdx} idx={tagIdx} name={name} />;
             })}
           </TagListWrapSt>
         </TagSettingWrapSt>
@@ -100,19 +97,6 @@ const TagListWrapSt = styled.div`
 
   padding: 14px;
   background: var(--dark-l);
-`;
-
-const TagItemSt = styled.div`
-  padding: 8px 12px;
-  border-radius: var(--border-radius);
-  background: var(--gray);
-  color: #ffffff;
-  cursor: pointer;
-  transition: var(--transition);
-
-  &:hover {
-    background: var(--primary-color-d);
-  }
 `;
 
 export default TagSettings;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import TagSettings from "./TagSettings";
+import TagSettings from "./TagSettings/TagSettings";
 
 function Settings() {
   return (
