@@ -11,9 +11,9 @@ router.get("/list/:tagIdx", async (req, res) => {
       SELECT idx, subject, content, datetime 
       FROM posts
       WHERE delete_datetime IS NULL 
-      AND JSON_CONTAINS(tags, '${tagIdx}')
+      AND JSON_CONTAINS(tags, ?)
       ORDER BY datetime DESC
-    `);
+    `, [tagIdx]);
 
     res.json({ msg: "SUCCESS", postList: postListRes });
   } catch (err) {
@@ -33,8 +33,8 @@ router.get("/:postIdx", async (req, res) => {
     const [postDataRes] = await db.query(`
       SELECT subject, content, idx, tags 
       FROM posts 
-      WHERE idx=${postIdx}
-    `);
+      WHERE idx=?
+    `, [postIdx]);
 
     if (postDataRes.length === 0) {
       const err = new Error("게시글을 불러오지 못했습니다.");
@@ -60,13 +60,13 @@ router.post("/", async (req, res) => {
   try {
     const [insertPostRes] = await db.query(`
       INSERT INTO posts SET
-      member=${userIdx}, 
-      board=${board}, 
+      member=?, 
+      board=?, 
       auth=0, 
-      subject='${subject}', 
-      content='${markDown.replace(/'/g, "\\'")}',
+      subject=?, 
+      content=?,
       tags='[]'
-    `);
+    `, [userIdx, board, subject, markDown.replace(/'/g, "\\'")]);
 
     res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });
   } catch (err) {

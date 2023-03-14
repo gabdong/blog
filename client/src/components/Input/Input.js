@@ -7,6 +7,7 @@ function Input({
   value,
   style = {},
   onChange,
+  onKeyUp
 }) {
   return (
     <InputSt
@@ -17,6 +18,7 @@ function Input({
       style={style}
       value={value}
       onChange={onChange}
+      onKeyUp={onKeyUp}
       autoComplete="false"
     />
   );

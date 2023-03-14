@@ -12,9 +12,9 @@ router.post("/login", async (req, res) => {
     const [userRes] = await db.query(`
       SELECT idx, id, name, phone, email 
       FROM members 
-      WHERE id='${id}' 
-      AND password='${password}'
-    `);
+      WHERE id=? 
+      AND password=?
+    `, [id, password]);
 
     if (userRes.length === 0) {
       const err = new Error("잘못된 아이디 또는 비밀번호입니다.");

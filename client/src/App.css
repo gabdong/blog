@@ -99,6 +99,7 @@ input {
 }
 h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     font-family: 'SUIT-Regular';
+    line-height: 1.2;
 }
 * {
     -webkit-box-sizing: border-box;

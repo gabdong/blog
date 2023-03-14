@@ -10,12 +10,14 @@ router.delete("/", async (req, res) => {
 
   await db.query(`
     DELETE FROM tokens
-    WHERE hash_idx='${hashIdx}'
-  `);
+    WHERE hash_idx=? 
+  `, [hashIdx]);
+
   res.cookie("refreshToken", "", {
     httpOnly: true,
     maxAge: 0,
   });
+
   res.json({ msg: "SUCCESS" });
 });
 
@@ -34,8 +36,8 @@ router.get("/check-token", async (req, res) => {
       const [refreshTokenRes] = await db.query(`
         SELECT refresh_token AS refreshToken
         FROM tokens 
-        WHERE hash_idx='${refreshTokenIdx}'
-      `);
+        WHERE hash_idx=?
+      `, [refreshTokenIdx]);
 
       if (refreshTokenRes.length === 0) {
         const err = new Error("권한이 없습니다.");
@@ -59,8 +61,8 @@ router.get("/check-token", async (req, res) => {
       const [userRes] = await db.query(`
         SELECT idx, id, name, phone, email
         FROM members
-        WHERE idx=${idx}
-      `);
+        WHERE idx=?
+      `, [idx]);
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");
@@ -72,15 +74,15 @@ router.get("/check-token", async (req, res) => {
 
       await db.query(`
         UPDATE tokens SET
-        refresh_token='${newRefreshToken}'
-        WHERE member='${idx}'
-      `);
+        refresh_token=? 
+        WHERE member=?
+      `, [newRefreshToken, idx]);
 
       const [hashIdxRes] = await db.query(`
         SELECT hash_idx AS hashIdx 
         FROM tokens 
-        WHERE member='${idx}'
-      `);
+        WHERE member=?
+      `, [idx]);
 
       if (hashIdxRes.length === 0) {
         const err = new Error("토큰 hash idx요청을 실패하였습니다.");
@@ -107,8 +109,8 @@ router.get("/check-token", async (req, res) => {
       const [userRes] = await db.query(`
         SELECT idx, id, name, phone, email
         FROM members
-        WHERE idx=${idx}
-      `);
+        WHERE idx=?
+      `, [idx]);
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");

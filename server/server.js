@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const helmet = require("helmet");
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -9,6 +10,7 @@ const bodyParser = require("body-parser");
 const limiter = require("./config/limiter.js");
 const PORT = process.env.port || 9411;
 
+app.use(helmet());
 app.use(cors());
 app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: true }));

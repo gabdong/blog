@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getTagList } from "../../apis/tags";
+import { getTagList, addTag } from "../../apis/tags";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
+
 
 function TagSettings() {
   const [tagList, setTagList] = useState([]);
@@ -18,27 +19,44 @@ function TagSettings() {
     setTagName(e.target.value);
   };
 
+  /**
+   * * 태그 추가
+   * @param {Event} e 
+   * @returns 
+   */
+  const callAddTagFn = (e) => {
+    if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter") return;
+
+    return addTag(tagName, setTagList);
+  }
+
+
   useEffect(() => {
     (async function () {
-      await getTagList(setTagList);
+      setTagList(await getTagList());
       setLoading(false);
     })();
   }, []);
+  
 
   return (
     <>
       {loading ? null : (
         <TagSettingWrapSt>
-          <TagNameInputWrapSt>
-            <p className="normalText">태그명 : </p>
-            <Input
-              type="text"
-              value={tagName}
-              onChange={tagNameHandler}
-              placeholder="콤마로 구분하여 여러개를 추가할 수 있습니다. 추가할 태그명 입력후 추가버튼 혹은 엔터키를 입력해주세요."
-            />
-            <Button text="추가" />
-          </TagNameInputWrapSt>
+          <div>
+            <TagNameInputWrapSt>
+              <p className="normalText">태그명 : </p>
+              <Input
+                type="text"
+                value={tagName}
+                onChange={tagNameHandler}
+                onKeyUp={callAddTagFn}
+              />
+              <Button text="추가" onClick={callAddTagFn}/>
+            </TagNameInputWrapSt>
+            <p className="caption mt15">* 콤마로 구분하여 여러개를 추가할 수 있습니다. 추가할 태그명 입력후 추가버튼 혹은 엔터키를 입력해주세요.</p>
+            <p className="caption mt15">* 공백과 특수문자, HTML은 제거됩니다.</p>
+          </div>
           <TagListWrapSt>
             {tagList.map((tagData) => {
               const { idx: tagIdx, name } = tagData;
@@ -59,7 +77,7 @@ function TagSettings() {
 const TagSettingWrapSt = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 `;
 
 const TagNameInputWrapSt = styled.div`

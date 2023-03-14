@@ -11,9 +11,9 @@ router.get("/", async (req, res) => {
   try {
     const [duplicatedImgRes] = await db.query(`
       SELECT url, alt FROM images 
-      WHERE original_name='${name}'
-      AND size=${size}
-    `);
+      WHERE original_name=? 
+      AND size=? 
+    `, [name, size]);
 
     let url, alt;
 
@@ -39,14 +39,14 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
   try {
     await db.query(`
       INSERT INTO images SET 
-      member=${userIdx},
-      size=${size},
-      original_name='${originalname}',
-      name='${name}',
-      url='${location}',
-      alt='${alt}',
-      mime_type='${mimetype}'
-    `);
+      member=?,
+      size=?,
+      original_name=?,
+      name=?,
+      url=?,
+      alt=?,
+      mime_type=?
+    `, [userIdx, size, originalname, name, location, alt, mimetype]);
 
     res.json({ msg: "SUCCESS", url: location });
   } catch (err) {

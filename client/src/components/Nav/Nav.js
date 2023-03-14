@@ -35,7 +35,7 @@ function Nav() {
 
   useEffect(() => {
     (async function () {
-      await getTagList(setTagList);
+      setTagList(await getTagList());
       setLoading(false);
 
       if (pathname.includes("/post")) {
@@ -87,8 +87,8 @@ const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 200px;
-  min-width: 200px;
+  width: 140px;
+  min-width: 140px;
 
   @media all and (max-width: 479px) {
     gap: 12px;
@@ -96,7 +96,7 @@ const NavSt = styled.nav`
     width: 80%;
     height: 100%;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     overflow-y: auto;
     position: fixed;
     left: -80%;
