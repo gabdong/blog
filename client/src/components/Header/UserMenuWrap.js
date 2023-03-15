@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { removeToken } from "../../apis/tokens";
 import { logoutUser } from "../../modules/user";
-
-import { Link } from "react-router-dom";
 
 function UserMenuWrap() {
     const dispatch = useDispatch();

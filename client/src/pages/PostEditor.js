@@ -19,9 +19,8 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-clojure";
 
 import axios from "../utils/axios";
-import { getFirstDepthBoardList } from "../apis/boards";
-import { getChildBoardList } from "../apis/boards";
 import { uploadImage } from "../apis/images";
+import { getTagList } from "../apis/tags";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
@@ -44,6 +43,7 @@ function PostEditor() {
 
   const [subject, setsubject] = useState("");
   const [tagList, setTagList] = useState([]);
+  const [seletecTagList, setSelectedTagList] = useState([]);
 
   //* subject handler
   const subjectHandler = (e) => {
@@ -73,7 +73,9 @@ function PostEditor() {
   };
 
   useEffect(() => {
-
+    (async function() {
+      setTagList(await getTagList);
+    })();
   }, []);
 
   return (
