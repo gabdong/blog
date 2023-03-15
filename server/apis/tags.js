@@ -56,4 +56,57 @@ router.post('/', async (req, res) => {
     res.json({ msg: "SUCCESS" });
 });
 
+//* 태그 수정
+router.put('/:tagIdx', async (req, res) => {
+    const { tagIdx } = req.params;
+    const { name } = req.body;
+
+    try {
+        const [duplicateTagRes] = await db.query(`
+            SELECT idx 
+            FROM tags 
+            WHERE name=? 
+            AND delete_datetime IS NULL
+        `, [name]);
+
+        if (duplicateTagRes.length > 0) {
+            const err = new Error('중복된 태그명이 존재합니다.')
+            err.code = 409;
+
+            throw err;
+        } else {
+            await db.query(`
+                UPDATE tags SET 
+                name=? 
+                WHERE idx=?
+            `, [name, tagIdx]);
+
+            res.json({msg: 'SUCCESS'});
+        }
+    } catch (err) {
+        if (err.code) {
+            res.status(err.code).json({msg: "중복된 태그명이 존재합니다."});
+        } else {
+            throw err;
+        }
+    }
+});
+
+//* 태그 삭제
+router.delete('/:tagIdx', async (req, res) => {
+    const { tagIdx } = req.params;
+
+    try {
+        await db.query(`
+            UPDATE tags SET 
+            delete_datetime=CURRENT_TIMESTAMP() 
+            WHERE idx=?
+        `, [tagIdx]);
+
+        res.json({msg: "SUCCESS"});
+    } catch (err) {
+        res.status(500).json({msg: "태그 삭제를 실패하였습니다."});
+    }
+});
+
 module.exports = router;

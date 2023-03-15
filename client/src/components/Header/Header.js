@@ -85,7 +85,7 @@ function Header() {
             <Search className="pcOnly"/>
           </HeaderBtnSt> */}
           {!user.isLogin ? null : (
-            <LinkButton classname="pcOnly" text="새 글 작성" path="/post/new" />
+            <LinkButton classname="pcOnly" text="새 글 작성" path="/postEditor/new" />
           )}
           {/* //* login Btn */}
           <HeaderBtnSt

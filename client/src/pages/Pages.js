@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 import Home from "./Home.js";
 import Tag from "./Tag.js";
@@ -7,7 +8,6 @@ import Settings from "./Settings/Settings.js";
 import Post from "./Post.js";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute.js";
 import PostEditor from "./PostEditor.js";
-import { useSelector } from "react-redux";
 
 function Pages() {
   const user = useSelector((state) => state.user);
@@ -19,7 +19,7 @@ function Pages() {
         <Route path="/tag/:tagIdx" element={<Tag />} />
         <Route path="/post/:postIdx" element={<Post />} />
         <Route
-          path="/post/new"
+          path="/postEditor/:mode"
           element={<PrivateRoute user={user} component={<PostEditor />} />}
         />
         <Route

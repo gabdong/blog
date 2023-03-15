@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 //* markdown editor
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -28,6 +28,9 @@ import Input from "../components/Input/Input";
 
 //TODO 썸네일 추가하기
 function PostEditor() {
+  //TODO 새글, 글수정
+  const params = useParams();
+
   const navigate = useNavigate();
   const toolbarItems = [
     ["heading", "bold"],
@@ -40,21 +43,11 @@ function PostEditor() {
   const user = useSelector((store) => store.user.idx);
 
   const [subject, setsubject] = useState("");
-  const [firstDepthLoading, setFirstDepthLoading] = useState(true);
-  const [firstDepthBoardList, setFirstDepthBoardList] = useState([]);
-  const [childBoardListLoading, setChidBoardListLoading] = useState(true);
-  const [childBoardList, setChildBoardList] = useState([]);
-  const [firstDepthBoard, setFirstDepthBoard] = useState(null);
-  const [secondDepthBoard, setSecondDepthBoard] = useState(null);
+  const [tagList, setTagList] = useState([]);
 
   //* subject handler
   const subjectHandler = (e) => {
     setsubject(e.target.value);
-  };
-
-  //* board handler
-  const boardHandler = (e) => {
-    setSecondDepthBoard(e.target.value);
   };
 
   /**
@@ -62,15 +55,12 @@ function PostEditor() {
    */
   const uploadPost = () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
-    let targetBoard = secondDepthBoard ? secondDepthBoard : firstDepthBoard;
 
     if (!subject) return alert("제목을 입력해주세요.");
-    if (!targetBoard) return alert("게시판을 선택해주세요.");
 
     const body = {
       markDown,
       subject,
-      board: targetBoard,
       user,
       checkAuth: true,
     };
@@ -82,65 +72,14 @@ function PostEditor() {
     });
   };
 
-  /**
-   * * 하위 게시판 리스트 요청
-   * @param {Event} e
-   */
-  const changeFirstDepth = async (e) => {
-    const { value } = e.target;
-
-    setFirstDepthBoard(value);
-    setChildBoardList(await getChildBoardList(value));
-    setChidBoardListLoading(false);
-  };
-
   useEffect(() => {
-    (async function () {
-      //* 1차 게시판 리스트 요청
-      setFirstDepthBoardList(await getFirstDepthBoardList());
-      setFirstDepthLoading(false);
-    })();
+
   }, []);
 
   return (
     <WriteWrap>
       <h2 className="subTitle">게시글 작성</h2>
 
-      {/* //* 1차 메뉴 선택 */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <h3 className="smallTitle">1차 분류 :</h3>
-        <select onChange={changeFirstDepth}>
-          <option value="none">선택없음</option>
-          {firstDepthLoading
-            ? null
-            : firstDepthBoardList.map((data) => {
-                const { idx, title } = data;
-                return (
-                  <option key={idx} value={idx}>
-                    {title}
-                  </option>
-                );
-              })}
-        </select>
-      </div>
-
-      {/* //* 2차 메뉴 선택 */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <h3 className="smallTitle">2차 분류 :</h3>
-        <select onChange={boardHandler}>
-          <option value="none">선택없음</option>
-          {childBoardListLoading
-            ? null
-            : childBoardList.map((data) => {
-                const { idx, title } = data;
-                return (
-                  <option key={idx} value={idx}>
-                    {title}
-                  </option>
-                );
-              })}
-        </select>
-      </div>
 
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

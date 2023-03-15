@@ -30,3 +30,20 @@ export async function addTag(tagName, setTagList = null) {
         throw err;
     }
 }
+
+/**
+ * * 태그 수정
+ * @param {Number} tagIdx
+ */
+export async function updateTag(tagIdx, name) {
+    const body = { name, checkAuth: true };
+    await axios.put(`/apis/tags/${tagIdx}`, body);
+}
+
+/**
+ * * 태그 삭제
+ * @param {*} tagIdx 
+ */
+export async function deleteTag(tagIdx) {
+    await axios.delete(`/apis/tags/${tagIdx}`);
+}
