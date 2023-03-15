@@ -43,11 +43,20 @@ function PostEditor() {
 
   const [subject, setsubject] = useState("");
   const [tagList, setTagList] = useState([]);
-  const [seletecTagList, setSelectedTagList] = useState([]);
+  const [tagListLoading, setTagListLoading] = useState(true);
+  //TODO 수정모드일 경우 사용중인 tagList 불러오기
+  const [selectedTagList, setSelectedTagList] = useState([
+    { idx: 1, name: "test" },
+  ]);
 
   //* subject handler
   const subjectHandler = (e) => {
     setsubject(e.target.value);
+  };
+
+  //* selected tag list handler
+  const selectedTagListHandler = (e) => {
+    setSelectedTagList();
   };
 
   /**
@@ -73,8 +82,9 @@ function PostEditor() {
   };
 
   useEffect(() => {
-    (async function() {
-      setTagList(await getTagList);
+    (async function () {
+      setTagList(await getTagList());
+      setTagListLoading(false);
     })();
   }, []);
 
@@ -82,6 +92,48 @@ function PostEditor() {
     <WriteWrap>
       <h2 className="subTitle">게시글 작성</h2>
 
+      {/* //* 태그 설정 */}
+      <TagSettingWrap>
+        <p className="smallTitle">태그설정</p>
+
+        {/* //* 태그 검색 */}
+        <TagSearchWrapSt>
+          <Input placeholder="검색할 단어 입력 후 엔터 혹은 검색버튼을 클릭하세요." />
+          <Button text="검색" />
+        </TagSearchWrapSt>
+
+        {/* //* 태그 목록 */}
+        <TagListSt className="mb10 scroll">
+          {tagListLoading
+            ? null
+            : tagList.map((tagData) => {
+                //TODO 권한 확인
+                const { idx: tagIdx, auth, name: tagName } = tagData;
+
+                return (
+                  <TagItemSt key={tagIdx}>
+                    <p className="caption">{tagName}</p>
+                  </TagItemSt>
+                );
+              })}
+        </TagListSt>
+
+        {/* //* 선택된 태그 */}
+        <SelectedTagListWrapSt>
+          <p className="normalText">선택된 태그 :</p>
+          <SelectedTagListSt>
+            {selectedTagList.map((selectedTagData) => {
+              const { idx: tagIdx, name: tagName } = selectedTagData;
+
+              return (
+                <TagItemSt key={tagIdx}>
+                  <p className="caption">{tagName}</p>
+                </TagItemSt>
+              );
+            })}
+          </SelectedTagListSt>
+        </SelectedTagListWrapSt>
+      </TagSettingWrap>
 
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -103,7 +155,6 @@ function PostEditor() {
           toolbarItems={toolbarItems}
           theme="dark"
           hooks={{
-            //TODO 이미지 저장
             addImageBlobHook: async (blob, callback) => {
               const altText = document.getElementById(
                 "toastuiAltTextInput"
@@ -137,6 +188,53 @@ const EditorWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+const TagSettingWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const TagSearchWrapSt = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  & > input {
+    flex: 1;
+  }
+`;
+
+const TagListSt = styled.div`
+  display: flex;
+  gap: 14px;
+
+  padding: 14px;
+  background: var(--dark-l);
+`;
+
+const TagItemSt = styled.div`
+  padding: 8px 12px;
+  background: var(--gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--primary-color);
+  }
+`;
+
+const SelectedTagListWrapSt = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+`;
+
+const SelectedTagListSt = styled.div`
+  display: flex;
+  gap: 14px;
 `;
 
 export default PostEditor;

@@ -120,13 +120,14 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     letter-spacing: 0.15px;
 }
 .subTitle {
-    font-family: 'SUIT-Regular';
+    font-family: 'SUIT-Bold';
     font-size: 16px;
     letter-spacing: 0.15px;
 }
 .smallTitle {
     font-family: 'SUIT-Medium';
     font-size: 14px;
+    font-weight: 700;
     letter-spacing: 0.1px;
 }
 .buttonText {
