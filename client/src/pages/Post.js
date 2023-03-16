@@ -8,6 +8,7 @@ import Prism from "prismjs";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-clojure";
+import { NavLink } from "react-router-dom";
 
 import { getPost } from "../apis/posts";
 
@@ -35,18 +36,29 @@ function Post() {
   }, [postIdx]);
 
   return loading ? null : (
-    <div className="scroll h100">
-      <h2 className="headline mb20">{subject}</h2>
+    <PostWrapSt className="scroll h100">
+      <h2 className="headline">{subject}</h2>
 
-      <div style={{display: "flex", justifyContent: "space-between"}}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <PostInfoWrapSt>
           <h3 className="subTitle">{memberName}</h3>
-          <p className="normalText">{new Date(updateDatetime).toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" })}</p>
+          <p className="normalText">
+            {new Date(updateDatetime).toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })}
+          </p>
         </PostInfoWrapSt>
         {memberIdx !== user?.idx ? null : (
           <PostButtonWrapSt>
-              <p className="buttonText">수정</p>
-              <p className="buttonText">삭제</p>
+            <NavLink
+              className="buttonText"
+              to={`/postEditor/edit?post=${postIdx}`}
+            >
+              수정
+            </NavLink>
+            <NavLink className="buttonText">삭제</NavLink>
           </PostButtonWrapSt>
         )}
       </div>
@@ -55,9 +67,15 @@ function Post() {
         initialValue={content}
         plugins={[[codeSyntax, { highlighter: Prism }]]}
       />
-    </div>
+    </PostWrapSt>
   );
 }
+
+const PostWrapSt = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const PostInfoWrapSt = styled.div`
   display: flex;

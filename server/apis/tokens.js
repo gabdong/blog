@@ -8,10 +8,13 @@ const token = require("../config/jwt");
 router.delete("/", async (req, res) => {
   const hashIdx = getCookie(req.headers.cookie, "refreshToken");
 
-  await db.query(`
+  await db.query(
+    `
     DELETE FROM tokens
     WHERE hash_idx=? 
-  `, [hashIdx]);
+  `,
+    [hashIdx]
+  );
 
   res.cookie("refreshToken", "", {
     httpOnly: true,
@@ -33,11 +36,14 @@ router.get("/check-token", async (req, res) => {
       //* accessToken false일경우 refreshToken 검증
       const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
 
-      const [refreshTokenRes] = await db.query(`
+      const [refreshTokenRes] = await db.query(
+        `
         SELECT refresh_token AS refreshToken
         FROM tokens 
         WHERE hash_idx=?
-      `, [refreshTokenIdx]);
+      `,
+        [refreshTokenIdx]
+      );
 
       if (refreshTokenRes.length === 0) {
         const err = new Error("권한이 없습니다.");
@@ -58,11 +64,14 @@ router.get("/check-token", async (req, res) => {
       const newAccessToken = token().access(idx);
       const newRefreshToken = token().refresh(idx);
 
-      const [userRes] = await db.query(`
+      const [userRes] = await db.query(
+        `
         SELECT idx, id, name, phone, email
         FROM members
         WHERE idx=?
-      `, [idx]);
+      `,
+        [idx]
+      );
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");
@@ -72,17 +81,23 @@ router.get("/check-token", async (req, res) => {
 
       const user = userRes[0];
 
-      await db.query(`
+      await db.query(
+        `
         UPDATE tokens SET
         refresh_token=? 
         WHERE member=?
-      `, [newRefreshToken, idx]);
+      `,
+        [newRefreshToken, idx]
+      );
 
-      const [hashIdxRes] = await db.query(`
+      const [hashIdxRes] = await db.query(
+        `
         SELECT hash_idx AS hashIdx 
         FROM tokens 
         WHERE member=?
-      `, [idx]);
+      `,
+        [idx]
+      );
 
       if (hashIdxRes.length === 0) {
         const err = new Error("토큰 hash idx요청을 실패하였습니다.");
@@ -106,11 +121,14 @@ router.get("/check-token", async (req, res) => {
       });
     } else {
       const { idx } = checkAccessToken;
-      const [userRes] = await db.query(`
+      const [userRes] = await db.query(
+        `
         SELECT idx, id, name, phone, email
         FROM members
         WHERE idx=?
-      `, [idx]);
+      `,
+        [idx]
+      );
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");

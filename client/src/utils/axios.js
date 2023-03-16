@@ -37,13 +37,13 @@ instance.interceptors.request.use(
 
         const { newAccessToken } = checkAuthResult.data;
         const { user } = checkAuthResult.data;
-  
+
         if (isFormData) {
           config.data.append("user", JSON.stringify(user));
         } else {
           config.data.user = user;
         }
-  
+
         if (newAccessToken) {
           authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
           instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;

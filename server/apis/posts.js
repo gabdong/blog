@@ -71,7 +71,12 @@ router.post("/", async (req, res) => {
       content=?,
       tags=?
     `,
-      [userIdx, subject, markDown.replace(/'/g, "\\'"), JSON.stringify(tags).replace(/"/g, "")]
+      [
+        userIdx,
+        subject,
+        markDown.replace(/'/g, "\\'"),
+        JSON.stringify(tags).replace(/"/g, ""),
+      ]
     );
 
     res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });

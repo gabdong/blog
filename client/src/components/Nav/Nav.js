@@ -45,7 +45,7 @@ function Nav() {
           setActiveTagIdx(Number(searchParams.get("tag")));
         }
       } else if (pathname.includes("/tag")) {
-        setActiveTagIdx(Number(pathname.replace('/tag/', '')));
+        setActiveTagIdx(Number(pathname.replace("/tag/", "")));
       } else {
         setActiveTagIdx(null);
       }

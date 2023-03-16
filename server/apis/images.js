@@ -8,11 +8,14 @@ router.get("/", async (req, res) => {
   const { name, size } = req.query;
 
   try {
-    const [duplicatedImgRes] = await db.query(`
+    const [duplicatedImgRes] = await db.query(
+      `
       SELECT url, alt FROM images 
       WHERE original_name=? 
       AND size=? 
-    `, [name, size]);
+    `,
+      [name, size]
+    );
 
     let url, alt;
 
@@ -23,7 +26,7 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", url, alt });
   } catch (err) {
-    res.status(500).json({ msg: "중복된 이미지검사를 실패하였습니다." })
+    res.status(500).json({ msg: "중복된 이미지검사를 실패하였습니다." });
   }
 });
 
@@ -36,7 +39,8 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
   const name = key.replace("images/", "");
 
   try {
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO images SET 
       member=?,
       size=?,
@@ -45,7 +49,9 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
       url=?,
       alt=?,
       mime_type=?
-    `, [userIdx, size, originalname, name, location, alt, mimetype]);
+    `,
+      [userIdx, size, originalname, name, location, alt, mimetype]
+    );
 
     res.json({ msg: "SUCCESS", url: location });
   } catch (err) {

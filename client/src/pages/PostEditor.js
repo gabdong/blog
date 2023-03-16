@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 //* markdown editor
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -24,13 +24,25 @@ import { getTagList } from "../apis/tags";
 
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import { getPost } from "../apis/posts";
 
 //TODO 썸네일 추가하기
 function PostEditor() {
   //TODO 새글, 글수정
   const params = useParams();
-
+  const location = useLocation();
   const navigate = useNavigate();
+  const editorRef = useRef(null);
+  const user = useSelector((store) => store.user.idx);
+
+  const [subject, setSubject] = useState("");
+  const [content, setContent] = useState("");
+  const [tagList, setTagList] = useState([]);
+  const [tagListLoading, setTagListLoading] = useState(true);
+  const [selectedTagList, setSelectedTagList] = useState([]);
+  const [selectedTagDataList, setSelectedTagDataList] = useState({});
+  const [loading, setLoading] = useState(true);
+
   const toolbarItems = [
     ["heading", "bold"],
     ["hr"],
@@ -38,31 +50,48 @@ function PostEditor() {
     ["table", "link"],
     ["image", "code", "codeblock"],
   ];
-  const editorRef = useRef(null);
-  const user = useSelector((store) => store.user.idx);
 
-  const [subject, setsubject] = useState("");
-  const [tagList, setTagList] = useState([]);
-  const [tagListLoading, setTagListLoading] = useState(true);
-  //TODO 수정모드일 경우 사용중인 tagList 불러오기
-  const [selectedTagList, setSelectedTagList] = useState([]);
-  const [selectedTagDataList, setSelectedTagDataList] = useState({});
-
-  //* subject handler
+  //* 제목 handler
   const subjectHandler = (e) => {
-    setsubject(e.target.value);
+    setSubject(e.target.value);
   };
 
-  //* selected tag list handler
+  //* 선택된 태그 리스트 handler
   const selectedTagListHandler = (e, mode) => {
     const { idx } = e.currentTarget.dataset;
 
-    if (mode === 'add') {
+    if (mode === "add") {
+      const tagData = { ...tagList[idx] };
+
+      //* 선택된 태그 리스트 갱신
       setSelectedTagList((prev) => [...prev, ...[idx]]);
+      setSelectedTagDataList((prev) => {
+        prev[idx] = tagData;
+        return { ...prev };
+      });
+
+      //* 태그목록 갱신
+      setTagList((prev) => {
+        delete prev[idx];
+        return { ...prev };
+      });
     } else {
+      const tagData = { ...selectedTagDataList[idx] };
+
+      //* 선택된 태그 리스트 갱신
       setSelectedTagList((prev) => {
-        prev.splice(prev.indexOf(idx), 1)
+        prev.splice(prev.indexOf(idx), 1);
         return [...prev];
+      });
+      setSelectedTagDataList((prev) => {
+        delete prev[idx];
+        return { ...prev };
+      });
+
+      //* 태그목록 갱신
+      setTagList((prev) => {
+        prev[idx] = tagData;
+        return { ...prev };
       });
     }
   };
@@ -80,13 +109,13 @@ function PostEditor() {
       subject,
       user,
       checkAuth: true,
-      tags: selectedTagList
+      tags: selectedTagList,
     };
 
     try {
       axios.post("/apis/posts/", body).then((data) => {
         const { postIdx } = data.data;
-  
+
         navigate(`/post/${postIdx}`);
       });
     } catch (err) {
@@ -96,22 +125,45 @@ function PostEditor() {
 
   useEffect(() => {
     (async function () {
-      // 사용중인 태그는 태그목록에서 제외
       const getTagListRes = await getTagList();
+
+      let selectedTagDataRes = [],
+        postSubject = "",
+        postContent = "";
+      if (params.mode === "edit") {
+        const postIdx = new URLSearchParams(location.search).get("post");
+        const postDataRes = await getPost(Number(postIdx));
+
+        selectedTagDataRes = postDataRes[0].tags;
+        postSubject = postDataRes[0].subject;
+        postContent = postDataRes[0].content;
+      }
+
+      //* 사용중인 태그는 태그목록에서 제외
       const selectedTagDataTmp = {};
-      for (const selectedTagIdx of selectedTagList) {
-        selectedTagDataTmp[selectedTagIdx] = {...getTagListRes[selectedTagIdx]};
+      for (const selectedTagIdx of selectedTagDataRes) {
+        selectedTagDataTmp[selectedTagIdx] = {
+          ...getTagListRes[selectedTagIdx],
+        };
 
         delete getTagListRes[selectedTagIdx];
       }
 
+      //* 태그목록
       setTagList(getTagListRes);
-      setSelectedTagDataList(selectedTagDataTmp);
-      setTagListLoading(false);
-    })();
-  }, [selectedTagList]);
 
-  return (
+      //* 적용중인 게시글설정 - 게시글 수정중 새글작성 페이지 이동시 초기화 위해 수정중아닐때도 설정
+      setSelectedTagDataList(selectedTagDataTmp);
+      setSelectedTagList(selectedTagDataRes);
+      setSubject(postSubject);
+      setContent(postContent);
+
+      setTagListLoading(false);
+      setLoading(false);
+    })();
+  }, [location.search, params.mode]);
+
+  return loading ? null : (
     <WriteWrap>
       <h2 className="subTitle">게시글 작성</h2>
 
@@ -135,7 +187,13 @@ function PostEditor() {
                 const { auth, name: tagName } = tagData[1];
 
                 return (
-                  <TagItemSt key={tagIdx} onClick={(e) => {selectedTagListHandler(e, 'add')}} data-idx={tagIdx}>
+                  <TagItemSt
+                    key={tagIdx}
+                    onClick={(e) => {
+                      selectedTagListHandler(e, "add");
+                    }}
+                    data-idx={tagIdx}
+                  >
                     <p className="caption">{tagName}</p>
                   </TagItemSt>
                 );
@@ -146,14 +204,21 @@ function PostEditor() {
         <SelectedTagListWrapSt>
           <p className="normalText">선택된 태그 :</p>
           <SelectedTagListSt className="scroll">
-            {tagListLoading 
-              ? null 
+            {tagListLoading
+              ? null
               : Object.entries(selectedTagDataList).map((selectedTagData) => {
                   const tagIdx = selectedTagData[0];
                   const { name: tagName } = selectedTagData[1];
 
                   return (
-                    <TagItemSt key={tagIdx} onClick={(e) => {selectedTagListHandler(e, 'minus')}} data-idx={tagIdx} data-name={tagName}>
+                    <TagItemSt
+                      key={tagIdx}
+                      onClick={(e) => {
+                        selectedTagListHandler(e, "minus");
+                      }}
+                      data-idx={tagIdx}
+                      data-name={tagName}
+                    >
                       <p className="caption">{tagName}</p>
                     </TagItemSt>
                   );
@@ -165,7 +230,7 @@ function PostEditor() {
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <h3 className="smallTitle">제목 :</h3>
-        <Input style={{ flex: 1 }} onChange={subjectHandler} />
+        <Input style={{ flex: 1 }} onChange={subjectHandler} value={subject} />
       </div>
 
       {/* //* mark down editor */}
@@ -181,6 +246,7 @@ function PostEditor() {
           hideModeSwitch={true}
           toolbarItems={toolbarItems}
           theme="dark"
+          initialValue={content}
           hooks={{
             addImageBlobHook: async (blob, callback) => {
               const altText = document.getElementById(
