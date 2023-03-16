@@ -73,7 +73,6 @@ function TagSettingItem({ idx, name }) {
         <input
           type="text"
           className="caption"
-          id={`boardEditInput_${idx}`}
           value={editedName}
           onChange={editedNameHandler}
           autoComplete="off"

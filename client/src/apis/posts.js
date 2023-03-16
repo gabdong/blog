@@ -2,15 +2,12 @@ import axios from "axios";
 
 /**
  * * 게시글 리스트 요청
- * @param {Number} boardIdx
- * @param {Number} parentBoardIdx
+ * @param {Number} tagIdx
  * @param {Function} loadingHandler
  */
-export async function getPostList(boardIdx, parentBoardIdx) {
+export async function getPostList(tagIdx) {
   try {
-    const json = await axios.get(`/apis/posts/list/${boardIdx}`, {
-      params: { parentBoardIdx },
-    });
+    const json = await axios.get(`/apis/posts/list/${tagIdx}`);
 
     return json.data.postList;
   } catch (err) {
