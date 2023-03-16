@@ -14,6 +14,7 @@ import { getPost } from "../apis/posts";
 function Post() {
   const params = useParams();
   const user = useSelector((store) => store.user);
+  console.log(user);
   const { postIdx } = params;
   const [loading, setLoading] = useState(true);
   const [postData, setPostData] = useState({});
@@ -26,6 +27,7 @@ function Post() {
     memberName = postData[0].name;
     updateDatetime = postData[0].updateDatetime;
   }
+  console.log(postData);
 
   useEffect(() => {
     (async function () {
