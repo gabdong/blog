@@ -45,9 +45,8 @@ function PostEditor() {
   const [tagList, setTagList] = useState([]);
   const [tagListLoading, setTagListLoading] = useState(true);
   //TODO 수정모드일 경우 사용중인 tagList 불러오기
-  const [selectedTagList, setSelectedTagList] = useState([
-    { idx: 1, name: "test" },
-  ]);
+  const [selectedTagList, setSelectedTagList] = useState([]);
+  const [selectedTagDataList, setSelectedTagDataList] = useState({});
 
   //* subject handler
   const subjectHandler = (e) => {
@@ -55,8 +54,17 @@ function PostEditor() {
   };
 
   //* selected tag list handler
-  const selectedTagListHandler = (e) => {
-    setSelectedTagList();
+  const selectedTagListHandler = (e, mode) => {
+    const { idx } = e.currentTarget.dataset;
+
+    if (mode === 'add') {
+      setSelectedTagList((prev) => [...prev, ...idx]);
+    } else {
+      setSelectedTagList((prev) => {
+        prev.splice(prev.indexOf(idx), 1)
+        return [...prev];
+      });
+    }
   };
 
   /**
@@ -72,21 +80,36 @@ function PostEditor() {
       subject,
       user,
       checkAuth: true,
+      tags: selectedTagList
     };
 
-    axios.post("/apis/posts/", body).then((data) => {
-      const { postIdx } = data.data;
-
-      navigate(`/post/${postIdx}`);
-    });
+    try {
+      axios.post("/apis/posts/", body).then((data) => {
+        const { postIdx } = data.data;
+  
+        navigate(`/post/${postIdx}`);
+      });
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
   };
 
   useEffect(() => {
     (async function () {
-      setTagList(await getTagList());
+      // 사용중인 태그는 태그목록에서 제외
+      const getTagListRes = await getTagList();
+      const selectedTagDataTmp = {};
+      for (const selectedTagIdx of selectedTagList) {
+        selectedTagDataTmp[selectedTagIdx] = {...getTagListRes[selectedTagIdx]};
+
+        delete getTagListRes[selectedTagIdx];
+      }
+
+      setTagList(getTagListRes);
+      setSelectedTagDataList(selectedTagDataTmp);
       setTagListLoading(false);
     })();
-  }, []);
+  }, [selectedTagList]);
 
   return (
     <WriteWrap>
@@ -106,12 +129,13 @@ function PostEditor() {
         <TagListSt className="mb10 scroll">
           {tagListLoading
             ? null
-            : tagList.map((tagData) => {
+            : Object.entries(tagList).map((tagData) => {
                 //TODO 권한 확인
-                const { idx: tagIdx, auth, name: tagName } = tagData;
+                const tagIdx = tagData[0];
+                const { auth, name: tagName } = tagData[1];
 
                 return (
-                  <TagItemSt key={tagIdx}>
+                  <TagItemSt key={tagIdx} onClick={(e) => {selectedTagListHandler(e, 'add')}} data-idx={tagIdx}>
                     <p className="caption">{tagName}</p>
                   </TagItemSt>
                 );
@@ -121,16 +145,19 @@ function PostEditor() {
         {/* //* 선택된 태그 */}
         <SelectedTagListWrapSt>
           <p className="normalText">선택된 태그 :</p>
-          <SelectedTagListSt>
-            {selectedTagList.map((selectedTagData) => {
-              const { idx: tagIdx, name: tagName } = selectedTagData;
+          <SelectedTagListSt className="scroll">
+            {tagListLoading 
+              ? null 
+              : Object.entries(selectedTagDataList).map((selectedTagData) => {
+                  const tagIdx = selectedTagData[0];
+                  const { name: tagName } = selectedTagData[1];
 
-              return (
-                <TagItemSt key={tagIdx}>
-                  <p className="caption">{tagName}</p>
-                </TagItemSt>
-              );
-            })}
+                  return (
+                    <TagItemSt key={tagIdx} onClick={(e) => {selectedTagListHandler(e, 'minus')}} data-idx={tagIdx} data-name={tagName}>
+                      <p className="caption">{tagName}</p>
+                    </TagItemSt>
+                  );
+                })}
           </SelectedTagListSt>
         </SelectedTagListWrapSt>
       </TagSettingWrap>
@@ -208,9 +235,13 @@ const TagSearchWrapSt = styled.div`
 
 const TagListSt = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  align-items: strat;
+  align-content: start;
   gap: 14px;
 
   padding: 14px;
+  height: 80px;
   background: var(--dark-l);
 `;
 
@@ -230,11 +261,20 @@ const SelectedTagListWrapSt = styled.div`
   display: flex;
   align-items: center;
   gap: 14px;
+
+  & > .normalText {
+    white-space: nowrap;
+  }
 `;
 
 const SelectedTagListSt = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  align-content: start;
   gap: 14px;
+
+  max-height: 80px;
 `;
 
 export default PostEditor;

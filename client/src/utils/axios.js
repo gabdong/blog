@@ -32,21 +32,25 @@ instance.interceptors.request.use(
 
     if (checkAuth === true) {
       //* check auth
+      try {
         const checkAuthResult = await checkToken();
-  
+
         const { newAccessToken } = checkAuthResult.data;
         const { user } = checkAuthResult.data;
-
+  
         if (isFormData) {
           config.data.append("user", JSON.stringify(user));
         } else {
           config.data.user = user;
         }
-
+  
         if (newAccessToken) {
           authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
           instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         }
+      } catch (err) {
+        if (err.code !== 401) console.error(err);
+      }
     }
 
     return config;

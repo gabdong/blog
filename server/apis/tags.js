@@ -13,9 +13,15 @@ router.get("/", async (req, res) => {
     `
     );
 
-    res.json({ msg: "SUCCESS", tagList: selectTagListRes });
+    const tagList = {};
+    for (const tagData of selectTagListRes) {
+      const { idx, auth, name } = tagData;
+      tagList[idx] = { auth, name };
+    }
+
+    res.json({ msg: "SUCCESS", tagList });
   } catch (err) {
-    throw err;
+    res.status(500).json({ msg: "태그리스트를 불러오지 못했습니다." });
   }
 });
 

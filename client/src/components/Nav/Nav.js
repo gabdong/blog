@@ -19,7 +19,7 @@ function Nav() {
   const navRendering = true;
 
   const [activeTagIdx, setActiveTagIdx] = useState(null);
-  const [tagList, setTagList] = useState([]);
+  const [tagList, setTagList] = useState({});
   const [loading, setLoading] = useState(true);
 
   /**
@@ -36,18 +36,21 @@ function Nav() {
   useEffect(() => {
     (async function () {
       setTagList(await getTagList());
-      setLoading(false);
 
       if (pathname.includes("/post")) {
         if (location.state?.activeTagIdx) {
           setActiveTagIdx(Number(location.state.activeTagIdx));
         } else {
           const searchParams = new URLSearchParams(location.search);
-          setActiveTagIdx(searchParams.get("tag"));
+          setActiveTagIdx(Number(searchParams.get("tag")));
         }
+      } else if (pathname.includes("/tag")) {
+        setActiveTagIdx(Number(pathname.replace('/tag/', '')));
       } else {
         setActiveTagIdx(null);
       }
+
+      setLoading(false);
     })();
   }, [location.search, pathname, location.state?.activeTagIdx]);
 
@@ -60,12 +63,15 @@ function Nav() {
           <NavBackgroundSt id="navBackground" onClick={navClose} />
           <NavSt id="nav">
             <CloseBtnSt onClick={navClose} />
-            {tagList.map((tagData) => {
-              const { idx: tagIdx, auth, name } = tagData;
+            {Object.entries(tagList).map((tagData) => {
+              const tagIdx = Number(tagData[0]);
+              const { auth, name } = tagData[1];
 
               const activeClass = activeTagIdx === tagIdx ? "active" : "";
+
               //TODO 로그인계정 권한도 확인하기
               if (auth === 1 && !isLogin) return "";
+
               return (
                 <NavBtn
                   key={tagIdx}

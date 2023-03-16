@@ -43,38 +43,36 @@ router.get("/:postIdx", async (req, res) => {
     );
 
     if (postDataRes.length === 0) {
-      const err = new Error("게시글을 불러오지 못했습니다.");
-      err.statusCode(500);
+      const err = new Error("게시글 정보가 존재하지 않습니다.");
+      err.code = 404;
     }
 
     res.json({ msg: "SUCCESS", postData: postDataRes });
   } catch (err) {
-    if (err.statusCode) {
-      res.status(err.statusCode).json({ msg: err.message });
+    if (err.code) {
+      res.status(err.code).json({ msg: err.message });
     } else {
-      throw err;
+      res.status(500).json({ msg: "게시글을 불러오지 못했습니다." });
     }
   }
 });
 
 //* 게시글 업로드 요청
 router.post("/", async (req, res) => {
-  const { markDown, subject, board, user } = req.body;
+  const { markDown, subject, tags, user } = req.body;
   const userIdx = user.idx;
 
-  //TODO board없애기
   try {
     const [insertPostRes] = await db.query(
       `
       INSERT INTO posts SET
       member=?, 
-      board=?, 
       auth=0, 
       subject=?, 
       content=?,
-      tags='[]'
+      tags=?
     `,
-      [userIdx, board, subject, markDown.replace(/'/g, "\\'")]
+      [userIdx, subject, markDown.replace(/'/g, "\\'"), JSON.stringify(tags).replace(/"/g, "")]
     );
 
     res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });

@@ -9,7 +9,7 @@ import TagSettingItem from "./TagSettingItem";
 
 
 function TagSettings() {
-  const [tagList, setTagList] = useState([]);
+  const [tagList, setTagList] = useState({});
   const [loading, setLoading] = useState(true);
   const [tagName, setTagName] = useState("");
 
@@ -59,8 +59,9 @@ function TagSettings() {
 
       <TagListWrapSt className="scroll">
         {loading ? null : 
-          tagList.map((tagData) => {
-            const { idx: tagIdx, name } = tagData;
+          Object.entries(tagList).map((tagData) => {
+            const tagIdx = tagData[0];
+            const { name } = tagData[1];
 
             return <TagSettingItem key={tagIdx} idx={tagIdx} name={name} />;
           })
