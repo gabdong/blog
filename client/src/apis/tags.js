@@ -17,17 +17,15 @@ export async function getTagList() {
  * @param {String} tagName
  * @param {Function} setTagList
  */
-export async function addTag(tagName, setTagList = null) {
-    const tagNameArr = tagName.replace(/(<([^>]+)>)/gi, '').replace(/[`~!@#$%^&*()_|+\-=?;:'".<>\{\}\[\]\\\/\s]/gim, '').split(','); // eslint-disable-line
+export async function addTag(tagName) {
+    const tagNameArr = tagName.replace(/(<([^>]+)>)/gi, '').replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, '').split(',').filter(Boolean); // eslint-disable-line
 
     if (tagNameArr.length === 0) return alert("추가할 태그명을 입력해주세요.");
 
     try {
-        await axios.post('/apis/tags/', { tags: tagNameArr, checkAuth: true }).then(async () => {
-            if (setTagList) setTagList(await getTagList());
-        });
+        await axios.post('/apis/tags/', { tags: tagNameArr, checkAuth: true });
     } catch (err) {
-        throw err;
+        alert(err.reponse.data.msg);
     }
 }
 

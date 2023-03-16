@@ -10,7 +10,7 @@ router.get("/list/:tagIdx", async (req, res) => {
     const [postListRes] = await db.query(
       `
       SELECT idx, subject, content, datetime 
-      FROM posts
+      FROM posts 
       WHERE delete_datetime IS NULL 
       AND JSON_CONTAINS(tags, ?)
       ORDER BY datetime DESC
@@ -20,11 +20,7 @@ router.get("/list/:tagIdx", async (req, res) => {
 
     res.json({ msg: "SUCCESS", postList: postListRes });
   } catch (err) {
-    if (err.statusCode) {
-      res.status(err.statusCode).json({ msg: err.message });
-    } else {
-      res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
-    }
+    res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
   }
 });
 
@@ -35,22 +31,25 @@ router.get("/:postIdx", async (req, res) => {
   try {
     const [postDataRes] = await db.query(
       `
-      SELECT subject, content, idx, tags 
-      FROM posts 
-      WHERE idx=?
+      SELECT posts.subject, posts.content, posts.tags, posts.member, posts.update_datetime AS updateDatetime, members.name 
+      FROM posts posts 
+      INNER JOIN members members ON members.idx=posts.member
+      WHERE posts.idx=?
     `,
       [postIdx]
     );
 
     if (postDataRes.length === 0) {
       const err = new Error("게시글 정보가 존재하지 않습니다.");
-      err.code = 404;
+      err.status = 404;
+
+      throw err;
     }
 
     res.json({ msg: "SUCCESS", postData: postDataRes });
   } catch (err) {
-    if (err.code) {
-      res.status(err.code).json({ msg: err.message });
+    if (err.status) {
+      res.status(err.status).json({ msg: err.message });
     } else {
       res.status(500).json({ msg: "게시글을 불러오지 못했습니다." });
     }

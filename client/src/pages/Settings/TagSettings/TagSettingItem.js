@@ -6,7 +6,7 @@ import { MdModeEditOutline as Edit } from "react-icons/md";
 
 import { updateTag, deleteTag } from "../../../apis/tags";
 
-function TagSettingItem({ idx, name }) {
+function TagSettingItem({ idx, name, setTagList }) {
   const [editing, setEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const [prevName, setPrevName] = useState(name);
@@ -53,7 +53,11 @@ function TagSettingItem({ idx, name }) {
     try {
       await deleteTag(idx);
 
-      e.target.closest(".tagSettingItem").remove();
+      setTagList((prev) => {
+        delete prev[idx];
+        
+        return {...prev};
+      });
     } catch (err) {
       if (err.response.data.msg) {
         return alert(err.response.data.msg);

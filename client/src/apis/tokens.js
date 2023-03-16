@@ -20,7 +20,7 @@ export async function checkToken() {
     return result;
   } catch (err) { //TODO error handling
     const error = new Error(err.response.data.msg);
-    error.code = err.response.status;
+    error.status = err.response.status;
 
     throw error;
   }

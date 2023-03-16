@@ -4,7 +4,6 @@ const db = require("../config/db");
 const imageUploader = require("../utils/imageUploader");
 
 //* 중복된 이미지 확인
-//TODO 작업하기
 router.get("/", async (req, res) => {
   const { name, size } = req.query;
 
@@ -24,7 +23,7 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", url, alt });
   } catch (err) {
-    throw err;
+    res.status(500).json({ msg: "중복된 이미지검사를 실패하였습니다." })
   }
 });
 

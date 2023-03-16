@@ -26,10 +26,12 @@ function TagSettings() {
    * @param {Event} e 
    * @returns 
    */
-  const callAddTagFn = (e) => {
+  const callAddTagFn = async (e) => {
     if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter") return;
 
-    return addTag(tagName, setTagList);
+    await addTag(tagName);
+    setTagName("");
+    setTagList(await getTagList());
   }
 
   useEffect(() => {
@@ -38,7 +40,7 @@ function TagSettings() {
       setLoading(false);
     })();
   }, []);
-  
+
   //TODO 태그검색기능 추가
   return (
     <TagSettingWrapSt>
@@ -63,7 +65,7 @@ function TagSettings() {
             const tagIdx = tagData[0];
             const { name } = tagData[1];
 
-            return <TagSettingItem key={tagIdx} idx={tagIdx} name={name} />;
+            return <TagSettingItem key={tagIdx} idx={tagIdx} name={name} setTagList={setTagList}/>;
           })
         }
       </TagListWrapSt>

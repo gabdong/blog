@@ -49,7 +49,7 @@ instance.interceptors.request.use(
           instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         }
       } catch (err) {
-        if (err.code !== 401) console.error(err);
+        if (err.status !== 401) console.error(err);
       }
     }
 

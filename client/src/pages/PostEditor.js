@@ -58,7 +58,7 @@ function PostEditor() {
     const { idx } = e.currentTarget.dataset;
 
     if (mode === 'add') {
-      setSelectedTagList((prev) => [...prev, ...idx]);
+      setSelectedTagList((prev) => [...prev, ...[idx]]);
     } else {
       setSelectedTagList((prev) => {
         prev.splice(prev.indexOf(idx), 1)

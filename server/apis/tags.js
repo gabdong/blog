@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
         );
       }
     } catch (err) {
-      throw err;
+      res.status(500).json({ msg: "태그 추가를 실패하였습니다." });
     }
   }
 
@@ -91,7 +91,7 @@ router.put("/:tagIdx", async (req, res) => {
 
     if (duplicateTagRes.length > 0) {
       const err = new Error("중복된 태그명이 존재합니다.");
-      err.code = 409;
+      err.status = 409;
 
       throw err;
     } else {
@@ -107,8 +107,8 @@ router.put("/:tagIdx", async (req, res) => {
       res.json({ msg: "SUCCESS" });
     }
   } catch (err) {
-    if (err.code) {
-      res.status(err.code).json({ msg: "중복된 태그명이 존재합니다." });
+    if (err.status) {
+      res.status(err.status).json({ msg: "중복된 태그명이 존재합니다." });
     } else {
       res.status(500).json({ msg: "태그 수정을 실패하였습니다." });
     }

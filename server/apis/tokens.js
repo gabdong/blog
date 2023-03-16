@@ -41,7 +41,7 @@ router.get("/check-token", async (req, res) => {
 
       if (refreshTokenRes.length === 0) {
         const err = new Error("권한이 없습니다.");
-        err.statusCode = 401;
+        err.status = 401;
         throw err;
       }
 
@@ -50,7 +50,7 @@ router.get("/check-token", async (req, res) => {
 
       if (!checkRefreshToken) {
         const err = new Error("권한이 없습니다.");
-        err.statusCode = 401;
+        err.status = 401;
         throw err;
       }
 
@@ -66,7 +66,7 @@ router.get("/check-token", async (req, res) => {
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");
-        err.statusCode = 404;
+        err.status = 404;
         throw err;
       }
 
@@ -86,7 +86,7 @@ router.get("/check-token", async (req, res) => {
 
       if (hashIdxRes.length === 0) {
         const err = new Error("토큰 hash idx요청을 실패하였습니다.");
-        err.statusCode = 500;
+        err.status = 500;
         throw err;
       }
 
@@ -114,7 +114,7 @@ router.get("/check-token", async (req, res) => {
 
       if (userRes.length === 0) {
         const err = new Error("유저정보를 찾을 수 없습니다.");
-        err.statusCode = 404;
+        err.status = 404;
         throw err;
       }
 
@@ -122,10 +122,10 @@ router.get("/check-token", async (req, res) => {
       res.json({ msg: "SUCCESS", status: 200, auth: true, user });
     }
   } catch (err) {
-    if (err.statusCode) {
-      res.status(err.statusCode).json({ msg: err.message });
+    if (err.status) {
+      res.status(err.status).json({ msg: err.message });
     } else {
-      throw new Error(err);
+      res.status(500).json({ msg: "토큰 유효성검사를 실패하였습니다." });
     }
   }
 });
