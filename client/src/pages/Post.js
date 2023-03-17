@@ -94,6 +94,10 @@ const PostWrapSt = styled.section`
   gap: 20px;
 
   padding-right: 20px;
+
+  @media screen and (max-width: 479px) {
+    padding-right: 0px;
+  }
 `;
 
 const PostInfoWrapSt = styled.div`

@@ -44,8 +44,34 @@ function PostEditor() {
   const [loading, setLoading] = useState(true);
   const postIdx = params.mode === "edit" ? Number(new URLSearchParams(location.search).get("post")) : null;
 
+  //* 에디터 뒤로가기 버튼
+  const editorUndo = document.createElement('span');
+  editorUndo.classList.add('material-icons');
+  editorUndo.textContent = 'undo';
+  editorUndo.style = 'cursor: pointer; margin-top: 4px;'
+  editorUndo.addEventListener('click', () => {
+    editorRef.current.getInstance().exec('undo');
+  });
+
+  //* 에디터 앞으로가기 버튼
+  const editorRedo = document.createElement('span');
+  editorRedo.classList.add('material-icons');
+  editorRedo.textContent = 'redo';
+  editorRedo.style = 'cursor: pointer; margin-top: 4px;'
+  editorRedo.addEventListener('click', () => {
+    editorRef.current.getInstance().exec('redo');
+  });
+
   const toolbarItems = [
-    ["heading", "bold"],
+    [{
+      name: 'undo',
+      tooltip: '뒤로가기',
+      el: editorUndo
+    }, {
+      name: 'redo',
+      tooltip: '앞으로가기',
+      el: editorRedo
+    }, "heading", "bold"],
     ["hr"],
     ["ul", "ol", "task"],
     ["table", "link"],
@@ -142,7 +168,7 @@ function PostEditor() {
 
     try {
       await axios.put(`/apis/posts/${postIdx}`, body);
-      
+
       navigate(`/post/${postIdx}`);
     } catch (err) {
       alert(err.response.data.msg);
@@ -271,7 +297,7 @@ function PostEditor() {
           hideModeSwitch={true}
           toolbarItems={toolbarItems}
           theme="dark"
-          initialValue={content}
+          // initialValue={content} 
           hooks={{
             addImageBlobHook: async (blob, callback) => {
               const altText = document.getElementById(
