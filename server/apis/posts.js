@@ -34,7 +34,8 @@ router.get("/:postIdx", async (req, res) => {
       SELECT posts.subject, posts.content, posts.tags, posts.member, posts.update_datetime AS updateDatetime, members.name 
       FROM posts posts 
       INNER JOIN members members ON members.idx=posts.member
-      WHERE posts.idx=?
+      WHERE posts.idx=? 
+      AND posts.delete_datetime IS NULL
     `,
       [postIdx]
     );
@@ -82,6 +83,59 @@ router.post("/", async (req, res) => {
     res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });
   } catch (err) {
     res.status(500).json({ msg: "게시판 업로드를 실패하였습니다." });
+  }
+});
+
+//* 게시글 수정
+router.put('/:postIdx', async (req, res) => {
+  const { postIdx } = req.params;
+  const { markDown, subject, tags, user } = req.body;
+  const userIdx = user.idx;
+
+  try {
+    //TODO 권한수정
+    await db.query(
+      `
+      UPDATE posts SET
+      member=?, 
+      auth=0, 
+      subject=?, 
+      content=?,
+      tags=?
+      WHERE idx=?
+    `,
+      [
+        userIdx,
+        subject,
+        markDown.replace(/'/g, "\\'"),
+        JSON.stringify(tags).replace(/"/g, ""),
+        postIdx
+      ]
+    );
+  
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    res.status(500).json({ msg: "게시글 수정을 실패하였습니다." });
+  }
+});
+
+//* 게시글 삭제
+router.delete('/:postIdx', async (req, res) => {
+  const { postIdx } = req.params;
+
+  try {
+    await db.query(
+      `
+      UPDATE posts SET 
+      delete_datetime=CURRENT_TIMESTAMP() 
+      WHERE idx=?
+    `, 
+      [postIdx]
+    );
+
+    res.json({ msg: "SUCCESS" });
+  } catch (err) {
+    res.status(500).json({ msg: "게시글 삭제를 실패하였습니다." });
   }
 });
 

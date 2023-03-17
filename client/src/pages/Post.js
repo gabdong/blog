@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { Viewer } from "@toast-ui/react-editor";
@@ -11,9 +11,11 @@ import "prismjs/components/prism-clojure";
 import { NavLink } from "react-router-dom";
 
 import { getPost } from "../apis/posts";
+import axios from "../utils/axios";
 
 function Post() {
   const params = useParams();
+  const navigate = useNavigate();
   const user = useSelector((store) => store.user);
   const { postIdx } = params;
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,21 @@ function Post() {
     memberIdx = postData[0].member;
     memberName = postData[0].name;
     updateDatetime = postData[0].updateDatetime;
+  }
+
+  /**
+   * * 게시글 삭제
+   */
+  const deletePost = async () => {
+    if (!window.confirm("게시글 삭제를 진행하시겠습니까?")) return;
+
+    try {
+      await axios.delete(`/apis/posts/${postIdx}`);
+
+      navigate(`/`);
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
   }
 
   useEffect(() => {
@@ -58,7 +75,7 @@ function Post() {
             >
               수정
             </NavLink>
-            <NavLink className="buttonText">삭제</NavLink>
+            <NavLink className="buttonText" onClick={deletePost}>삭제</NavLink>
           </PostButtonWrapSt>
         )}
       </div>

@@ -42,6 +42,7 @@ function PostEditor() {
   const [selectedTagList, setSelectedTagList] = useState([]);
   const [selectedTagDataList, setSelectedTagDataList] = useState({});
   const [loading, setLoading] = useState(true);
+  const postIdx = params.mode === "edit" ? Number(new URLSearchParams(location.search).get("post")) : null;
 
   const toolbarItems = [
     ["heading", "bold"],
@@ -58,7 +59,7 @@ function PostEditor() {
 
   //* 선택된 태그 리스트 handler
   const selectedTagListHandler = (e, mode) => {
-    const { idx } = e.currentTarget.dataset;
+    const idx = Number(e.currentTarget.dataset.idx);
 
     if (mode === "add") {
       const tagData = { ...tagList[idx] };
@@ -99,7 +100,7 @@ function PostEditor() {
   /**
    * * 게시글 업로드
    */
-  const uploadPost = () => {
+  const uploadPost = async () => {
     const markDown = editorRef.current.getInstance().getMarkdown();
 
     if (!subject) return alert("제목을 입력해주세요.");
@@ -113,7 +114,7 @@ function PostEditor() {
     };
 
     try {
-      axios.post("/apis/posts/", body).then((data) => {
+      await axios.post("/apis/posts/", body).then((data) => {
         const { postIdx } = data.data;
 
         navigate(`/post/${postIdx}`);
@@ -123,6 +124,31 @@ function PostEditor() {
     }
   };
 
+  /**
+   * * 게시글 수정
+   */
+  const updatePost = async () => {
+    const markDown = editorRef.current.getInstance().getMarkdown();
+
+    if (!subject) return alert("제목을 입력해주세요.");
+
+    const body = {
+      markDown,
+      subject,
+      user,
+      tags: selectedTagList,
+      checkAuth: true
+    };
+
+    try {
+      await axios.put(`/apis/posts/${postIdx}`, body);
+      
+      navigate(`/post/${postIdx}`);
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
+  }
+
   useEffect(() => {
     (async function () {
       const getTagListRes = await getTagList();
@@ -131,7 +157,6 @@ function PostEditor() {
         postSubject = "",
         postContent = "";
       if (params.mode === "edit") {
-        const postIdx = new URLSearchParams(location.search).get("post");
         const postDataRes = await getPost(Number(postIdx));
 
         selectedTagDataRes = postDataRes[0].tags;
@@ -161,7 +186,7 @@ function PostEditor() {
       setTagListLoading(false);
       setLoading(false);
     })();
-  }, [location.search, params.mode]);
+  }, [location.search, params.mode, postIdx]);
 
   return loading ? null : (
     <WriteWrap>
@@ -264,7 +289,7 @@ function PostEditor() {
       </EditorWrap>
 
       {/* //* save button */}
-      <Button text="Save" style={{ alignSelf: "end" }} onClick={uploadPost} />
+      <Button text="Save" style={{ alignSelf: "end" }} onClick={params.mode === "new" ? uploadPost : updatePost} />
     </WriteWrap>
   );
 }
