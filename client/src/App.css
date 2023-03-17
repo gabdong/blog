@@ -37,6 +37,10 @@
     font-family: "SUIT-ExtraBold";
     src: url("./assets/font/SUIT-ExtraBold.woff2");
 }
+@font-face {
+    font-family: "Ubuntu-Regular";
+    src: url("./assets/font/Ubuntu-Regular.ttf");
+}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -218,6 +222,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .ProseMirror {
     min-height: 300px;
 }
+.toastui-editor-main-container,
 .toastui-editor-contents h1,
 .toastui-editor-contents h2,
 .toastui-editor-contents h3,

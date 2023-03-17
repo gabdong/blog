@@ -75,7 +75,7 @@ function Header() {
 
         {/* //* Logo */}
         <Link to="/">
-          <LogoSt id="logo">GABDONG</LogoSt>
+          <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
         </Link>
 
         <HeaderBtnWrapSt>
@@ -171,7 +171,7 @@ const HeaderBtnSt = styled.button`
 `;
 
 const LogoSt = styled.h1`
-  font-family: "SUIT-ExtraBold";
+  font-family: "Ubuntu-Regular";
   font-size: 21px;
   letter-spacing: 0.15px;
   transition: var(--transition);
