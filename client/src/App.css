@@ -222,7 +222,14 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .ProseMirror {
     min-height: 300px;
 }
+.toastui-editor-contents h1 {
+    border-bottom: none !important;
+}
 .toastui-editor-main-container,
+.toastui-editor-contents dir, 
+.toastui-editor-contents menu, 
+.toastui-editor-contents ol, 
+.toastui-editor-contents ul,
 .toastui-editor-contents h1,
 .toastui-editor-contents h2,
 .toastui-editor-contents h3,
