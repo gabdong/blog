@@ -53,7 +53,7 @@ function Post() {
   }, [postIdx]);
 
   return loading ? null : (
-    <PostWrapSt className="scroll h100">
+    <PostWrapSt className="h100">
       <h2 className="headline">{subject}</h2>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -92,6 +92,8 @@ const PostWrapSt = styled.section`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  padding-right: 20px;
 `;
 
 const PostInfoWrapSt = styled.div`
