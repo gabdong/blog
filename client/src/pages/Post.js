@@ -17,10 +17,12 @@ function Post() {
   const params = useParams();
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  const { postIdx } = params;
+
   const [loading, setLoading] = useState(true);
   const [postData, setPostData] = useState({});
 
+  //* 게시글 정보
+  const { postIdx } = params;
   let subject, content, memberIdx, memberName, updateDatetime;
   if (!loading) {
     subject = postData[0].subject;
@@ -43,7 +45,7 @@ function Post() {
     } catch (err) {
       alert(err.response.data.msg);
     }
-  }
+  };
 
   useEffect(() => {
     (async function () {
@@ -75,7 +77,9 @@ function Post() {
             >
               수정
             </NavLink>
-            <NavLink className="buttonText" onClick={deletePost}>삭제</NavLink>
+            <NavLink className="buttonText" onClick={deletePost}>
+              삭제
+            </NavLink>
           </PostButtonWrapSt>
         )}
       </div>

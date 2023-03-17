@@ -5,20 +5,34 @@ const db = require("../config/db");
 //* 게시글 리스트 요청
 router.get("/list/:tagIdx", async (req, res) => {
   const { tagIdx } = req.params;
+  const page = Number(req.query.page);
+  const offset = (page - 1) * 10;
 
   try {
+    const [totalCntRes] = await db.query(
+      `
+      SELECT COUNT(idx) as totalCnt 
+      FROM posts 
+      WHERE delete_datetime IS NULL 
+      AND JSON_CONTAINS(tags, ?)
+    `,
+      [tagIdx]
+    );
+    const { totalCnt } = totalCntRes[0];
+
     const [postListRes] = await db.query(
       `
       SELECT idx, subject, content, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
       AND JSON_CONTAINS(tags, ?)
-      ORDER BY datetime DESC
+      ORDER BY datetime DESC, idx DESC 
+      LIMIT 10 OFFSET ?
     `,
-      [tagIdx]
+      [tagIdx, offset]
     );
 
-    res.json({ msg: "SUCCESS", postList: postListRes });
+    res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
   } catch (err) {
     res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
   }
@@ -87,7 +101,7 @@ router.post("/", async (req, res) => {
 });
 
 //* 게시글 수정
-router.put('/:postIdx', async (req, res) => {
+router.put("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
   const { markDown, subject, tags, user } = req.body;
   const userIdx = user.idx;
@@ -109,10 +123,10 @@ router.put('/:postIdx', async (req, res) => {
         subject,
         markDown.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
-        postIdx
+        postIdx,
       ]
     );
-  
+
     res.json({ msg: "SUCCESS" });
   } catch (err) {
     res.status(500).json({ msg: "게시글 수정을 실패하였습니다." });
@@ -120,7 +134,7 @@ router.put('/:postIdx', async (req, res) => {
 });
 
 //* 게시글 삭제
-router.delete('/:postIdx', async (req, res) => {
+router.delete("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
 
   try {
@@ -129,7 +143,7 @@ router.delete('/:postIdx', async (req, res) => {
       UPDATE posts SET 
       delete_datetime=CURRENT_TIMESTAMP() 
       WHERE idx=?
-    `, 
+    `,
       [postIdx]
     );
 

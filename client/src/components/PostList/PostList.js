@@ -5,16 +5,16 @@ import removeMd from "remove-markdown";
 
 import { getPostList } from "../../apis/posts";
 
-function PostList({ tagIdx }) {
+function PostList({ tagIdx, page }) {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
     (async function () {
-      setPostList(await getPostList(tagIdx));
+      setPostList(await getPostList(tagIdx, page));
       setLoading(false);
     })();
-  }, [tagIdx]);
+  }, [tagIdx, page]);
 
   return (
     <>

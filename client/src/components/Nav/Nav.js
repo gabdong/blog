@@ -23,7 +23,7 @@ function Nav() {
   const [loading, setLoading] = useState(true);
 
   /**
-   * * nav close
+   * * mobile nav close
    */
   const navClose = () => {
     const nav = document.getElementById("nav");
@@ -76,7 +76,7 @@ function Nav() {
                 <NavBtn
                   key={tagIdx}
                   text={name}
-                  path={`/tag/${tagIdx}`}
+                  path={`/tag/${tagIdx}?page=1`}
                   active={activeClass}
                 />
               );
