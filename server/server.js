@@ -15,14 +15,13 @@ const cspOptions = {
     ...helmet.contentSecurityPolicy.getDefaultDirectives(), 
     "script-src": ["'self'", "*.googleapis.com", "'unsafe-inline'", "'unsafe-eval'"],
     'img-src': ["'self'", 'data:', '*.daumcdn.net', '*.kakaocdn.net', '*.amazonaws.com'],
-    "base-uri" : ["/", "http:"],
+    "base-uri" : ["http:", "https:"],
   }
 }
-
+app.use(cors());
 app.use(helmet({
   contentSecurityPolicy: cspOptions
 }));
-app.use(cors());
 app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
