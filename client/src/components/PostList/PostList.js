@@ -4,14 +4,21 @@ import { Link } from "react-router-dom";
 import removeMd from "remove-markdown";
 
 import { getPostList } from "../../apis/posts";
+import Pagination from "../Pagination/Pagination";
 
 function PostList({ tagIdx, page }) {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
+  const [totalCnt, setTotalCnt] = useState(0);
 
   useEffect(() => {
     (async function () {
-      setPostList(await getPostList(tagIdx, page));
+      const postListRes = await getPostList(tagIdx, page);
+      const { postList: postListData } = postListRes;
+      const { totalCnt } = postListRes;
+
+      setPostList(postListData);
+      setTotalCnt(totalCnt);
       setLoading(false);
     })();
   }, [tagIdx, page]);
@@ -19,36 +26,50 @@ function PostList({ tagIdx, page }) {
   return (
     <>
       {loading ? null : (
-        <PostListUlSt>
-          {postList.map((postData) => {
-            const { idx, subject, content, datetime } = postData;
-            const datetimeFormat = new Date(datetime).toLocaleDateString(
-              "ko-KR",
-              {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              }
-            );
+        <>
+          {/* //* 게시글 리스트 */}
+          <PostListUlSt>
+            {postList.map((postData) => {
+              const { idx, subject, content, datetime } = postData;
+              const datetimeFormat = new Date(datetime).toLocaleDateString(
+                "ko-KR",
+                {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                }
+              );
 
-            const contentStr = removeMd(content.replace(/<\/?[^>]+(>|$)/g, ""));
+              const contentStr = removeMd(
+                content.replace(/<\/?[^>]+(>|$)/g, "")
+              );
 
-            return (
-              <PostListLiSt key={idx}>
-                <PostLinkSt
-                  to={`/post/${idx}?tag=${tagIdx}`}
-                  state={{ activeTagIdx: tagIdx }}
-                >
-                  <p className="subTitle">{subject}</p>
-                  <div>
-                    <p className="caption content">{contentStr}</p>
-                    <p className="caption date">{datetimeFormat}</p>
-                  </div>
-                </PostLinkSt>
-              </PostListLiSt>
-            );
-          })}
-        </PostListUlSt>
+              return (
+                <PostListLiSt key={idx}>
+                  <PostLinkSt
+                    to={`/post/${idx}?tag=${tagIdx}`}
+                    state={{ activeTagIdx: tagIdx }}
+                  >
+                    <p className="subTitle">{subject}</p>
+                    <div>
+                      <p className="caption content">{contentStr}</p>
+                      <p className="caption date">{datetimeFormat}</p>
+                    </div>
+                  </PostLinkSt>
+                </PostListLiSt>
+              );
+            })}
+          </PostListUlSt>
+
+          {/* //* pagination */}
+          <Pagination
+            totalCnt={totalCnt}
+            page={page}
+            paginationCnt={3}
+            path={`/tag/${tagIdx}`}
+            limit={10}
+          />
+        </>
       )}
     </>
   );
