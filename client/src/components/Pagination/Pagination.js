@@ -1,6 +1,12 @@
 import styled from "styled-components";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import React from "react";
+import {
+  MdNavigateNext as Next,
+  MdNavigateBefore as Prev,
+  MdFirstPage as FirstPage,
+  MdLastPage as LastPage,
+} from "react-icons/md";
 
 /**
  * @param Number totalCnt: 컨텐츠 총갯수
@@ -14,22 +20,45 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
 
   if (totalCnt <= limit) return null; // 컨텐츠 총갯수가 limit보다 작을경우 출력 x
 
+  // 페이지네이션 그룹 startNumber(ex: 3~6이 나올때 3)
   let startNum = Math.floor(page / paginationCnt) * paginationCnt + 1;
   if (page % paginationCnt === 0) startNum = startNum - paginationCnt;
 
+  // 컨텐츠 총갯수로 나올수있는 페이지네이션 마지막페이지
   const lastNum = Math.ceil(totalCnt / limit);
 
-  const paginationLength =
+  // 페이지네이션 그룹 갯수
+  let paginationLength =
     Math.ceil(totalCnt / 10) > paginationCnt
       ? paginationCnt
       : Math.ceil(totalCnt / 10);
+  if (startNum + paginationLength > lastNum)
+    paginationLength = lastNum - startNum + 1;
+
+  const firstPageBtnUsing = page !== 1 ? true : false;
+  const lastPageBtnUsing = page !== lastNum ? true : false;
+  const prevArrowUsing = page > 1 ? true : false;
+  const nextArrowUsing = page < lastNum ? true : false;
 
   return (
     <PaginationSt>
+      {firstPageBtnUsing ? (
+        <Link to={`${path}?page=1`}>
+          <FirstPage />
+        </Link>
+      ) : null}
+      {prevArrowUsing ? (
+        <Link
+          to={`${path}?page=${
+            page - paginationCnt < 1 ? 1 : page - paginationCnt
+          }`}
+        >
+          <Prev />
+        </Link>
+      ) : null}
       {Array.from({ length: paginationLength }).map((a, i) => {
         let pageNum = startNum + i;
 
-        if (pageNum > lastNum) return null;
         return (
           <NavLink
             key={pageNum}
@@ -47,6 +76,20 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
           </NavLink>
         );
       })}
+      {nextArrowUsing ? (
+        <Link
+          to={`${path}?page=${
+            page + paginationCnt > lastNum ? lastNum : page + paginationCnt
+          }`}
+        >
+          <Next />
+        </Link>
+      ) : null}
+      {lastPageBtnUsing ? (
+        <Link to={`${path}?page=${lastNum}`}>
+          <LastPage />
+        </Link>
+      ) : null}
     </PaginationSt>
   );
 }
