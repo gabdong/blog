@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { getTagList, addTag } from "../../../apis/tags";
-
 import Button from "../../../components/Button/Button";
 import Input from "../../../components/Input/Input";
 import TagSettingItem from "./TagSettingItem";
-
 
 function TagSettings() {
   const [tagList, setTagList] = useState({});
@@ -23,16 +21,17 @@ function TagSettings() {
 
   /**
    * * 태그 추가
-   * @param {Event} e 
-   * @returns 
+   * @param {Event} e
+   * @returns
    */
   const callAddTagFn = async (e) => {
-    if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter") return;
+    if (e.type === "keyup" && e.code !== "Enter" && e.code !== "NumpadEnter")
+      return;
 
     await addTag(tagName);
     setTagName("");
     setTagList(await getTagList());
-  }
+  };
 
   useEffect(() => {
     (async function () {
@@ -53,21 +52,31 @@ function TagSettings() {
             onChange={tagNameHandler}
             onKeyUp={callAddTagFn}
           />
-          <Button text="추가" onClick={callAddTagFn}/>
+          <Button text="추가" onClick={callAddTagFn} />
         </TagNameInputWrapSt>
-        <p className="caption mt15">* 콤마로 구분하여 여러개를 추가할 수 있습니다. 추가할 태그명 입력후 추가버튼 혹은 엔터키를 입력해주세요.</p>
+        <p className="caption mt15">
+          * 콤마로 구분하여 여러개를 추가할 수 있습니다. 추가할 태그명 입력후
+          추가버튼 혹은 엔터키를 입력해주세요.
+        </p>
         <p className="caption mt15">* 공백과 특수문자, HTML은 제거됩니다.</p>
       </div>
 
       <TagListWrapSt className="scroll">
-        {loading ? null : 
-          Object.entries(tagList).map((tagData) => {
-            const tagIdx = tagData[0];
-            const { name } = tagData[1];
+        {loading
+          ? null
+          : Object.entries(tagList).map((tagData) => {
+              const tagIdx = tagData[0];
+              const { name } = tagData[1];
 
-            return <TagSettingItem key={tagIdx} idx={tagIdx} name={name} setTagList={setTagList}/>;
-          })
-        }
+              return (
+                <TagSettingItem
+                  key={tagIdx}
+                  idx={tagIdx}
+                  name={name}
+                  setTagList={setTagList}
+                />
+              );
+            })}
       </TagListWrapSt>
     </TagSettingWrapSt>
   );
@@ -78,7 +87,6 @@ const TagSettingWrapSt = styled.section`
   flex-direction: column;
   gap: 20px;
 `;
-
 const TagNameInputWrapSt = styled.div`
   display: flex;
   align-items: center;
@@ -90,7 +98,6 @@ const TagNameInputWrapSt = styled.div`
     flex: 1;
   }
 `;
-
 const TagListWrapSt = styled.div`
   flex: 1;
   display: flex;

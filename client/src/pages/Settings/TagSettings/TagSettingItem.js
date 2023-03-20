@@ -55,8 +55,8 @@ function TagSettingItem({ idx, name, setTagList }) {
 
       setTagList((prev) => {
         delete prev[idx];
-        
-        return {...prev};
+
+        return { ...prev };
       });
     } catch (err) {
       if (err.response.data.msg) {
@@ -114,7 +114,6 @@ const TagSettingItemSt = styled.div`
     background: var(--primary-color);
   }
 `;
-
 const TagSettingBtnWrapSt = styled.div`
   display: flex;
   gap: 4px;

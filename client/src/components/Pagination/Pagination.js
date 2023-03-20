@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Link, NavLink, useLocation } from "react-router-dom";
 import React from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   MdNavigateNext as Next,
   MdNavigateBefore as Prev,

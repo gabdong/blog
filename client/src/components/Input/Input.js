@@ -7,7 +7,7 @@ function Input({
   value,
   style = {},
   onChange,
-  onKeyUp
+  onKeyUp,
 }) {
   return (
     <InputSt

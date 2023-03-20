@@ -4,14 +4,14 @@ import axios from "../utils/axios";
  * * 이미지 업로드
  * @param {File} blob
  * @param {String} alt
- * @returns Object {url: String, alt: String}
+ * @returns {Object} {url: String, alt: String}
  */
 export async function uploadImage(blob, alt) {
   const { name, size } = blob;
 
   let url;
 
-  // 중복된 이미지 확인
+  //* 중복된 이미지 확인
   try {
     const duplicatedImgData = await axios.get("/apis/images/", {
       params: { name, size },

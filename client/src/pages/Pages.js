@@ -1,6 +1,6 @@
-import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "./Home.js";
 import Tag from "./Tag.js";

@@ -21,10 +21,9 @@ import "prismjs/components/prism-clojure";
 import axios from "../utils/axios";
 import { uploadImage } from "../apis/images";
 import { getTagList } from "../apis/tags";
-
+import { getPost } from "../apis/posts";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
-import { getPost } from "../apis/posts";
 
 //TODO 썸네일 추가하기
 function PostEditor() {
@@ -339,19 +338,16 @@ const WriteWrap = styled.div`
 
   height: 100%;
 `;
-
 const EditorWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
 `;
-
 const TagSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
 `;
-
 const TagSearchWrapSt = styled.div`
   display: flex;
   align-items: center;
@@ -361,7 +357,6 @@ const TagSearchWrapSt = styled.div`
     flex: 1;
   }
 `;
-
 const TagListSt = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -373,7 +368,6 @@ const TagListSt = styled.div`
   height: 80px;
   background: var(--dark-l);
 `;
-
 const TagItemSt = styled.div`
   padding: 8px 12px;
   background: var(--gray);
@@ -385,7 +379,6 @@ const TagItemSt = styled.div`
     background: var(--primary-color);
   }
 `;
-
 const SelectedTagListWrapSt = styled.div`
   display: flex;
   align-items: center;
@@ -395,7 +388,6 @@ const SelectedTagListWrapSt = styled.div`
     white-space: nowrap;
   }
 `;
-
 const SelectedTagListSt = styled.div`
   display: flex;
   flex-wrap: wrap;

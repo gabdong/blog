@@ -1,18 +1,18 @@
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
-function NavBtn({ text, path, idx, active }) {
+function NavButton({ text, path, idx, active }) {
   return (
     <>
-      <NavBtnSt className={active ? 'active' : ''} to={path}>
+      <NavButtonSt className={active ? "active" : ""} to={path}>
         {text}
-      </NavBtnSt>
+      </NavButtonSt>
     </>
   );
 }
 
-const NavBtnSt = styled(NavLink)`
-  font-family: 'SUIT-Regular';
+const NavButtonSt = styled(NavLink)`
+  font-family: "SUIT-Regular";
   font-size: 14px;
   letter-spacing: 0.15px;
   cursor: pointer;
@@ -28,4 +28,4 @@ const NavBtnSt = styled(NavLink)`
   }
 `;
 
-export default NavBtn;
+export default NavButton;

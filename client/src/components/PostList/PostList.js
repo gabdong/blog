@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import removeMd from "remove-markdown";
+import { Link } from "react-router-dom";
 
 import { getPostList } from "../../apis/posts";
 import Pagination from "../Pagination/Pagination";
@@ -65,7 +65,7 @@ function PostList({ tagIdx, page }) {
           <Pagination
             totalCnt={totalCnt}
             page={page}
-            paginationCnt={3}
+            paginationCnt={5}
             path={`/tag/${tagIdx}`}
             limit={10}
           />
@@ -80,7 +80,6 @@ const PostListUlSt = styled.ul`
   flex-direction: column;
   gap: 16px;
 `;
-
 const PostListLiSt = styled.li`
   padding-bottom: 8px;
   border-bottom: 1px solid #ffffff;
@@ -91,7 +90,6 @@ const PostListLiSt = styled.li`
     border-bottom: 1px solid var(--primary-color);
   }
 `;
-
 const PostLinkSt = styled(Link)`
   display: flex;
   flex-direction: column;

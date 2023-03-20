@@ -2,14 +2,13 @@ import axios from "../utils/axios";
 
 /**
  * * 태그리스트 요청
- * @param {Function} setState
  * @returns {Array} tagList
  */
 export async function getTagList() {
-    const tagListRes = await axios.get('/apis/tags/');
-    const { tagList } = tagListRes.data;
+  const tagListRes = await axios.get("/apis/tags/");
+  const { tagList } = tagListRes.data;
 
-    return tagList;
+  return tagList;
 }
 
 /**
@@ -18,15 +17,19 @@ export async function getTagList() {
  * @param {Function} setTagList
  */
 export async function addTag(tagName) {
-    const tagNameArr = tagName.replace(/(<([^>]+)>)/gi, '').replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, '').split(',').filter(Boolean); // eslint-disable-line
+  const tagNameArr = tagName
+    .replace(/(<([^>]+)>)/gi, "")
+    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "")
+    .split(",")
+    .filter(Boolean); // eslint-disable-line
 
-    if (tagNameArr.length === 0) return alert("추가할 태그명을 입력해주세요.");
+  if (tagNameArr.length === 0) return alert("추가할 태그명을 입력해주세요.");
 
-    try {
-        await axios.post('/apis/tags/', { tags: tagNameArr, checkAuth: true });
-    } catch (err) {
-        alert(err.reponse.data.msg);
-    }
+  try {
+    await axios.post("/apis/tags/", { tags: tagNameArr, checkAuth: true });
+  } catch (err) {
+    alert(err.reponse.data.msg);
+  }
 }
 
 /**
@@ -34,14 +37,14 @@ export async function addTag(tagName) {
  * @param {Number} tagIdx
  */
 export async function updateTag(tagIdx, name) {
-    const body = { name, checkAuth: true };
-    await axios.put(`/apis/tags/${tagIdx}`, body);
+  const body = { name, checkAuth: true };
+  await axios.put(`/apis/tags/${tagIdx}`, body);
 }
 
 /**
  * * 태그 삭제
- * @param {*} tagIdx 
+ * @param {Number} tagIdx
  */
 export async function deleteTag(tagIdx) {
-    await axios.delete(`/apis/tags/${tagIdx}`);
+  await axios.delete(`/apis/tags/${tagIdx}`);
 }

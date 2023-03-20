@@ -5,8 +5,7 @@ import { useLocation } from "react-router-dom";
 import { RiCloseFill as Close } from "react-icons/ri";
 
 import { getTagList } from "../../apis/tags.js";
-
-import NavBtn from "./NavBtn.js";
+import NavButton from "./NavButton.js";
 
 function Nav() {
   const user = useSelector((store) => store.user);
@@ -73,7 +72,7 @@ function Nav() {
               if (auth === 1 && !isLogin) return "";
 
               return (
-                <NavBtn
+                <NavButton
                   key={tagIdx}
                   text={name}
                   path={`/tag/${tagIdx}?page=1`}
@@ -81,7 +80,7 @@ function Nav() {
                 />
               );
             })}
-            {isLogin ? <NavBtn path="/settings" text="Settings" /> : null}
+            {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
           </NavSt>
         </>
       )}
@@ -125,7 +124,6 @@ const NavSt = styled.nav`
     }
   }
 `;
-
 const NavBackgroundSt = styled.div`
   @media all and (max-width: 479px) {
     &.active {
@@ -139,7 +137,6 @@ const NavBackgroundSt = styled.div`
     }
   }
 `;
-
 const CloseBtnSt = styled(Close)`
   display: none;
 

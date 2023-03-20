@@ -1,9 +1,9 @@
-import { FiMenu as NavIcon } from "react-icons/fi";
-import { AiFillCaretDown as DownIcon } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { AiFillCaretDown as DownIcon } from "react-icons/ai";
+import { FiMenu as NavIcon } from "react-icons/fi";
 
 import LoginModal from "../LoginModal/LoginModal";
 import LinkButton from "../LinkButton/LinkButton";
@@ -85,7 +85,11 @@ function Header() {
             <Search className="pcOnly"/>
           </HeaderBtnSt> */}
           {!user.isLogin ? null : (
-            <LinkButton classname="pcOnly" text="새 글 작성" path="/postEditor/new" />
+            <LinkButton
+              classname="pcOnly"
+              text="새 글 작성"
+              path="/postEditor/new"
+            />
           )}
           {/* //* login Btn */}
           <HeaderBtnSt
@@ -128,7 +132,6 @@ const HeaderSt = styled.header`
     flex-direction: column;
   }
 `;
-
 const HeaderInnerSt = styled.div`
   display: flex;
   justify-content: space-between;
@@ -143,7 +146,6 @@ const HeaderInnerSt = styled.div`
     min-height: var(--mo-header-height);
   }
 `;
-
 const HeaderBtnWrapSt = styled.div`
   display: flex;
   align-items: center;
@@ -155,7 +157,6 @@ const HeaderBtnWrapSt = styled.div`
     gap: 8px;
   }
 `;
-
 const HeaderBtnSt = styled.button`
   font-size: 1rem;
   color: var(--gray-l);
@@ -169,7 +170,6 @@ const HeaderBtnSt = styled.button`
     font-size: 0.9rem;
   }
 `;
-
 const LogoSt = styled.h1`
   font-family: "Ubuntu-Regular";
   font-size: 21px;
@@ -185,16 +185,13 @@ const LogoSt = styled.h1`
     transform: translate(-50%, -50%);
   }
 `;
-
 const NavIconSt = styled(NavIcon)`
   font-size: 20px;
 `;
-
 const DownIconSt = styled(DownIcon)`
   margin-left: 4px;
   font-size: 14px;
 `;
-
 const MobileSearchWrapSt = styled.div`
   @media all and (max-width: 479px) {
     display: flex;

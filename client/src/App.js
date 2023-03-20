@@ -5,11 +5,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import { checkToken } from "./apis/tokens";
 import { loginUser } from "./modules/user";
-
-import "./App.css";
 import Nav from "./components/Nav/Nav.js";
 import Header from "./components/Header/Header.js";
 import Pages from "./pages/Pages.js";
+import "./App.css";
 
 function App() {
   const dispatch = useDispatch();

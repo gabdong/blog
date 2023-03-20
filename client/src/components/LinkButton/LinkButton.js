@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-function LinkButton({ text, classname = '', path }) {
-  return <LinkButtonSt className={`${classname} buttonText`} to={path}>{text}</LinkButtonSt>;
+function LinkButton({ text, classname = "", path }) {
+  return (
+    <LinkButtonSt className={`${classname} buttonText`} to={path}>
+      {text}
+    </LinkButtonSt>
+  );
 }
 
 const LinkButtonSt = styled(Link)`
