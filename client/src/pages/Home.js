@@ -2,12 +2,16 @@ import styled from "styled-components";
 
 function Home() {
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <HomeWrapSt>
+      <h2>home</h2>
+      <TabSt>
+
+      </TabSt>
+    </HomeWrapSt>
   );
 }
 
 const HomeWrapSt = styled.div``;
+const TabSt = styled.div``;
 
 export default Home;
