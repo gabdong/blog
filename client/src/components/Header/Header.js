@@ -122,7 +122,7 @@ const HeaderSt = styled.header`
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 21;
 
   @media all and (max-width: 479px) {
     flex-direction: column;

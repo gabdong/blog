@@ -225,7 +225,6 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .toastui-editor-contents h1 {
     border-bottom: none !important;
 }
-
 .toastui-editor-dark .toastui-editor-md-block-quote .toastui-editor-md-marked-text, 
 .toastui-editor-dark .toastui-editor-md-list-item .toastui-editor-md-meta,
 .toastui-editor-dark .toastui-editor-md-block-quote, 
@@ -253,6 +252,15 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 }
 .toastui-editor-contents pre {
     background: var(--dark-l) !important;
+}
+.toastui-editor-contents li:before {
+    margin-top: 4px;
+}
+.toastui-editor-contents a {
+    text-decoration: none !important;
+}
+.toastui-editor-contents blockquote {
+    border-left: 4px solid var(--primary-color) !important;
 }
 @media all and (max-width: 479px) {
     .toastui-editor-dropdown-toolbar {
