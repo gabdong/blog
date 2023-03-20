@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { checkToken } from "./apis/tokens";
 import { loginUser } from "./modules/user";
