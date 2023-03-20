@@ -35,21 +35,21 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Wrapper id="wrapper">
+    <WrapperSt id="wrapper">
       {loading ? null : (
         <Router basename={process.env.PUBLIC_URL}>
           <Header />
-          <Main>
+          <MainSt>
             <Nav />
             <Pages />
-          </Main>
+          </MainSt>
         </Router>
       )}
-    </Wrapper>
+    </WrapperSt>
   );
 }
 
-const Wrapper = styled.div`
+const WrapperSt = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,7 +61,7 @@ const Wrapper = styled.div`
   user-select: none;
 `;
 
-const Main = styled.main`
+const MainSt = styled.main`
   display: flex;
 
   width: 1200px;

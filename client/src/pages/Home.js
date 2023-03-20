@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 function Home() {
   return (
     <div>
@@ -5,5 +7,7 @@ function Home() {
     </div>
   );
 }
+
+const HomeWrapSt = styled.div``;
 
 export default Home;
