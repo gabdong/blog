@@ -9,19 +9,15 @@ function Home() {
     <HomeWrapSt>
       <Tab
         tabBtnList={{
-          latest: { label: "최근게시물", active: true },
-          introduce: { label: "소개", active: false },
+          latest: "최근게시물",
+          introduce: "소개",
         }}
         tabItemList={{
-          latest: {
-            component: (prop = {}) => <LatestPostList prop={prop} />,
-            active: true,
-          },
-          introduce: {
-            component: (prop = {}) => <Introduce prop={prop} />,
-            active: false,
-          },
+          latest: (prop = {}) => <LatestPostList prop={prop} />,
+          introduce: (prop = {}) => <Introduce prop={prop} />,
         }}
+        tabCnt={2}
+        activeIndex={0}
       />
     </HomeWrapSt>
   );
