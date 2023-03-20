@@ -254,7 +254,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
     background: var(--dark-l) !important;
 }
 .toastui-editor-contents li:before {
-    margin-top: 4px;
+    transform: translateY(4px);
 }
 .toastui-editor-contents a {
     text-decoration: none !important;
