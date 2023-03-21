@@ -28,7 +28,7 @@ function Post() {
   let postData = {};
   if (!loading) {
     postData = { ...postDataRes[0] };
-    postData.content = removeMd(
+    postData.removeMdContent = removeMd(
       postData.content.replace(/<\/?[^>]+(>|$)/g, "")
     );
 
@@ -60,7 +60,7 @@ function Post() {
 
   return loading ? null : (
     <>
-      <MetaTag subject={postData.subject} desc={postData.content} />
+      <MetaTag subject={postData.subject} desc={postData.removeMdContent} />
 
       <PostWrapSt className="h100">
         <h2 className="headline">{postData.subject}</h2>
