@@ -25,9 +25,8 @@ import { getPost } from "../apis/posts";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 
-//TODO 썸네일 추가하기
+//TODO 컴포넌트 분리
 function PostEditor() {
-  //TODO 새글, 글수정
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,6 +39,9 @@ function PostEditor() {
   const [tagListLoading, setTagListLoading] = useState(true);
   const [selectedTagList, setSelectedTagList] = useState([]);
   const [selectedTagDataList, setSelectedTagDataList] = useState({});
+  const [thumbnailFile, setThumbnailFile] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnailAlt, setThumbnailAlt] = useState("");
   const [loading, setLoading] = useState(true);
   const postIdx =
     params.mode === "edit"
@@ -90,6 +92,17 @@ function PostEditor() {
     setSubject(e.target.value);
   };
 
+  //* 썸네일 handler
+  const thumbnailHandler = (e) => {
+    setThumbnail(e.target.value);
+    setThumbnailFile(e.target.files[0]);
+  };
+
+  //* 썸네일 alt handler
+  const thumbnailAltHandler = (e) => {
+    setThumbnailAlt(e.target.value);
+  };
+
   //* 선택된 태그 리스트 handler
   const selectedTagListHandler = (e, mode) => {
     const idx = Number(e.currentTarget.dataset.idx);
@@ -138,12 +151,17 @@ function PostEditor() {
 
     if (!subject) return alert("제목을 입력해주세요.");
 
+    const altText = thumbnailAlt ? thumbnailAlt : `${subject} 썸네일 이미지`;
+    const { url, alt } = await uploadImage(thumbnailFile, altText);
+
     const body = {
       markDown,
       subject,
       user,
       checkAuth: true,
       tags: selectedTagList,
+      thumbnail: url,
+      thumbnailAlt: alt,
     };
 
     try {
@@ -188,7 +206,8 @@ function PostEditor() {
 
       let selectedTagDataRes = [],
         postSubject = "",
-        postContent = "";
+        postContent = "",
+        postThumbnail = "";
       if (params.mode === "edit") {
         const postDataRes = await getPost(Number(postIdx));
 
@@ -215,6 +234,7 @@ function PostEditor() {
       setSelectedTagList(selectedTagDataRes);
       setSubject(postSubject);
       setContent(postContent);
+      setThumbnail(postThumbnail);
 
       setTagListLoading(false);
       setLoading(false);
@@ -222,68 +242,83 @@ function PostEditor() {
   }, [location.search, params.mode, postIdx]);
 
   return loading ? null : (
-    <WriteWrap>
+    <EditorWrapSt className="editorWrap">
       <h2 className="subTitle">게시글 작성</h2>
 
-      {/* //* 태그 설정 */}
-      <TagSettingWrap>
-        <p className="smallTitle">태그설정</p>
+      <PostSettingsWrap className="postSettingWrap">
+        <ThumbnailSettingWrap className="thumbnailSettingWrap">
+          <input
+            type="file"
+            value={thumbnail || ""}
+            onChange={thumbnailHandler}
+          />
+          <Input
+            type="text"
+            value={thumbnailAlt}
+            onChange={thumbnailAltHandler}
+          />
+        </ThumbnailSettingWrap>
 
-        {/* //* 태그 검색 */}
-        <TagSearchWrapSt>
-          <Input placeholder="검색할 단어 입력 후 엔터 혹은 검색버튼을 클릭하세요." />
-          <Button text="검색" />
-        </TagSearchWrapSt>
+        {/* //* 태그 설정 */}
+        <TagSettingWrap className="tagSettigWrap">
+          <p className="smallTitle">태그설정</p>
 
-        {/* //* 태그 목록 */}
-        <TagListSt className="mb10 scroll">
-          {tagListLoading
-            ? null
-            : Object.entries(tagList).map((tagData) => {
-                //TODO 권한 확인
-                const tagIdx = tagData[0];
-                const { auth, name: tagName } = tagData[1];
+          {/* //* 태그 검색 */}
+          <TagSearchWrapSt>
+            <Input placeholder="검색할 단어 입력 후 엔터 혹은 검색버튼을 클릭하세요." />
+            <Button text="검색" />
+          </TagSearchWrapSt>
 
-                return (
-                  <TagItemSt
-                    key={tagIdx}
-                    onClick={(e) => {
-                      selectedTagListHandler(e, "add");
-                    }}
-                    data-idx={tagIdx}
-                  >
-                    <p className="caption">{tagName}</p>
-                  </TagItemSt>
-                );
-              })}
-        </TagListSt>
-
-        {/* //* 선택된 태그 */}
-        <SelectedTagListWrapSt>
-          <p className="normalText">선택된 태그 :</p>
-          <SelectedTagListSt className="scroll">
+          {/* //* 태그 목록 */}
+          <TagListSt className="mb10 scroll">
             {tagListLoading
               ? null
-              : Object.entries(selectedTagDataList).map((selectedTagData) => {
-                  const tagIdx = selectedTagData[0];
-                  const { name: tagName } = selectedTagData[1];
+              : Object.entries(tagList).map((tagData) => {
+                  //TODO 권한 확인
+                  const tagIdx = tagData[0];
+                  const { auth, name: tagName } = tagData[1];
 
                   return (
                     <TagItemSt
                       key={tagIdx}
                       onClick={(e) => {
-                        selectedTagListHandler(e, "minus");
+                        selectedTagListHandler(e, "add");
                       }}
                       data-idx={tagIdx}
-                      data-name={tagName}
                     >
                       <p className="caption">{tagName}</p>
                     </TagItemSt>
                   );
                 })}
-          </SelectedTagListSt>
-        </SelectedTagListWrapSt>
-      </TagSettingWrap>
+          </TagListSt>
+
+          {/* //* 선택된 태그 */}
+          <SelectedTagListWrapSt>
+            <p className="normalText">선택된 태그 :</p>
+            <SelectedTagListSt className="scroll">
+              {tagListLoading
+                ? null
+                : Object.entries(selectedTagDataList).map((selectedTagData) => {
+                    const tagIdx = selectedTagData[0];
+                    const { name: tagName } = selectedTagData[1];
+
+                    return (
+                      <TagItemSt
+                        key={tagIdx}
+                        onClick={(e) => {
+                          selectedTagListHandler(e, "minus");
+                        }}
+                        data-idx={tagIdx}
+                        data-name={tagName}
+                      >
+                        <p className="caption">{tagName}</p>
+                      </TagItemSt>
+                    );
+                  })}
+            </SelectedTagListSt>
+          </SelectedTagListWrapSt>
+        </TagSettingWrap>
+      </PostSettingsWrap>
 
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -292,7 +327,7 @@ function PostEditor() {
       </div>
 
       {/* //* mark down editor */}
-      <EditorWrap className="scroll" style={{ wordBreak: "break-word" }}>
+      <EditorContainerSt className="scroll" style={{ wordBreak: "break-word" }}>
         <Editor
           previewStyle="tab"
           height="auto"
@@ -319,7 +354,7 @@ function PostEditor() {
             },
           }}
         />
-      </EditorWrap>
+      </EditorContainerSt>
 
       {/* //* save button */}
       <Button
@@ -327,25 +362,27 @@ function PostEditor() {
         style={{ alignSelf: "end" }}
         onClick={params.mode === "new" ? uploadPost : updatePost}
       />
-    </WriteWrap>
+    </EditorWrapSt>
   );
 }
 
-const WriteWrap = styled.div`
+const EditorWrapSt = styled.section`
   display: flex;
   flex-direction: column;
   gap: 20px;
 
   height: 100%;
 `;
-const EditorWrap = styled.div`
+const PostSettingsWrap = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+`;
+const ThumbnailSettingWrap = styled.div`
+  flex: 1;
 `;
 const TagSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 8px;
 `;
 const TagSearchWrapSt = styled.div`
@@ -396,6 +433,11 @@ const SelectedTagListSt = styled.div`
   gap: 14px;
 
   max-height: 80px;
+`;
+const EditorContainerSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export default PostEditor;

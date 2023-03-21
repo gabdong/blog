@@ -55,6 +55,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
 
     res.json({ msg: "SUCCESS", url: location });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "이미지 업로드를 실패하였습니다." });
   }
 });

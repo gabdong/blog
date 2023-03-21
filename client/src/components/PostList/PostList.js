@@ -43,7 +43,15 @@ function PostList({
           {/* //* 게시글 리스트 */}
           <PostListUlSt>
             {postList.map((postData) => {
-              const { idx, subject, content, thumbnail, datetime } = postData;
+              const {
+                idx,
+                subject,
+                content,
+                thumbnail,
+                thumbnailAlt,
+                datetime,
+              } = postData;
+
               const datetimeFormat = new Date(datetime).toLocaleDateString(
                 "ko-KR",
                 {
@@ -69,6 +77,7 @@ function PostList({
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
+                      title={thumbnailAlt}
                     />
                     <PostInfoWrapSt className="postInfoWrap">
                       <p className="subTitle">{subject}</p>

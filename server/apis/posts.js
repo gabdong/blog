@@ -26,7 +26,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 
     const [postListRes] = await db.query(
       `
-      SELECT idx, subject, content, thumbnail, datetime 
+      SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
       ${tagCond}
@@ -49,7 +49,7 @@ router.get("/:postIdx", async (req, res) => {
   try {
     const [postDataRes] = await db.query(
       `
-      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail 
+      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.thumbnail_alt AS thumbnailAlt 
       FROM posts posts 
       INNER JOIN members members ON members.idx=posts.member
       WHERE posts.idx=? 
@@ -77,7 +77,7 @@ router.get("/:postIdx", async (req, res) => {
 
 //* 게시글 업로드 요청
 router.post("/", async (req, res) => {
-  const { markDown, subject, tags, user } = req.body;
+  const { markDown, subject, tags, user, thumbnail, thumbnailAlt } = req.body;
   const userIdx = user.idx;
 
   try {
@@ -88,13 +88,17 @@ router.post("/", async (req, res) => {
       auth=0, 
       subject=?, 
       content=?,
-      tags=?
+      tags=?,
+      thumbnail=?,
+      thumbnail_alt=?
     `,
       [
         userIdx,
         subject,
         markDown.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
+        thumbnail,
+        thumbnailAlt,
       ]
     );
 

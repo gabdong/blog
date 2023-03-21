@@ -32,8 +32,8 @@ function Post() {
       postData.content.replace(/<\/?[^>]+(>|$)/g, "")
     );
 
-    if (postData.content.length > 200)
-      postData.content = postData.content.substring(0, 200);
+    if (postData.removeMdContent.length > 200)
+      postData.removeMdContent = postData.removeMdContent.substring(0, 200);
   }
 
   /**
@@ -92,7 +92,7 @@ function Post() {
         </div>
 
         <ThumbnailWrap>
-          <img src={postData.thumbnail} alt="게시글 썸네일" />
+          <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
         </ThumbnailWrap>
 
         <Viewer
