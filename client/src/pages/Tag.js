@@ -9,7 +9,7 @@ function Tag() {
 
   const { tagIdx } = params;
 
-  return <PostList tagIdx={tagIdx} page={Number(page)} />;
+  return <PostList tagIdx={tagIdx} page={Number(page)} limit={9} />;
 }
 
 export default Tag;

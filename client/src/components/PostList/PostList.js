@@ -7,14 +7,24 @@ import { getPostList } from "../../apis/posts";
 import Pagination from "../Pagination/Pagination";
 import MetaTag from "../MetaTag/MetaTag";
 
-function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true }) {
+function PostList({
+  tagIdx = "",
+  page = 1,
+  limit = 10,
+  paginationUsing = true,
+}) {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
   const [totalCnt, setTotalCnt] = useState(0);
 
   useEffect(() => {
     (async function () {
-      const postListRes = await getPostList(tagIdx, page, limit, paginationUsing);
+      const postListRes = await getPostList(
+        tagIdx,
+        page,
+        limit,
+        paginationUsing
+      );
       const postListData = postListRes?.postList || [];
       const totalCnt = postListRes?.totalCnt || 0;
 
@@ -28,12 +38,12 @@ function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true })
     <>
       {loading ? null : (
         <>
-          <MetaTag subject="gabdong" desc="김동환 개발블로그 게시글리스트"/>
+          <MetaTag subject="gabdong" desc="김동환 개발블로그 게시글리스트" />
 
           {/* //* 게시글 리스트 */}
           <PostListUlSt>
             {postList.map((postData) => {
-              const { idx, subject, content, datetime } = postData;
+              const { idx, subject, content, thumbnail, datetime } = postData;
               const datetimeFormat = new Date(datetime).toLocaleDateString(
                 "ko-KR",
                 {
@@ -48,16 +58,25 @@ function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true })
               );
 
               return (
-                <PostListLiSt key={idx}>
+                <PostListLiSt key={idx} className="postListLi">
                   <PostLinkSt
                     to={`/post/${idx}?tag=${tagIdx}`}
                     state={{ activeTagIdx: tagIdx }}
                   >
-                    <p className="subTitle">{subject}</p>
-                    <div>
-                      <p className="caption content">{contentStr}</p>
-                      <p className="caption date">{datetimeFormat}</p>
-                    </div>
+                    <PostThumbnailSt
+                      style={{
+                        background: `url(${thumbnail})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                    <PostInfoWrapSt className="postInfoWrap">
+                      <p className="subTitle">{subject}</p>
+                      <div>
+                        <p className="caption content">{contentStr}</p>
+                        <p className="caption date">{datetimeFormat}</p>
+                      </div>
+                    </PostInfoWrapSt>
                   </PostLinkSt>
                 </PostListLiSt>
               );
@@ -65,15 +84,15 @@ function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true })
           </PostListUlSt>
 
           {/* //* pagination */}
-          {!paginationUsing ? null : 
+          {!paginationUsing ? null : (
             <Pagination
               totalCnt={totalCnt}
               page={page}
               paginationCnt={5}
               path={`/tag/${tagIdx}`}
-              limit={10}
+              limit={9}
             />
-          }
+          )}
         </>
       )}
     </>
@@ -82,11 +101,11 @@ function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true })
 
 const PostListUlSt = styled.ul`
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 const PostListLiSt = styled.li`
-  padding-bottom: 8px;
+  width: calc(100% / 3 - 14px);
   border-bottom: 1px solid #ffffff;
   transition: var(--transition);
   cursor: pointer;
@@ -99,18 +118,31 @@ const PostLinkSt = styled(Link)`
   display: flex;
   flex-direction: column;
   gap: 10px;
+`;
+const PostThumbnailSt = styled.div`
+  padding-top: 52%;
+`;
+const PostInfoWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  
+  padding 14px 0;
 
   & > div {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    gap: 14px;
+    align-items: start;
+
+    height: 80px;
   }
 
   & > div .content {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+    word-break: break-all;
     overflow: hidden;
   }
 

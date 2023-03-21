@@ -9,8 +9,8 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   const limit = Number(req.query.limit);
   const paginationUsing = Boolean(req.query.paginationUsing);
   const offset = (page - 1) * 10;
-  const tagCond = tagIdx ? `AND JSON_CONTAINS(tags, '${tagIdx}') ` : '';
-  
+  const tagCond = tagIdx ? `AND JSON_CONTAINS(tags, '${tagIdx}') ` : "";
+
   try {
     //* 페이지네이션 사용일때 전체갯수
     let totalCnt;
@@ -26,7 +26,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 
     const [postListRes] = await db.query(
       `
-      SELECT idx, subject, content, datetime 
+      SELECT idx, subject, content, thumbnail, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
       ${tagCond}
@@ -49,7 +49,7 @@ router.get("/:postIdx", async (req, res) => {
   try {
     const [postDataRes] = await db.query(
       `
-      SELECT posts.subject, posts.content, posts.tags, posts.member, posts.update_datetime AS updateDatetime, members.name 
+      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail 
       FROM posts posts 
       INNER JOIN members members ON members.idx=posts.member
       WHERE posts.idx=? 

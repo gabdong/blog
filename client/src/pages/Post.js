@@ -21,21 +21,19 @@ function Post() {
   const user = useSelector((store) => store.user);
 
   const [loading, setLoading] = useState(true);
-  const [postData, setPostData] = useState({});
+  const [postDataRes, setPostData] = useState({});
 
   //* 게시글 정보
   const { postIdx } = params;
-  let subject, content, memberIdx, memberName, updateDatetime, removeMdContent;
+  let postData = {};
   if (!loading) {
-    subject = postData[0].subject;
-    content = postData[0].content;
-    memberIdx = postData[0].member;
-    memberName = postData[0].name;
-    updateDatetime = postData[0].updateDatetime;
-    removeMdContent = removeMd(content.replace(/<\/?[^>]+(>|$)/g, ""));
+    postData = { ...postDataRes[0] };
+    postData.content = removeMd(
+      postData.content.replace(/<\/?[^>]+(>|$)/g, "")
+    );
 
-    if (removeMdContent.length > 200)
-      removeMdContent = removeMdContent.substring(0, 200);
+    if (postData.content.length > 200)
+      postData.content = postData.content.substring(0, 200);
   }
 
   /**
@@ -62,23 +60,23 @@ function Post() {
 
   return loading ? null : (
     <>
-      <MetaTag subject={subject} desc={removeMdContent}/>
+      <MetaTag subject={postData.subject} desc={postData.content} />
 
       <PostWrapSt className="h100">
-        <h2 className="headline">{subject}</h2>
+        <h2 className="headline">{postData.subject}</h2>
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <PostInfoWrapSt>
-            <h3 className="subTitle">{memberName}</h3>
+            <h3 className="subTitle">{postData.memberName}</h3>
             <p className="normalText">
-              {new Date(updateDatetime).toLocaleDateString("ko-KR", {
+              {new Date(postData.updateDatetime).toLocaleDateString("ko-KR", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
               })}
             </p>
           </PostInfoWrapSt>
-          {memberIdx !== user?.idx ? null : (
+          {postData.memberIdx !== user?.idx ? null : (
             <PostButtonWrapSt>
               <NavLink
                 className="buttonText"
@@ -93,8 +91,12 @@ function Post() {
           )}
         </div>
 
+        <ThumbnailWrap>
+          <img src={postData.thumbnail} alt="게시글 썸네일" />
+        </ThumbnailWrap>
+
         <Viewer
-          initialValue={content}
+          initialValue={postData.content}
           plugins={[[codeSyntax, { highlighter: Prism }]]}
         />
       </PostWrapSt>
@@ -129,6 +131,14 @@ const PostButtonWrapSt = styled.div`
 
   & > .buttonText:hover {
     color: var(--primary-color);
+  }
+`;
+const ThumbnailWrap = styled.div`
+  width: 100%;
+  text-align: center;
+
+  & img {
+    max-width: 50%;
   }
 `;
 
