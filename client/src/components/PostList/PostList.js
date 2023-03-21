@@ -113,6 +113,11 @@ const PostListLiSt = styled.li`
   &:hover {
     border-bottom: 1px solid var(--primary-color);
   }
+
+  @media all and (max-width: 479px) {
+    width: 100%;
+    gap: 12px;
+  }
 `;
 const PostLinkSt = styled(Link)`
   display: flex;
@@ -148,6 +153,12 @@ const PostInfoWrapSt = styled.div`
 
   & > div .date {
     flex-shrink: 0;
+  }
+
+  @media all and (max-width: 479px) {
+    & > div {
+      height: 60px;
+    }
   }
 `;
 

@@ -140,6 +140,12 @@ const ThumbnailWrap = styled.div`
   & img {
     max-width: 50%;
   }
+
+  @media all and (max-width: 479px) {
+    & img {
+      max-width: 90%;
+    }
+  }
 `;
 
 export default Post;
