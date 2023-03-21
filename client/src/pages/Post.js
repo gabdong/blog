@@ -10,10 +10,10 @@ import codeSyntax from "@toast-ui/editor-plugin-code-syntax-highlight";
 import removeMd from "remove-markdown";
 import { Viewer } from "@toast-ui/react-editor";
 import { NavLink } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 import { getPost } from "../apis/posts";
 import axios from "../utils/axios";
+import MetaTag from "../components/MetaTag/MetaTag";
 
 function Post() {
   const params = useParams();
@@ -62,23 +62,7 @@ function Post() {
 
   return loading ? null : (
     <>
-      <Helmet>
-        <title>{subject}</title>
-        <meta name="title" content={subject} />
-        <meta name="description" content={removeMdContent} />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={subject} />
-        <meta property="og:description" content={removeMdContent} />
-        {/* <meta property="og:url" content="https://metatags.io/" /> */}
-        {/* <meta property="og:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png" /> */}
-
-        <meta property="twitter:title" content={subject} />
-        <meta property="twitter:description" content={removeMdContent} />
-        {/* <meta property="twitter:card" content="summary_large_image" /> */}
-        {/* <meta property="twitter:url" content="https://metatags.io/" /> */}
-        {/* <meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png" /> */}
-      </Helmet>
+      <MetaTag subject={subject} desc={removeMdContent}/>
 
       <PostWrapSt className="h100">
         <h2 className="headline">{subject}</h2>

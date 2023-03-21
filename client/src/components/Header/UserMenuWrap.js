@@ -40,10 +40,6 @@ const UserMenuWrapSt = styled.ul`
   right: 0;
   top: calc(100% + 8px);
 
-  @media all and (max-width: 479px) {
-    top: calc(100% + 10px);
-  }
-
   & > li {
     white-space: nowrap;
     cursor: pointer;
@@ -52,6 +48,10 @@ const UserMenuWrapSt = styled.ul`
 
   & > li:hover {
     color: var(--primary-color);
+  }
+
+  @media all and (max-width: 479px) {
+    top: calc(100% + 10px);
   }
 `;
 

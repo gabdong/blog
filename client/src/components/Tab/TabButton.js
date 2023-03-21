@@ -1,6 +1,13 @@
-import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
-function TabButton({ name, value, active = false, index, tabCnt }) {
+/**
+ * @param {String} name: 탭버튼 name
+ * @param {Number} index: 탭버튼 순서 index
+ * @param {Number} tabCnt: 탭 총 갯수
+ * @param {String} path: 버튼 path
+ * @param {String} location: 현재 path
+ */
+function TabButton({ name, index, tabCnt, path, location }) {
   /**
    * * tab
    * @param {Event} e
@@ -8,46 +15,26 @@ function TabButton({ name, value, active = false, index, tabCnt }) {
   const tabFn = (e) => {
     const btn = e.currentTarget;
     const tab = btn.closest(".tab");
-    const tabItem = document.querySelector(`.tabItem[data-value="${value}"]`);
-    const selectedItem = tab.querySelector(".tabItem.active");
     const border = tab.querySelector(".tabBorder");
 
-    if (selectedItem && tabItem !== selectedItem) {
-      //* 탭 display 조절
-      const selectedBtn = tab.querySelector(".tabBtn.active");
-      btn.classList.add("active");
-      tabItem.classList.add("active");
-      selectedBtn.classList.remove("active");
-      selectedItem.classList.remove("active");
-
-      //* 탭 하단 border위치이동
-      border.style.left = `${(100 / tabCnt) * index}%`;
-    }
+    //* 탭 하단 border위치이동
+    border.style.left = `${(100 / tabCnt) * index}%`;
   };
 
   return (
-    <TabButtonSt
-      className={`tabBtn ${active ? "active" : ""}`}
-      data-value={value}
+    <NavLink
+      className={() => {
+        let className = "tabBtn";
+        if (location === path) className += ' active';
+
+        return className;
+      }}
       onClick={tabFn}
+      to={path}
     >
-      <p className="title">{name}</p>
-    </TabButtonSt>
+      {name}
+    </NavLink>
   );
 }
-
-const TabButtonSt = styled.div`
-  flex: 1;
-
-  padding: 0 0 8px 0;
-  text-align: center;
-  cursor: pointer;
-  transition: var(--transition);
-
-  &.active,
-  &:hover {
-    color: var(--primary-color);
-  }
-`;
 
 export default TabButton;

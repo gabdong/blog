@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
+/**
+ * @param {Boolean} active: 게시글 등 NavButton path와 맞지 않아도 active효과를 주기 위함
+ */
 function NavButton({ text, path, idx, active }) {
   return (
     <>

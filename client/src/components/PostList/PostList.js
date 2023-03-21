@@ -5,28 +5,31 @@ import { Link } from "react-router-dom";
 
 import { getPostList } from "../../apis/posts";
 import Pagination from "../Pagination/Pagination";
+import MetaTag from "../MetaTag/MetaTag";
 
-function PostList({ tagIdx, page }) {
+function PostList({ tagIdx = '', page = 1, limit = 10, paginationUsing = true }) {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
   const [totalCnt, setTotalCnt] = useState(0);
 
   useEffect(() => {
     (async function () {
-      const postListRes = await getPostList(tagIdx, page);
-      const { postList: postListData } = postListRes;
-      const { totalCnt } = postListRes;
+      const postListRes = await getPostList(tagIdx, page, limit, paginationUsing);
+      const postListData = postListRes?.postList || [];
+      const totalCnt = postListRes?.totalCnt || 0;
 
       setPostList(postListData);
       setTotalCnt(totalCnt);
       setLoading(false);
     })();
-  }, [tagIdx, page]);
+  }, [tagIdx, page, limit, paginationUsing]);
 
   return (
     <>
       {loading ? null : (
         <>
+          <MetaTag subject="gabdong" desc="김동환 개발블로그 게시글리스트"/>
+
           {/* //* 게시글 리스트 */}
           <PostListUlSt>
             {postList.map((postData) => {
@@ -62,13 +65,15 @@ function PostList({ tagIdx, page }) {
           </PostListUlSt>
 
           {/* //* pagination */}
-          <Pagination
-            totalCnt={totalCnt}
-            page={page}
-            paginationCnt={5}
-            path={`/tag/${tagIdx}`}
-            limit={10}
-          />
+          {!paginationUsing ? null : 
+            <Pagination
+              totalCnt={totalCnt}
+              page={page}
+              paginationCnt={5}
+              path={`/tag/${tagIdx}`}
+              limit={10}
+            />
+          }
         </>
       )}
     </>

@@ -1,57 +1,48 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import TabButton from "./TabButton";
-import TabItem from "./TabItem";
 
-function Tab({ tabBtnList = {}, tabItemList = {}, tabCnt, activeIndex }) {
+function Tab({ tabBtnList = {}, tabItemList = {}, tabCnt }) {
+  const location = useLocation();
+  const activeTab = new URLSearchParams(location.search).get('tabItem') || Object.keys(tabItemList)[0];
+  const activeIndex = Object.keys(tabItemList).indexOf(activeTab);
+
   return (
     <TabSt tabBtnCnt={Object.keys(tabBtnList).length} className="tab">
       {/* //* Tab Button */}
       <TabButtonWrapSt className="tabBtnWrap">
         <TabButtonContainerSt>
-          {Object.entries(tabBtnList).map((tabBtnData, i) => {
-            const [tabBtnValue, label] = tabBtnData;
-            const active = activeIndex === i ? true : false;
+          {Object.entries(tabBtnList).map((tabBtnListData, i) => {
+            const [tabBtnValue, tabBtnData] = tabBtnListData;
+            const { label, path } = tabBtnData;
 
             return (
               <TabButton
                 key={tabBtnValue}
                 name={label}
-                value={tabBtnValue}
-                active={active}
-                tabCnt={tabCnt}
                 index={i}
+                tabCnt={tabCnt}
+                path={path}
+                location={`/${location.search}`}
               />
             );
           })}
         </TabButtonContainerSt>
 
         {/* //* Tab Border */}
-        {/* //TODO active index 구해서 left값 적용해놓기 */}
         <TabBorderSt
           className="tabBorder"
           style={{
             width: `${100 / tabCnt}%`,
-            left: `${(100 / tabCnt) * activeIndex}`,
+            left: `${(100 / tabCnt) * activeIndex}%`,
           }}
         />
       </TabButtonWrapSt>
 
       {/* //* Tab Item */}
       <TabItemWrapSt className="tabItemWrap">
-        {Object.entries(tabItemList).map((tabItemData, i) => {
-          const [tabItemValue, component] = tabItemData;
-          const active = activeIndex === i ? true : false;
-
-          return (
-            <TabItem
-              key={tabItemValue}
-              component={component()}
-              active={active}
-              value={tabItemValue}
-            />
-          );
-        })}
+        {tabItemList[activeTab]()}
       </TabItemWrapSt>
     </TabSt>
   );
@@ -67,6 +58,19 @@ const TabButtonWrapSt = styled.div`
   flex-direction: column;
 
   position: relative;
+
+  & .tabBtn {
+    flex: 1;
+
+    padding: 0 0 8px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  & .tabBtn.active {
+    color: var(--primary-color);
+  }
 `;
 const TabButtonContainerSt = styled.div`
   display: flex;

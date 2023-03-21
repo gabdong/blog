@@ -55,6 +55,9 @@
     "puppeteerArgs": [
       "--no-sandbox",
       "--disabl-setuid-sandbox"
+    ],
+    "include": [
+      "/", "/post", "/tag"
     ]
   },
   "devDependencies": {

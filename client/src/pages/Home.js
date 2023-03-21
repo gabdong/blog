@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import Tab from "../components/Tab/Tab";
-import LatestPostList from "../components/PostList/LatestPostList";
+import PostList from "../components/PostList/PostList";
 import Introduce from "./Introduce";
 
 function Home() {
@@ -9,15 +9,20 @@ function Home() {
     <HomeWrapSt>
       <Tab
         tabBtnList={{
-          latest: "최근게시물",
-          introduce: "소개",
+          latest: {
+            label: "최근게시물",
+            path: "/?tabItem=latestPostList"
+          },
+          introduce: {
+            label: "소개",
+            path: "/?tabItem=introduce"
+          }
         }}
         tabItemList={{
-          latest: (prop = {}) => <LatestPostList prop={prop} />,
-          introduce: (prop = {}) => <Introduce prop={prop} />,
+          latestPostList: () => <PostList page={1} limit={10} paginationUsing={false} />,
+          introduce: () => <Introduce />,
         }}
         tabCnt={2}
-        activeIndex={0}
       />
     </HomeWrapSt>
   );

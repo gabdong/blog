@@ -9,6 +9,17 @@ import LoginModal from "../LoginModal/LoginModal";
 import LinkButton from "../LinkButton/LinkButton";
 import UserMenuWrap from "./UserMenuWrap";
 
+/**
+ * * nav open
+ */
+const navOpen = () => {
+  const nav = document.getElementById("nav");
+  const background = document.getElementById("navBackground");
+
+  nav.classList.add("active");
+  background.classList.add("active");
+};
+
 function Header() {
   const user = useSelector((store) => store.user);
   const [loginModalView, setloginModalView] = useState(false);
@@ -33,17 +44,6 @@ function Header() {
     e.stopPropagation();
 
     setUserMenuWrapView(!userMenuWrapView);
-  };
-
-  /**
-   * * nav open
-   */
-  const navOpen = () => {
-    const nav = document.getElementById("nav");
-    const background = document.getElementById("navBackground");
-
-    nav.classList.add("active");
-    background.classList.add("active");
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function Header() {
         <NavIconSt className="mobileOnly" onClick={navOpen} />
 
         {/* //* Logo */}
-        <Link to="/">
+        <Link to="/?tabItem=latestPostList">
           <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
         </Link>
 

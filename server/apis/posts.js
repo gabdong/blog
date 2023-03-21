@@ -3,33 +3,37 @@ const router = express.Router();
 const db = require("../config/db");
 
 //* 게시글 리스트 요청
-router.get("/list/:tagIdx", async (req, res) => {
+router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   const { tagIdx } = req.params;
   const page = Number(req.query.page);
+  const limit = Number(req.query.limit);
+  const paginationUsing = Boolean(req.query.paginationUsing);
   const offset = (page - 1) * 10;
-
+  const tagCond = tagIdx ? `AND JSON_CONTAINS(tags, '${tagIdx}') ` : '';
+  
   try {
-    const [totalCntRes] = await db.query(
-      `
-      SELECT COUNT(idx) as totalCnt 
-      FROM posts 
-      WHERE delete_datetime IS NULL 
-      AND JSON_CONTAINS(tags, ?)
-    `,
-      [tagIdx]
-    );
-    const { totalCnt } = totalCntRes[0];
+    //* 페이지네이션 사용일때 전체갯수
+    let totalCnt;
+    if (paginationUsing) {
+      const [totalCntRes] = await db.query(`
+        SELECT COUNT(idx) as totalCnt 
+        FROM posts 
+        WHERE delete_datetime IS NULL 
+        ${tagCond}
+      `);
+      totalCnt = totalCntRes[0].totalCnt;
+    }
 
     const [postListRes] = await db.query(
       `
       SELECT idx, subject, content, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
-      AND JSON_CONTAINS(tags, ?)
+      ${tagCond}
       ORDER BY datetime DESC, idx DESC 
-      LIMIT 10 OFFSET ?
+      LIMIT ? OFFSET ?
     `,
-      [tagIdx, offset]
+      [limit, offset]
     );
 
     res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });

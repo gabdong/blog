@@ -66,8 +66,10 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
               const currentPage = Number(
                 new URLSearchParams(location.search).get("page")
               );
+              
               let className = "smallTitle";
               if (currentPage === pageNum) className += " active";
+
               return className;
             }}
             to={`${path}?page=${pageNum}`}
