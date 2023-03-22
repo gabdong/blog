@@ -71,7 +71,7 @@ function PostList({
                     to={`/post/${idx}?tag=${tagIdx}`}
                     state={{ activeTagIdx: tagIdx }}
                   >
-                    {!thumbnail ? null : 
+                    {!thumbnail ? null : (
                       <PostThumbnailSt
                         style={{
                           background: `url(${thumbnail})`,
@@ -80,8 +80,8 @@ function PostList({
                         }}
                         title={thumbnailAlt}
                       />
-                    }
-                    
+                    )}
+
                     <PostInfoWrapSt className="postInfoWrap">
                       <div>
                         <p className="subTitle postSubject">{subject}</p>
@@ -143,8 +143,6 @@ const PostLinkSt = styled(Link)`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
-  height: 240px;
 `;
 const PostThumbnailSt = styled.div`
   padding-top: 52%;
@@ -167,7 +165,14 @@ const PostInfoWrapSt = styled.div`
     height: 80px;
   }
 
-  & > div .content {
+  & > div .postSubject {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  & > div .postContent {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;

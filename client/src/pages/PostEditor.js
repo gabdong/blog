@@ -95,14 +95,19 @@ function PostEditor() {
 
   //* 썸네일 handler
   const thumbnailHandler = (e) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = (e) => {
-      setThumbnailPreview(e.target.result);
-    };
+    if (e.target.files[0]) {
+      const reader = new FileReader();
 
-    setThumbnail(e.target.value);
-    setThumbnailFile(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = (e) => {
+        setThumbnailPreview(e.target.result);
+      };
+
+      setThumbnail(e.target.value);
+      setThumbnailFile(e.target.files[0]);
+    } else {
+      setThumbnail("");
+    }
   };
 
   //* 썸네일 alt handler
@@ -158,8 +163,14 @@ function PostEditor() {
 
     if (!subject) return alert("제목을 입력해주세요.");
 
-    const altText = thumbnailAlt ? thumbnailAlt : `${subject} 썸네일 이미지`;
-    const { url, alt } = await uploadImage(thumbnailFile, altText);
+    let url, alt;
+    if (thumbnailFile) {
+      const altText = thumbnailAlt ? thumbnailAlt : `${subject} 썸네일 이미지`;
+      const uploadImageRes = await uploadImage(thumbnailFile, altText);
+
+      url = uploadImageRes.url;
+      alt = uploadImageRes.alt;
+    }
 
     const body = {
       markDown,
@@ -275,7 +286,7 @@ function PostEditor() {
             <p className="normalText">썸네일 설명 :</p>
             <Input
               type="text"
-              value={thumbnailAlt}
+              value={thumbnailAlt || ""}
               onChange={thumbnailAltHandler}
             />
           </ThumbnailAltInputWrap>
@@ -345,7 +356,11 @@ function PostEditor() {
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <h3 className="smallTitle">제목 :</h3>
-        <Input style={{ flex: 1 }} onChange={subjectHandler} value={subject} />
+        <Input
+          style={{ flex: 1 }}
+          onChange={subjectHandler}
+          value={subject || ""}
+        />
       </div>
 
       {/* //* mark down editor */}
