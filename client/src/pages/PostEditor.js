@@ -99,7 +99,7 @@ function PostEditor() {
     reader.readAsDataURL(e.target.files[0]);
     reader.onload = (e) => {
       setThumbnailPreview(e.target.result);
-    }
+    };
 
     setThumbnail(e.target.value);
     setThumbnailFile(e.target.files[0]);
@@ -258,7 +258,9 @@ function PostEditor() {
           <label htmlFor="postThumbnailInput">
             <ThumbnailInputLabelSt>
               <ThumbnailPreviewWrapSt>
-                {thumbnailPreview ? <img src={thumbnailPreview}/> : null}
+                {thumbnailPreview ? (
+                  <img src={thumbnailPreview} alt={thumbnailAlt} />
+                ) : null}
               </ThumbnailPreviewWrapSt>
             </ThumbnailInputLabelSt>
           </label>
@@ -269,11 +271,14 @@ function PostEditor() {
             value={thumbnail || ""}
             onChange={thumbnailHandler}
           />
-          <Input
-            type="text"
-            value={thumbnailAlt}
-            onChange={thumbnailAltHandler}
-          />
+          <ThumbnailAltInputWrap>
+            <p className="normalText">썸네일 설명 :</p>
+            <Input
+              type="text"
+              value={thumbnailAlt}
+              onChange={thumbnailAltHandler}
+            />
+          </ThumbnailAltInputWrap>
         </ThumbnailSettingWrap>
 
         {/* //* 태그 설정 */}
@@ -392,7 +397,11 @@ const EditorWrapSt = styled.section`
 `;
 const PostSettingsWrap = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 20px;
+
+  @media all and (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 const ThumbnailSettingWrap = styled.div`
   display: flex;
@@ -417,6 +426,15 @@ const ThumbnailPreviewWrapSt = styled.div`
     height: 100%;
     display: block;
     object-fit: cover;
+  }
+`;
+const ThumbnailAltInputWrap = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  & > input {
+    flex: 1;
   }
 `;
 const TagSettingWrap = styled.div`

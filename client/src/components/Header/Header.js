@@ -82,9 +82,7 @@ function Header() {
 
         <HeaderBtnWrapSt>
           {/* //* Search Btn */}
-          <HeaderBtnSt className="buttonText pcOnly">
-            <SearchIcon className="search_icon" />
-          </HeaderBtnSt>
+          <SearchIcon className="search_icon pcOnly" />
           {!user.isLogin ? null : (
             <LinkButton
               classname="pcOnly"
@@ -106,7 +104,7 @@ function Header() {
 
       {/* //* mobile search wrap */}
       <MobileSearchWrapSt className="mobileOnly">
-        <Input placeholder="전체 게시글 검색"/>
+        <Input placeholder="전체 게시글 검색" />
         <HeaderBtnSt>
           <SearchIcon className="search_icon" />
         </HeaderBtnSt>
