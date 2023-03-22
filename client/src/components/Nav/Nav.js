@@ -61,7 +61,7 @@ function Nav() {
         <>
           <NavBackgroundSt id="navBackground" onClick={navClose} />
           <NavSt id="nav">
-            <CloseBtnSt onClick={navClose} />
+            <CloseBtnSt className="mobileOnly" onClick={navClose} />
             {Object.entries(tagList).map((tagData) => {
               const tagIdx = Number(tagData[0]);
               const { auth, name } = tagData[1];
@@ -95,7 +95,7 @@ const NavSt = styled.nav`
   width: 140px;
   min-width: 140px;
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     gap: 12px;
 
     width: 80%;
@@ -125,7 +125,7 @@ const NavSt = styled.nav`
   }
 `;
 const NavBackgroundSt = styled.div`
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     &.active {
       width: 100%;
       height: 100%;
@@ -138,12 +138,8 @@ const NavBackgroundSt = styled.div`
   }
 `;
 const CloseBtnSt = styled(Close)`
-  display: none;
-
-  @media all and (max-width: 479px) {
-    display: block;
-    font-size: 32px;
-  }
+  font-size: 32px;
+  cursor: pointer;
 `;
 
 export default Nav;

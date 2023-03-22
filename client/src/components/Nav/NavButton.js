@@ -26,7 +26,7 @@ const NavButtonSt = styled(NavLink)`
     font-weight: 700;
   }
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     font-size: 16px;
   }
 `;

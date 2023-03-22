@@ -52,7 +52,7 @@ const WrapperSt = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--header-main-space);
+  gap: 40px;
 
   width: 1600px;
   max-width: 90%;
@@ -65,7 +65,7 @@ const MainSt = styled.main`
 
   width: 1200px;
   max-width: 100%;
-  padding-bottom: var(--main-footer-space);
+  padding-bottom: 60px;
 `;
 
 export default App;

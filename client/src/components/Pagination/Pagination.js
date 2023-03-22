@@ -67,7 +67,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
                 new URLSearchParams(location.search).get("page")
               );
               
-              let className = "smallTitle";
+              let className = "normalText";
               if (currentPage === pageNum) className += " active";
 
               return className;

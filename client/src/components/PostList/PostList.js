@@ -71,20 +71,23 @@ function PostList({
                     to={`/post/${idx}?tag=${tagIdx}`}
                     state={{ activeTagIdx: tagIdx }}
                   >
-                    <PostThumbnailSt
-                      style={{
-                        background: `url(${thumbnail})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                      title={thumbnailAlt}
-                    />
+                    {!thumbnail ? null : 
+                      <PostThumbnailSt
+                        style={{
+                          background: `url(${thumbnail})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                        title={thumbnailAlt}
+                      />
+                    }
+                    
                     <PostInfoWrapSt className="postInfoWrap">
-                      <p className="subTitle">{subject}</p>
                       <div>
-                        <p className="caption content">{contentStr}</p>
-                        <p className="caption date">{datetimeFormat}</p>
+                        <p className="subTitle postSubject">{subject}</p>
+                        <p className="caption postContent">{contentStr}</p>
                       </div>
+                      <p className="caption date">{datetimeFormat}</p>
                     </PostInfoWrapSt>
                   </PostLinkSt>
                 </PostListLiSt>
@@ -115,15 +118,23 @@ const PostListUlSt = styled.ul`
 `;
 const PostListLiSt = styled.li`
   width: calc(100% / 3 - 14px);
-  border-bottom: 1px solid #ffffff;
+  background: var(--dark-l);
   transition: var(--transition);
   cursor: pointer;
 
   &:hover {
-    border-bottom: 1px solid var(--primary-color);
+    transform: translateY(-8px);
   }
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 1023px) {
+    width: calc(50% - 10px);
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  @media all and (max-width: 767px) {
     width: 100%;
     gap: 12px;
   }
@@ -132,6 +143,8 @@ const PostLinkSt = styled(Link)`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
+  height: 240px;
 `;
 const PostThumbnailSt = styled.div`
   padding-top: 52%;
@@ -139,9 +152,11 @@ const PostThumbnailSt = styled.div`
 const PostInfoWrapSt = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 14px;
   
-  padding 14px 0;
+  height: 100%;
+  padding 16px;
 
   & > div {
     display: flex;

@@ -72,7 +72,7 @@ function TagSettingItem({ idx, name, setTagList }) {
   }, [editing]);
 
   return (
-    <TagSettingItemSt className="tagSettingItem">
+    <TagSettingItemSt className={`tagSettingItem ${editing ? "editing" : ""}`}>
       {editing ? (
         <input
           type="text"
@@ -110,7 +110,8 @@ const TagSettingItemSt = styled.div`
   cursor: pointer;
   transition: var(--transition);
 
-  &:hover {
+  &:hover,
+  &.editing {
     background: var(--primary-color);
   }
 `;

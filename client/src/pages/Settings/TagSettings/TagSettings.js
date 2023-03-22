@@ -42,7 +42,7 @@ function TagSettings() {
 
   //TODO 태그검색기능 추가
   return (
-    <TagSettingWrapSt>
+    <TagSettingWrapSt className="tagSettingWrap">
       <div>
         <TagNameInputWrapSt>
           <p className="normalText">태그명 : </p>

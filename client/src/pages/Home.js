@@ -6,7 +6,7 @@ import Introduce from "./Introduce";
 
 function Home() {
   return (
-    <HomeWrapSt>
+    <HomeWrapSt className="homeWrap">
       <Tab
         tabBtnList={{
           latest: {

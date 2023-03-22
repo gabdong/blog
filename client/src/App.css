@@ -12,10 +12,6 @@
     
     --transition: 0.2s;
     --border-radius: 4px;
-    --header-height: 80px;
-    --mo-header-height: 56px;
-    --header-main-space: 40px;
-    --main-footer-space: 60px;
 }
 @font-face {
     font-family: "SUIT-Regular";
@@ -112,6 +108,9 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 }
 #root {
     height: 100%;
+}
+.disNone {
+    display: none;
 }
 .headline {
     font-family: 'SUIT-Medium';
@@ -283,7 +282,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .pcOnly {
     display: block;
 }
-@media all and (max-width: 479px) {
+@media all and (max-width: 767px) {
     .mobileOnly {
         display: block;
     }

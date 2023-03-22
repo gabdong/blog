@@ -22,7 +22,7 @@ function UserMenuWrap() {
         Logout
       </li>
       <li className="menuWrapBtn mobileOnly normalText">
-        <Link to="/post/new">새 글 작성</Link>
+        <Link to="/postEditor/new">새 글 작성</Link>
       </li>
     </UserMenuWrapSt>
   );
@@ -50,7 +50,7 @@ const UserMenuWrapSt = styled.ul`
     color: var(--primary-color);
   }
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     top: calc(100% + 10px);
   }
 `;

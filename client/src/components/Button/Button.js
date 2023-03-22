@@ -15,14 +15,14 @@ function Button({ text, classname = "", as, style = {}, onClick }) {
 
 const ButtonSt = styled.button`
   padding: 8px 12px;
-  background-color: var(--gray);
+  background: var(--gray);
   color: #ffffff;
   border-radius: var(--border-radius);
   transition: var(--transition);
   cursor: pointer;
 
   &:hover {
-    background-color: var(--primary-color);
+    background: var(--primary-color);
   }
 `;
 

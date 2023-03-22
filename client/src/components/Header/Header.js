@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiFillCaretDown as DownIcon } from "react-icons/ai";
 import { FiMenu as NavIcon } from "react-icons/fi";
+import { FaSearch as SearchIcon } from "react-icons/fa";
 
+import Input from "../Input/Input";
 import LoginModal from "../LoginModal/LoginModal";
 import LinkButton from "../LinkButton/LinkButton";
 import UserMenuWrap from "./UserMenuWrap";
@@ -80,10 +82,9 @@ function Header() {
 
         <HeaderBtnWrapSt>
           {/* //* Search Btn */}
-          {/* //TODO 기능완성 후 살리기 */}
-          {/* <HeaderBtnSt className="buttonText">
-            <Search className="pcOnly"/>
-          </HeaderBtnSt> */}
+          <HeaderBtnSt className="buttonText pcOnly">
+            <SearchIcon className="search_icon" />
+          </HeaderBtnSt>
           {!user.isLogin ? null : (
             <LinkButton
               classname="pcOnly"
@@ -104,11 +105,12 @@ function Header() {
       </HeaderInnerSt>
 
       {/* //* mobile search wrap */}
-      {/* //TODO 기능완성 후 살리기 */}
-      {/* <MobileSearchWrapSt className="mobileOnly">
+      <MobileSearchWrapSt className="mobileOnly">
         <Input placeholder="전체 게시글 검색"/>
-        <Search />
-      </MobileSearchWrapSt> */}
+        <HeaderBtnSt>
+          <SearchIcon className="search_icon" />
+        </HeaderBtnSt>
+      </MobileSearchWrapSt>
 
       {/* //* login modal */}
       {loginModalView ? (
@@ -128,7 +130,7 @@ const HeaderSt = styled.header`
   top: 0;
   z-index: 21;
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     flex-direction: column;
   }
 `;
@@ -138,12 +140,12 @@ const HeaderInnerSt = styled.div`
   align-items: center;
 
   width: 100%;
-  height: var(--header-height);
+  height: 80px;
   position: relative;
 
-  @media all and (max-width: 479px) {
-    height: var(--mo-header-height);
-    min-height: var(--mo-header-height);
+  @media all and (max-width: 767px) {
+    height: 56px;
+    min-height: 56px;
   }
 `;
 const HeaderBtnWrapSt = styled.div`
@@ -153,11 +155,14 @@ const HeaderBtnWrapSt = styled.div`
 
   position: relative;
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     gap: 8px;
   }
 `;
 const HeaderBtnSt = styled.button`
+  display: flex;
+  align-items: center;
+
   font-size: 1rem;
   color: var(--gray-l);
   transition: var(--transition);
@@ -166,7 +171,7 @@ const HeaderBtnSt = styled.button`
     color: #ffffff;
   }
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     font-size: 0.9rem;
   }
 `;
@@ -178,7 +183,7 @@ const LogoSt = styled.h1`
   color: var(--primary-color);
   cursor: pointer;
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -187,19 +192,33 @@ const LogoSt = styled.h1`
 `;
 const NavIconSt = styled(NavIcon)`
   font-size: 20px;
+
+  color: var(--gray-l);
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    color: #ffffff;
+  }
 `;
 const DownIconSt = styled(DownIcon)`
   margin-left: 4px;
   font-size: 14px;
 `;
 const MobileSearchWrapSt = styled.div`
-  @media all and (max-width: 479px) {
+  @media all and (max-width: 767px) {
     display: flex;
     gap: 10px;
     align-items: center;
 
+    padding-bottom: 8px;
+
     & > input {
       flex: 1;
+    }
+
+    & > .search_icon {
+      cursor: pointer;
     }
   }
 `;

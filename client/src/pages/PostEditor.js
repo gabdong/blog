@@ -39,8 +39,9 @@ function PostEditor() {
   const [tagListLoading, setTagListLoading] = useState(true);
   const [selectedTagList, setSelectedTagList] = useState([]);
   const [selectedTagDataList, setSelectedTagDataList] = useState({});
-  const [thumbnailFile, setThumbnailFile] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState(""); // 저장용
+  const [thumbnailPreview, setThumbnailPreview] = useState(""); // 미리보기용
+  const [thumbnail, setThumbnail] = useState(""); // input value용
   const [thumbnailAlt, setThumbnailAlt] = useState("");
   const [loading, setLoading] = useState(true);
   const postIdx =
@@ -94,6 +95,12 @@ function PostEditor() {
 
   //* 썸네일 handler
   const thumbnailHandler = (e) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = (e) => {
+      setThumbnailPreview(e.target.result);
+    }
+
     setThumbnail(e.target.value);
     setThumbnailFile(e.target.files[0]);
   };
@@ -247,7 +254,17 @@ function PostEditor() {
 
       <PostSettingsWrap className="postSettingWrap">
         <ThumbnailSettingWrap className="thumbnailSettingWrap">
+          <p className="smallTitle">썸네일 설정</p>
+          <label htmlFor="postThumbnailInput">
+            <ThumbnailInputLabelSt>
+              <ThumbnailPreviewWrapSt>
+                {thumbnailPreview ? <img src={thumbnailPreview}/> : null}
+              </ThumbnailPreviewWrapSt>
+            </ThumbnailInputLabelSt>
+          </label>
           <input
+            id="postThumbnailInput"
+            className="disNone"
             type="file"
             value={thumbnail || ""}
             onChange={thumbnailHandler}
@@ -261,7 +278,7 @@ function PostEditor() {
 
         {/* //* 태그 설정 */}
         <TagSettingWrap className="tagSettigWrap">
-          <p className="smallTitle">태그설정</p>
+          <p className="smallTitle">태그 설정</p>
 
           {/* //* 태그 검색 */}
           <TagSearchWrapSt>
@@ -341,14 +358,14 @@ function PostEditor() {
           theme="dark"
           initialValue={content}
           hooks={{
-            addImageBlobHook: async (blob, callback) => {
+            addImageBlobHook: async (file, callback) => {
               const altText = document.getElementById(
                 "toastuiAltTextInput"
               ).value;
 
               if (!altText) return alert("이미지 설명을 입력해주세요.");
 
-              const { url, alt } = await uploadImage(blob, altText);
+              const { url, alt } = await uploadImage(file, altText);
 
               callback(url, alt);
             },
@@ -375,9 +392,32 @@ const EditorWrapSt = styled.section`
 `;
 const PostSettingsWrap = styled.div`
   display: flex;
+  gap: 16px;
 `;
 const ThumbnailSettingWrap = styled.div`
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 8px;
+`;
+const ThumbnailInputLabelSt = styled.div`
+  padding-top: 55%;
+  position: relative;
+`;
+const ThumbnailPreviewWrapSt = styled.div`
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #eee;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
 `;
 const TagSettingWrap = styled.div`
   display: flex;
