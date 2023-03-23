@@ -25,7 +25,6 @@ import { getPost } from "../apis/posts";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 
-//TODO 컴포넌트 분리
 function PostEditor() {
   const params = useParams();
   const location = useLocation();
@@ -33,17 +32,24 @@ function PostEditor() {
   const editorRef = useRef(null);
   const user = useSelector((store) => store.user.idx);
 
+  //* 제목, 내용
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
+
+  //* 태그
   const [tagList, setTagList] = useState([]);
   const [tagListLoading, setTagListLoading] = useState(true);
   const [selectedTagList, setSelectedTagList] = useState([]);
   const [selectedTagDataList, setSelectedTagDataList] = useState({});
+
+  //* 썸네일
   const [thumbnailFile, setThumbnailFile] = useState(""); // 저장용
   const [thumbnailPreview, setThumbnailPreview] = useState(""); // 미리보기용
   const [thumbnail, setThumbnail] = useState(""); // input value용
   const [thumbnailAlt, setThumbnailAlt] = useState("");
+  
   const [loading, setLoading] = useState(true);
+
   const postIdx =
     params.mode === "edit"
       ? Number(new URLSearchParams(location.search).get("post"))
@@ -119,7 +125,7 @@ function PostEditor() {
   const selectedTagListHandler = (e, mode) => {
     const idx = Number(e.currentTarget.dataset.idx);
 
-    if (mode === "add") {
+    if (mode === "add") { //* 태그 선택
       const tagData = { ...tagList[idx] };
 
       //* 선택된 태그 리스트 갱신
@@ -134,7 +140,7 @@ function PostEditor() {
         delete prev[idx];
         return { ...prev };
       });
-    } else {
+    } else { //* 태그 해제
       const tagData = { ...selectedTagDataList[idx] };
 
       //* 선택된 태그 리스트 갱신
@@ -176,10 +182,10 @@ function PostEditor() {
       markDown,
       subject,
       user,
-      checkAuth: true,
       tags: selectedTagList,
       thumbnail: url,
       thumbnailAlt: alt,
+      checkAuth: true,
     };
 
     try {
@@ -201,11 +207,22 @@ function PostEditor() {
 
     if (!subject) return alert("제목을 입력해주세요.");
 
+    let url, alt;
+    if (thumbnailFile) {
+      const altText = thumbnailAlt ? thumbnailAlt : `${subject} 썸네일 이미지`;
+      const uploadImageRes = await uploadImage(thumbnailFile, altText);
+
+      url = uploadImageRes.url;
+      alt = uploadImageRes.alt;
+    }
+
     const body = {
       markDown,
       subject,
       user,
       tags: selectedTagList,
+      thumbnail: url,
+      thumbnailAlt: alt,
       checkAuth: true,
     };
 
@@ -225,13 +242,16 @@ function PostEditor() {
       let selectedTagDataRes = [],
         postSubject = "",
         postContent = "",
-        postThumbnail = "";
+        postThumbnail = "",
+        postThumbnailAlt = "";
       if (params.mode === "edit") {
         const postDataRes = await getPost(Number(postIdx));
 
         selectedTagDataRes = postDataRes[0].tags;
         postSubject = postDataRes[0].subject;
         postContent = postDataRes[0].content;
+        postThumbnail = postDataRes[0].thumbnail;
+        postThumbnailAlt = postDataRes[0].thumbnailAlt;
       }
 
       //* 사용중인 태그는 태그목록에서 제외
@@ -252,7 +272,8 @@ function PostEditor() {
       setSelectedTagList(selectedTagDataRes);
       setSubject(postSubject);
       setContent(postContent);
-      setThumbnail(postThumbnail);
+      setThumbnailPreview(postThumbnail);
+      setThumbnailAlt(postThumbnailAlt);
 
       setTagListLoading(false);
       setLoading(false);
@@ -288,6 +309,7 @@ function PostEditor() {
               type="text"
               value={thumbnailAlt || ""}
               onChange={thumbnailAltHandler}
+              placeholder="같은 이미지의 설명글은 수정할 수 없습니다."
             />
           </ThumbnailAltInputWrap>
         </ThumbnailSettingWrap>
@@ -298,7 +320,7 @@ function PostEditor() {
 
           {/* //* 태그 검색 */}
           <TagSearchWrapSt>
-            <Input placeholder="검색할 단어 입력 후 엔터 혹은 검색버튼을 클릭하세요." />
+            <Input placeholder="단어 입력 후 엔터 혹은 검색버튼 클릭" />
             <Button text="검색" />
           </TagSearchWrapSt>
 
