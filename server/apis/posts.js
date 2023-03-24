@@ -111,7 +111,7 @@ router.post("/", async (req, res) => {
 //* 게시글 수정
 router.put("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
-  const { markDown, subject, tags, user } = req.body;
+  const { markDown, subject, tags, user, thumbnail, thumbnailAlt } = req.body;
   const userIdx = user.idx;
 
   try {
@@ -123,7 +123,9 @@ router.put("/:postIdx", async (req, res) => {
       auth=0, 
       subject=?, 
       content=?,
-      tags=?
+      tags=?,
+      thumbnail=?,
+      thumbnail_alt=?
       WHERE idx=?
     `,
       [
@@ -131,12 +133,15 @@ router.put("/:postIdx", async (req, res) => {
         subject,
         markDown.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
+        thumbnail,
+        thumbnailAlt,
         postIdx,
       ]
     );
 
     res.json({ msg: "SUCCESS" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "게시글 수정을 실패하였습니다." });
   }
 });

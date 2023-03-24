@@ -214,6 +214,10 @@ function PostEditor() {
 
       url = uploadImageRes.url;
       alt = uploadImageRes.alt;
+    } else if (params.mode === "edit" && thumbnailPreview && !thumbnail) {
+      //* 수정이면서 썸네일 변경 없을경우
+      url = thumbnailPreview;
+      alt = thumbnailAlt;
     }
 
     const body = {
@@ -440,6 +444,8 @@ const PostSettingsWrap = styled.div`
     flex-direction: column;
   }
 `;
+
+//* 썸네일 설정영역
 const ThumbnailSettingWrap = styled.div`
   display: flex;
   flex: 1;
@@ -474,6 +480,8 @@ const ThumbnailAltInputWrap = styled.div`
     flex: 1;
   }
 `;
+
+//* 태그 설정영역
 const TagSettingWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -529,6 +537,8 @@ const SelectedTagListSt = styled.div`
 
   max-height: 80px;
 `;
+
+//* 에디터
 const EditorContainerSt = styled.div`
   display: flex;
   flex-direction: column;
