@@ -64,7 +64,7 @@ function Nav() {
             <CloseBtnSt className="mobileOnly" onClick={navClose} />
             {Object.entries(tagList).map((tagData) => {
               const tagIdx = Number(tagData[0]);
-              const { auth, name } = tagData[1];
+              const { auth, name, postCnt } = tagData[1];
 
               const activeClass = activeTagIdx === tagIdx ? "active" : "";
 
@@ -74,7 +74,7 @@ function Nav() {
               return (
                 <NavButton
                   key={tagIdx}
-                  text={name}
+                  text={`${name}(${postCnt})`}
                   path={`/tag/${tagIdx}?page=1`}
                   active={activeClass}
                 />
