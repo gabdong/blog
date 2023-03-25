@@ -7,16 +7,18 @@ router.get("/", async (req, res) => {
   try {
     const [selectTagListRes] = await db.query(
       `
-      SELECT idx, auth, name 
-      FROM tags 
-      WHERE delete_datetime IS NULL
+      SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
+      FROM tags tags 
+      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) 
+      WHERE tags.delete_datetime IS NULL 
+      GROUP BY tags.idx, tags.auth, tags.name
     `
     );
 
     const tagList = {};
     for (const tagData of selectTagListRes) {
-      const { idx, auth, name } = tagData;
-      tagList[idx] = { auth, name };
+      const { idx, auth, name, postCnt } = tagData;
+      tagList[idx] = { auth, name, postCnt };
     }
 
     res.json({ msg: "SUCCESS", tagList });
