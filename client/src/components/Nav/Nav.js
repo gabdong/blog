@@ -74,7 +74,7 @@ function Nav() {
               return (
                 <NavButton
                   key={tagIdx}
-                  text={`${name}(${postCnt})`}
+                  text={`${name} (${postCnt})`}
                   path={`/tag/${tagIdx}?page=1`}
                   active={activeClass}
                 />
