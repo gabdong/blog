@@ -48,6 +48,7 @@ function PostEditor() {
   const [thumbnail, setThumbnail] = useState(""); // input value용
   const [thumbnailAlt, setThumbnailAlt] = useState("");
   
+  const [publicPost, setPublicPost] = useState('Y');
   const [loading, setLoading] = useState(true);
 
   const postIdx =
@@ -55,39 +56,8 @@ function PostEditor() {
       ? Number(new URLSearchParams(location.search).get("post"))
       : null;
 
-  //* 에디터 뒤로가기 버튼
-  const editorUndo = document.createElement("span");
-  editorUndo.classList.add("material-icons");
-  editorUndo.textContent = "undo";
-  editorUndo.style = "cursor: pointer; margin-top: 4px;";
-  editorUndo.addEventListener("click", () => {
-    editorRef.current.getInstance().exec("undo");
-  });
-
-  //* 에디터 앞으로가기 버튼
-  const editorRedo = document.createElement("span");
-  editorRedo.classList.add("material-icons");
-  editorRedo.textContent = "redo";
-  editorRedo.style = "cursor: pointer; margin-top: 4px;";
-  editorRedo.addEventListener("click", () => {
-    editorRef.current.getInstance().exec("redo");
-  });
-
   const toolbarItems = [
-    [
-      {
-        name: "undo",
-        tooltip: "뒤로가기",
-        el: editorUndo,
-      },
-      {
-        name: "redo",
-        tooltip: "앞으로가기",
-        el: editorRedo,
-      },
-      "heading",
-      "bold",
-    ],
+    ["heading", "bold"],
     ["hr"],
     ["ul", "ol", "task"],
     ["table", "link"],
@@ -288,8 +258,8 @@ function PostEditor() {
     <EditorWrapSt className="editorWrap">
       <h2 className="subTitle">게시글 작성</h2>
 
-      <PostSettingsWrap className="postSettingWrap">
-        <ThumbnailSettingWrap className="thumbnailSettingWrap">
+      <PostSettingsWrapSt className="postSettingWrap">
+        <ThumbnailSettingWrapSt className="thumbnailSettingWrap">
           <p className="smallTitle">썸네일 설정</p>
           <label htmlFor="postThumbnailInput">
             <ThumbnailInputLabelSt>
@@ -307,7 +277,7 @@ function PostEditor() {
             value={thumbnail || ""}
             onChange={thumbnailHandler}
           />
-          <ThumbnailAltInputWrap>
+          <ThumbnailAltInputWrapSt>
             <p className="normalText">썸네일 설명 :</p>
             <Input
               type="text"
@@ -315,69 +285,79 @@ function PostEditor() {
               onChange={thumbnailAltHandler}
               placeholder="같은 이미지의 설명글은 수정할 수 없습니다."
             />
-          </ThumbnailAltInputWrap>
-        </ThumbnailSettingWrap>
+          </ThumbnailAltInputWrapSt>
+        </ThumbnailSettingWrapSt>
 
-        {/* //* 태그 설정 */}
-        <TagSettingWrap className="tagSettigWrap">
-          <p className="smallTitle">태그 설정</p>
+        <PostSettingsRightWrapSt>
+          {/* //* 태그 설정 */}
+          <TagSettingWrapSt className="tagSettigWrap">
+            <p className="smallTitle">태그 설정</p>
 
-          {/* //* 태그 검색 */}
-          <TagSearchWrapSt>
-            <Input placeholder="단어 입력 후 엔터 혹은 검색버튼 클릭" />
-            <Button text="검색" />
-          </TagSearchWrapSt>
+            {/* //* 태그 검색 */}
+            <TagSearchWrapSt>
+              <Input placeholder="단어 입력 후 엔터 혹은 검색버튼 클릭" />
+              <Button text="검색" />
+            </TagSearchWrapSt>
 
-          {/* //* 태그 목록 */}
-          <TagListSt className="mb10 scroll">
-            {tagListLoading
-              ? null
-              : Object.entries(tagList).map((tagData) => {
-                  //TODO 권한 확인
-                  const tagIdx = tagData[0];
-                  const { auth, name: tagName } = tagData[1];
-
-                  return (
-                    <TagItemSt
-                      key={tagIdx}
-                      onClick={(e) => {
-                        selectedTagListHandler(e, "add");
-                      }}
-                      data-idx={tagIdx}
-                    >
-                      <p className="caption">{tagName}</p>
-                    </TagItemSt>
-                  );
-                })}
-          </TagListSt>
-
-          {/* //* 선택된 태그 */}
-          <SelectedTagListWrapSt>
-            <p className="normalText">선택된 태그 :</p>
-            <SelectedTagListSt className="scroll">
+            {/* //* 태그 목록 */}
+            <TagListSt className="scroll">
               {tagListLoading
                 ? null
-                : Object.entries(selectedTagDataList).map((selectedTagData) => {
-                    const tagIdx = selectedTagData[0];
-                    const { name: tagName } = selectedTagData[1];
+                : Object.entries(tagList).map((tagData) => {
+                    //TODO 권한 확인
+                    const tagIdx = tagData[0];
+                    const { auth, name: tagName } = tagData[1];
 
                     return (
                       <TagItemSt
                         key={tagIdx}
                         onClick={(e) => {
-                          selectedTagListHandler(e, "minus");
+                          selectedTagListHandler(e, "add");
                         }}
                         data-idx={tagIdx}
-                        data-name={tagName}
                       >
                         <p className="caption">{tagName}</p>
                       </TagItemSt>
                     );
                   })}
-            </SelectedTagListSt>
-          </SelectedTagListWrapSt>
-        </TagSettingWrap>
-      </PostSettingsWrap>
+            </TagListSt>
+
+            {/* //* 선택된 태그 */}
+            <SelectedTagListWrapSt>
+              <p className="normalText">선택된 태그 :</p>
+              <SelectedTagListSt className="scroll">
+                {tagListLoading
+                  ? null
+                  : Object.entries(selectedTagDataList).map((selectedTagData) => {
+                      const tagIdx = selectedTagData[0];
+                      const { name: tagName } = selectedTagData[1];
+
+                      return (
+                        <TagItemSt
+                          key={tagIdx}
+                          onClick={(e) => {
+                            selectedTagListHandler(e, "minus");
+                          }}
+                          data-idx={tagIdx}
+                          data-name={tagName}
+                        >
+                          <p className="caption">{tagName}</p>
+                        </TagItemSt>
+                      );
+                    })}
+              </SelectedTagListSt>
+            </SelectedTagListWrapSt>
+          </TagSettingWrapSt>
+
+          <PublicSettingWrapSt>
+            <p className="smallTitle">공개 여부</p>
+            <input type="radio" name="public" id="publicY"/>
+            <label for="publicY">공개</label>
+            <input type="radio" name="public" id="publicN"/>
+            <label for="publicY">비공개</label>
+          </PublicSettingWrapSt>
+        </PostSettingsRightWrapSt>
+      </PostSettingsWrapSt>
 
       {/* //* 제목 설정 */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -403,6 +383,20 @@ function PostEditor() {
           toolbarItems={toolbarItems}
           theme="dark"
           initialValue={content}
+          onKeyup={() => {
+              //* undo / redo
+              let timeout;
+              if(window.event.keyCode === 90 && window.event.ctrlKey) {
+                timeout = setTimeout(() => {
+                  editorRef.current.getInstance().exec("undo");
+                }, 150);
+              }
+              if (window.event.keyCode === 90 && window.event.ctrlKey && window.event.shiftKey) {
+                clearTimeout(timeout);
+                editorRef.current.getInstance().exec("redo");
+              }
+            }
+          }
           hooks={{
             addImageBlobHook: async (file, callback) => {
               const altText = document.getElementById(
@@ -436,7 +430,7 @@ const EditorWrapSt = styled.section`
 
   height: 100%;
 `;
-const PostSettingsWrap = styled.div`
+const PostSettingsWrapSt = styled.div`
   display: flex;
   gap: 20px;
 
@@ -446,11 +440,11 @@ const PostSettingsWrap = styled.div`
 `;
 
 //* 썸네일 설정영역
-const ThumbnailSettingWrap = styled.div`
+const ThumbnailSettingWrapSt = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
 `;
 const ThumbnailInputLabelSt = styled.div`
   padding-top: 55%;
@@ -471,7 +465,7 @@ const ThumbnailPreviewWrapSt = styled.div`
     object-fit: cover;
   }
 `;
-const ThumbnailAltInputWrap = styled.div`
+const ThumbnailAltInputWrapSt = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
@@ -481,12 +475,20 @@ const ThumbnailAltInputWrap = styled.div`
   }
 `;
 
-//* 태그 설정영역
-const TagSettingWrap = styled.div`
+//* 설정영역 우측
+const PostSettingsRightWrapSt = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 8px;
+  gap: 14px;
+`;
+
+//* 태그 설정영역
+const TagSettingWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 14px;
 `;
 const TagSearchWrapSt = styled.div`
   display: flex;
@@ -536,6 +538,13 @@ const SelectedTagListSt = styled.div`
   gap: 14px;
 
   max-height: 80px;
+`;
+
+//* 공개여부 설정영역
+const PublicSettingWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 //* 에디터

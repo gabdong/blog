@@ -19,9 +19,9 @@ export async function getTagList() {
 export async function addTag(tagName) {
   const tagNameArr = tagName
     .replace(/(<([^>]+)>)/gi, "")
-    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "")
+    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "")  // eslint-disable-line
     .split(",")
-    .filter(Boolean); // eslint-disable-line
+    .filter(Boolean);
 
   if (tagNameArr.length === 0) return alert("추가할 태그명을 입력해주세요.");
 

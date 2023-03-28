@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
       `
       SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
       FROM tags tags 
-      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) 
+      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) AND posts.delete_datetime IS NULL
       WHERE tags.delete_datetime IS NULL 
       GROUP BY tags.idx, tags.auth, tags.name
     `
