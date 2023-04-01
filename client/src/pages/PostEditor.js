@@ -24,6 +24,7 @@ import { getTagList } from "../apis/tags";
 import { getPost } from "../apis/posts";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import Radio from "../components/Radio/Radio";
 
 function PostEditor() {
   const params = useParams();
@@ -47,8 +48,8 @@ function PostEditor() {
   const [thumbnailPreview, setThumbnailPreview] = useState(""); // 미리보기용
   const [thumbnail, setThumbnail] = useState(""); // input value용
   const [thumbnailAlt, setThumbnailAlt] = useState("");
-  
-  const [publicPost, setPublicPost] = useState('Y');
+
+  const [publicPost, setPublicPost] = useState("Y");
   const [loading, setLoading] = useState(true);
 
   const postIdx =
@@ -95,7 +96,8 @@ function PostEditor() {
   const selectedTagListHandler = (e, mode) => {
     const idx = Number(e.currentTarget.dataset.idx);
 
-    if (mode === "add") { //* 태그 선택
+    if (mode === "add") {
+      //* 태그 선택
       const tagData = { ...tagList[idx] };
 
       //* 선택된 태그 리스트 갱신
@@ -110,7 +112,8 @@ function PostEditor() {
         delete prev[idx];
         return { ...prev };
       });
-    } else { //* 태그 해제
+    } else {
+      //* 태그 해제
       const tagData = { ...selectedTagDataList[idx] };
 
       //* 선택된 태그 리스트 갱신
@@ -129,6 +132,11 @@ function PostEditor() {
         return { ...prev };
       });
     }
+  };
+
+  //* 공개여부 handler
+  const publicPostHandler = (e) => {
+    setPublicPost(e.target.value);
   };
 
   /**
@@ -328,33 +336,49 @@ function PostEditor() {
               <SelectedTagListSt className="scroll">
                 {tagListLoading
                   ? null
-                  : Object.entries(selectedTagDataList).map((selectedTagData) => {
-                      const tagIdx = selectedTagData[0];
-                      const { name: tagName } = selectedTagData[1];
+                  : Object.entries(selectedTagDataList).map(
+                      (selectedTagData) => {
+                        const tagIdx = selectedTagData[0];
+                        const { name: tagName } = selectedTagData[1];
 
-                      return (
-                        <TagItemSt
-                          key={tagIdx}
-                          onClick={(e) => {
-                            selectedTagListHandler(e, "minus");
-                          }}
-                          data-idx={tagIdx}
-                          data-name={tagName}
-                        >
-                          <p className="caption">{tagName}</p>
-                        </TagItemSt>
-                      );
-                    })}
+                        return (
+                          <TagItemSt
+                            key={tagIdx}
+                            onClick={(e) => {
+                              selectedTagListHandler(e, "minus");
+                            }}
+                            data-idx={tagIdx}
+                            data-name={tagName}
+                          >
+                            <p className="caption">{tagName}</p>
+                          </TagItemSt>
+                        );
+                      }
+                    )}
               </SelectedTagListSt>
             </SelectedTagListWrapSt>
           </TagSettingWrapSt>
 
           <PublicSettingWrapSt>
             <p className="smallTitle">공개 여부</p>
-            <input type="radio" name="public" id="publicY"/>
-            <label for="publicY">공개</label>
-            <input type="radio" name="public" id="publicN"/>
-            <label for="publicY">비공개</label>
+            <PublicSettingRadioWrapSt>
+              <Radio
+                id="publicY"
+                label="공개"
+                name="public"
+                checked={publicPost === "Y" ? true : false}
+                value="Y"
+                setFn={publicPostHandler}
+              />
+              <Radio
+                id="publicN"
+                label="비공개"
+                name="public"
+                checked={publicPost === "N" ? true : false}
+                value="N"
+                setFn={publicPostHandler}
+              />
+            </PublicSettingRadioWrapSt>
           </PublicSettingWrapSt>
         </PostSettingsRightWrapSt>
       </PostSettingsWrapSt>
@@ -384,19 +408,22 @@ function PostEditor() {
           theme="dark"
           initialValue={content}
           onKeyup={() => {
-              //* undo / redo
-              let timeout;
-              if(window.event.keyCode === 90 && window.event.ctrlKey) {
-                timeout = setTimeout(() => {
-                  editorRef.current.getInstance().exec("undo");
-                }, 150);
-              }
-              if (window.event.keyCode === 90 && window.event.ctrlKey && window.event.shiftKey) {
-                clearTimeout(timeout);
-                editorRef.current.getInstance().exec("redo");
-              }
+            //* undo / redo
+            let timeout;
+            if (window.event.keyCode === 90 && window.event.ctrlKey) {
+              timeout = setTimeout(() => {
+                editorRef.current.getInstance().exec("undo");
+              }, 150);
             }
-          }
+            if (
+              window.event.keyCode === 90 &&
+              window.event.ctrlKey &&
+              window.event.shiftKey
+            ) {
+              clearTimeout(timeout);
+              editorRef.current.getInstance().exec("redo");
+            }
+          }}
           hooks={{
             addImageBlobHook: async (file, callback) => {
               const altText = document.getElementById(
@@ -545,6 +572,12 @@ const PublicSettingWrapSt = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  gap: 14px;
+`;
+const PublicSettingRadioWrapSt = styled.div`
+  display: flex;
+  gap: 14px;
 `;
 
 //* 에디터
