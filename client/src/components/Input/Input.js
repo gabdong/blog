@@ -29,6 +29,7 @@ const InputSt = styled.input`
   border: none;
   border-bottom: 2px solid #ddd;
   cursor: pointer;
+  color: #ffffff;
   transition: var(--transition);
 
   &:active,

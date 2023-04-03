@@ -80,6 +80,8 @@ function Nav() {
                 />
               );
             })}
+
+            {isLogin ? <NavButton path="/tag/private" text="Private" /> : null}
             {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
           </NavSt>
         </>

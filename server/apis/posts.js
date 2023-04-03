@@ -29,6 +29,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
       SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
+      AND public='Y'
       ${tagCond}
       ORDER BY datetime DESC, idx DESC 
       LIMIT ? OFFSET ?
@@ -77,7 +78,8 @@ router.get("/:postIdx", async (req, res) => {
 
 //* 게시글 업로드 요청
 router.post("/", async (req, res) => {
-  const { markDown, subject, tags, user, thumbnail, thumbnailAlt } = req.body;
+  const { markDown, subject, tags, user, thumbnail, thumbnailAlt, publicPost } =
+    req.body;
   const userIdx = user.idx;
 
   try {
@@ -90,7 +92,8 @@ router.post("/", async (req, res) => {
       content=?,
       tags=?,
       thumbnail=?,
-      thumbnail_alt=?
+      thumbnail_alt=?,
+      public=?
     `,
       [
         userIdx,
@@ -99,6 +102,7 @@ router.post("/", async (req, res) => {
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
         thumbnailAlt,
+        publicPost,
       ]
     );
 
@@ -111,7 +115,8 @@ router.post("/", async (req, res) => {
 //* 게시글 수정
 router.put("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
-  const { markDown, subject, tags, user, thumbnail, thumbnailAlt } = req.body;
+  const { markDown, subject, tags, user, thumbnail, thumbnailAlt, publicPost } =
+    req.body;
   const userIdx = user.idx;
 
   try {
@@ -125,7 +130,8 @@ router.put("/:postIdx", async (req, res) => {
       content=?,
       tags=?,
       thumbnail=?,
-      thumbnail_alt=?
+      thumbnail_alt=?, 
+      public=?
       WHERE idx=?
     `,
       [
@@ -135,6 +141,7 @@ router.put("/:postIdx", async (req, res) => {
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
         thumbnailAlt,
+        publicPost,
         postIdx,
       ]
     );

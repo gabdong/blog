@@ -38,7 +38,7 @@ function PostEditor() {
   const [content, setContent] = useState("");
 
   //* 태그
-  const [tagList, setTagList] = useState([]);
+  const [tagList, setTagList] = useState([0]);
   const [tagListLoading, setTagListLoading] = useState(true);
   const [selectedTagList, setSelectedTagList] = useState([]);
   const [selectedTagDataList, setSelectedTagDataList] = useState({});
@@ -163,6 +163,7 @@ function PostEditor() {
       tags: selectedTagList,
       thumbnail: url,
       thumbnailAlt: alt,
+      publicPost,
       checkAuth: true,
     };
 
@@ -205,6 +206,7 @@ function PostEditor() {
       tags: selectedTagList,
       thumbnail: url,
       thumbnailAlt: alt,
+      publicPost,
       checkAuth: true,
     };
 
