@@ -9,7 +9,17 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   const limit = Number(req.query.limit);
   const paginationUsing = Boolean(req.query.paginationUsing);
   const offset = (page - 1) * 10;
-  const tagCond = tagIdx ? `AND JSON_CONTAINS(tags, '${tagIdx}') ` : "";
+  let tagCond = '';
+  if (tagIdx === 'private') {
+    tagCond = "AND public='N'";
+  } else if (tagIdx === 'total') {
+    tagCond = "AND public='Y'";
+  } else {
+    tagCond = `
+      AND public='Y' 
+      AND JSON_CONTAINS(tags, '${tagIdx}') 
+    `;
+  }
 
   try {
     //* 페이지네이션 사용일때 전체갯수
@@ -29,7 +39,6 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
       SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime 
       FROM posts 
       WHERE delete_datetime IS NULL 
-      AND public='Y'
       ${tagCond}
       ORDER BY datetime DESC, idx DESC 
       LIMIT ? OFFSET ?
@@ -39,6 +48,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 
     res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
   }
 });

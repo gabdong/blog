@@ -6,9 +6,8 @@ import axios from "../utils/axios";
  */
 export async function getTagList() {
   const tagListRes = await axios.get("/apis/tags/");
-  const { tagList } = tagListRes.data;
 
-  return tagList;
+  return tagListRes;
 }
 
 /**

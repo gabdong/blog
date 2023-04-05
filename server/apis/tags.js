@@ -9,11 +9,20 @@ router.get("/", async (req, res) => {
       `
       SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
       FROM tags tags 
-      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) AND posts.delete_datetime IS NULL
+      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) AND posts.delete_datetime IS NULL AND posts.public='Y'
       WHERE tags.delete_datetime IS NULL 
       GROUP BY tags.idx, tags.auth, tags.name
     `
     );
+    const [totalPostCntRes] = await db.query(
+      `
+      SELECT COUNT(idx) AS totalPostCnt
+      FROM posts 
+      WHERE delete_datetime IS NULL 
+      AND public='Y'
+    `
+    );
+    const { totalPostCnt } = totalPostCntRes[0];
 
     const tagList = {};
     for (const tagData of selectTagListRes) {
@@ -21,7 +30,7 @@ router.get("/", async (req, res) => {
       tagList[idx] = { auth, name, postCnt };
     }
 
-    res.json({ msg: "SUCCESS", tagList });
+    res.json({ msg: "SUCCESS", tagList, totalPostCnt });
   } catch (err) {
     res.status(500).json({ msg: "태그리스트를 불러오지 못했습니다." });
   }
