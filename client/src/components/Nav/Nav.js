@@ -20,6 +20,7 @@ function Nav() {
   const [activeTagIdx, setActiveTagIdx] = useState(null);
   const [tagList, setTagList] = useState({});
   const [totalPostCnt, setTotalPostCnt] = useState(0);
+  const [privatePostCnt, setPrivatePostCnt] = useState(0);
   const [loading, setLoading] = useState(true);
 
   /**
@@ -36,9 +37,10 @@ function Nav() {
   useEffect(() => {
     (async function () {
       const getTagListRes = await getTagList();
-      const { tagList: tagListRes, totalPostCnt: totalPostCntRes } = getTagListRes.data;
+      const { tagList: tagListRes, totalPostCnt: totalPostCntRes, privatePostCnt: privatePostCntRes } = getTagListRes.data;
       setTagList(tagListRes);
       setTotalPostCnt(totalPostCntRes);
+      setPrivatePostCnt(privatePostCntRes);
 
       if (pathname.includes("/post")) {
         if (location.state?.activeTagIdx) {
@@ -86,7 +88,7 @@ function Nav() {
               );
             })}
 
-            {isLogin ? <NavButton path="/tag/private?page=1" text="Private" /> : null}
+            {isLogin ? <NavButton path="/tag/private?page=1" text={`Private (${privatePostCnt})`} /> : null}
             {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
           </NavSt>
         </>

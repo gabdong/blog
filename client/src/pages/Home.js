@@ -19,7 +19,7 @@ function Home() {
           }
         }}
         tabItemList={{
-          latestPostList: () => <PostList page={1} limit={10} paginationUsing={false} />,
+          latestPostList: () => <PostList page={1} limit={9} paginationUsing={false} />,
           introduce: () => <Introduce />,
         }}
         tabCnt={2}
