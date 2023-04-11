@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
-const test = 'test';
+
 //* 태그 리스트 요청
 router.get("/", async (req, res) => {
   try {
