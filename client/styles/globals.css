@@ -15,27 +15,27 @@
 }
 @font-face {
   font-family: "SUIT-Regular";
-  src: url("/assets/font/SUIT-Regular.woff2");
+  src: url("/assets/fonts/SUIT-Regular.woff2");
 }
 @font-face {
   font-family: "SUIT-Bold";
-  src: url("/assets/font/SUIT-Bold.woff2");
+  src: url("/assets/fonts/SUIT-Bold.woff2");
 }
 @font-face {
   font-family: "SUIT-Light";
-  src: url("/assets/font/SUIT-Light.woff2");
+  src: url("/assets/fonts/SUIT-Light.woff2");
 }
 @font-face {
   font-family: "SUIT-Medium";
-  src: url("/assets/font/SUIT-Medium.woff2");
+  src: url("/assets/fonts/SUIT-Medium.woff2");
 }
 @font-face {
   font-family: "SUIT-ExtraBold";
-  src: url("/assets/font/SUIT-ExtraBold.woff2");
+  src: url("/assets/fonts/SUIT-ExtraBold.woff2");
 }
 @font-face {
   font-family: "Ubuntu-Regular";
-  src: url("/assets/font/Ubuntu-Regular.ttf");
+  src: url("/assets/fonts/Ubuntu-Regular.ttf");
 }
 
 html, body, div, span, applet, object, iframe,
