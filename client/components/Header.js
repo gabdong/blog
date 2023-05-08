@@ -1,6 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
+import Link from "next/link";
+
+import LinkButton from "./LinkButton";
 
 /**
  * * nav open
@@ -25,7 +28,15 @@ export default function Header() {
           <NavIconSt className="mobileOnly" onClick={navOpen} />
 
           {/* //* Logo */}
-          <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
+          <Link href="/?tabItem=latestPostList">
+            <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
+          </Link>
+
+          <LinkButton
+              classname="pcOnly"
+              text="새 글 작성"
+              href="/postEditor/new"
+            />
         </HeaderInnerSt>
       </HeaderSt>
     </>
