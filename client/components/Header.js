@@ -33,10 +33,10 @@ export default function Header() {
           </Link>
 
           <LinkButton
-              classname="pcOnly"
-              text="새 글 작성"
-              href="/postEditor/new"
-            />
+            classname="pcOnly"
+            text="새 글 작성"
+            href="/postEditor/new"
+          />
         </HeaderInnerSt>
       </HeaderSt>
     </>
