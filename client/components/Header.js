@@ -1,9 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
+import { FaSearch as SearchIcon } from "react-icons/fa";
 import Link from "next/link";
 
 import LinkButton from "./LinkButton";
+import LoginModal from "./LoginModal";
 
 /**
  * * nav open
@@ -20,26 +22,41 @@ export default function Header() {
   const [loginModalView, setloginModalView] = useState(false); // login modal control
   const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
 
+  /**
+   * * login modal handler
+   */
+  const loginModalHandler = () => {
+    setloginModalView((prev) => !prev);
+  }
+
   return (
-    <>
-      <HeaderSt id="header">
-        <HeaderInnerSt>
-          {/* //* nav button */}
-          <NavIconSt className="mobileOnly" onClick={navOpen} />
+    <HeaderSt id="header">
+      <HeaderInnerSt>
+        {/* //* nav button */}
+        <NavIconSt className="mobileOnly" onClick={navOpen} />
 
-          {/* //* Logo */}
-          <Link href="/?tabItem=latestPostList">
-            <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
-          </Link>
+        {/* //* logo */}
+        <Link href="/?tabItem=latestPostList">
+          <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
+        </Link>
 
-          <LinkButton
+        {/* //* button wrap */}
+        <HeaderButtonWrapSt>
+          {/* //TODO 기능 완성 후 주석제거 */}
+          {/* <SearchIcon className="serachIcon pcOnly"/> */}
+          {/* //TODO 새글 작성버튼 로그인 작업 후 진행 */}
+          {/* <LinkButton
             classname="pcOnly"
             text="새 글 작성"
             href="/postEditor/new"
-          />
-        </HeaderInnerSt>
-      </HeaderSt>
-    </>
+          /> */}
+          <HeaderButtonSt className="buttonText" onClick={loginModalHandler}>Login</HeaderButtonSt>
+        </HeaderButtonWrapSt>
+      </HeaderInnerSt>
+
+      {/* //* login modal */}
+      {loginModalView ? <LoginModal /> : null}
+    </HeaderSt>
   );
 }
 
@@ -86,7 +103,6 @@ const LogoSt = styled.h1`
   font-family: "Ubuntu-Regular";
   font-size: 21px;
   letter-spacing: 0.15px;
-  transition: var(--transition);
   color: var(--primary-color);
   cursor: pointer;
 
@@ -95,5 +111,26 @@ const LogoSt = styled.h1`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+`;
+const HeaderButtonWrapSt = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+const HeaderButtonSt = styled.button`
+  display: flex;
+  align-items: center;
+
+  font-size: 1rem;
+  color: var(--gray-l);
+  transition: var(--transition);
+
+  &:hover {
+    color: #ffffff;
+  }
+
+  @media all and (max-width: 767px) {
+    font-size: 0.9rem;
   }
 `;
