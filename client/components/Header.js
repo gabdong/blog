@@ -27,7 +27,7 @@ export default function Header() {
    */
   const loginModalHandler = () => {
     setloginModalView((prev) => !prev);
-  }
+  };
 
   return (
     <HeaderSt id="header">
@@ -50,12 +50,14 @@ export default function Header() {
             text="새 글 작성"
             href="/postEditor/new"
           /> */}
-          <HeaderButtonSt className="buttonText" onClick={loginModalHandler}>Login</HeaderButtonSt>
+          <HeaderButtonSt className="buttonText" onClick={loginModalHandler}>
+            Login
+          </HeaderButtonSt>
         </HeaderButtonWrapSt>
       </HeaderInnerSt>
 
       {/* //* login modal */}
-      {loginModalView ? <LoginModal /> : null}
+      {loginModalView ? <LoginModal modalHandler={loginModalHandler} /> : null}
     </HeaderSt>
   );
 }

@@ -41,7 +41,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
   try {
     await db.query(
       `
-      INSERT INTO images SET 
+      INSERT INTO images SET
       member=?,
       size=?,
       original_name=?,
