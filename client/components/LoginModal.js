@@ -16,6 +16,26 @@ export default function LoginModal({ modalHandler }) {
     setPassword(e.target.value);
   };
 
+  /**
+   * * 로그인
+   * @param {Event} e
+   */
+  const loginFn = async (e) => {
+    e.preventDefault();
+
+    const btn = e.currentTarget;
+    // btn.disabled = true;
+
+    if (!id) return alert("아이디를 입력해주세요.");
+    if (!password) return alert("비밀번호를 입력해주세요.");
+
+    const body = { id, password };
+
+    try {
+      const res = await axios.post("/apis/user/login", body);
+    } catch (error) {}
+  };
+
   return (
     <LoginModalSt>
       <LoginModalOverlay onClick={modalHandler} />
@@ -35,7 +55,7 @@ export default function LoginModal({ modalHandler }) {
             onChange={passwordHandler}
             style={{ width: "100%" }}
           />
-          <Button text="Login" />
+          <Button text="Login" onClick={loginFn} />
         </LoginForm>
       </LoginModalContent>
     </LoginModalSt>
