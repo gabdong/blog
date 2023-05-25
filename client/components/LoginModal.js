@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 
+import axios from "../utils/axios"
+
 import Input from "./Input";
 import Button from "./Button";
 
@@ -32,7 +34,8 @@ export default function LoginModal({ modalHandler }) {
     const body = { id, password };
 
     try {
-      const res = await axios.post("/apis/user/login", body);
+      const res = await axios.post("/apis/users/login", body);
+      console.log(res);
     } catch (error) {}
   };
 
