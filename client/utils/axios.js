@@ -17,8 +17,8 @@ instance.interceptors.request.use(
   async (config) => {
     if (!config.data) return config;
 
-    let checkAuth,
-      isFormData = false;
+    let checkAuth, // 로그인 판별여부
+      isFormData = false; // config에 FormData가 있는지 판별 -> user 값 넣는 방법 다름
 
     if (config.data instanceof FormData) {
       config.headers["Content-Type"] = "multipart/form-data";

@@ -5,7 +5,6 @@ export default class MyDocument extends Document {
     //* styled-components ssr
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
-
     try {
       ctx.renderPage = () =>
         originalRenderPage({

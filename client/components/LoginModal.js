@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import axios from "../utils/axios"
+import axios, { authCheckAxios } from "../utils/axios";
 
 import Input from "./Input";
 import Button from "./Button";
@@ -24,9 +24,8 @@ export default function LoginModal({ modalHandler }) {
    */
   const loginFn = async (e) => {
     e.preventDefault();
-
     const btn = e.currentTarget;
-    // btn.disabled = true;
+    btn.disabled = true;
 
     if (!id) return alert("아이디를 입력해주세요.");
     if (!password) return alert("비밀번호를 입력해주세요.");
@@ -35,8 +34,17 @@ export default function LoginModal({ modalHandler }) {
 
     try {
       const res = await axios.post("/apis/users/login", body);
-      console.log(res);
-    } catch (error) {}
+      const { user, accessToken } = res.data;
+
+      axios.defaults.headers.common.Authorization = accessToken; // axios accessToken 값 저장
+      authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
+
+      modalHandler();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      btn.disabled = false;
+    }
   };
 
   return (

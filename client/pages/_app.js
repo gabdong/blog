@@ -3,8 +3,17 @@ import "@/styles/globals.css";
 import styled from "styled-components";
 
 import Header from "@/components/Header";
+import { checkToken } from "@/apis/tokens";
+
+export async function getServerSideProps() {
+  const authCheck = await checkToken();
+
+  console.log(authCheck);
+  return {};
+}
 
 export default function App({ Component, pageProps }) {
+  console.log("App rendering");
   return (
     <>
       <Head>

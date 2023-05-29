@@ -9,6 +9,7 @@ router.post("/login", async (req, res) => {
   const { id, password } = req.body;
 
   try {
+    //TODO 암호 암호화
     const [userRes] = await db.query(
       `
       SELECT idx, id, name, phone, email 
@@ -84,7 +85,7 @@ router.post("/login", async (req, res) => {
     }
 
     res.cookie("refreshToken", hashIdx, {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24, // 1일
       httpOnly: true,
     });
     res.json({ msg: "SUCCESS", user, accessToken });
