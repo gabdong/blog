@@ -1,19 +1,14 @@
 import Head from "next/head";
 import "@/styles/globals.css";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 import Header from "@/components/Header";
 import { checkToken } from "@/apis/tokens";
 
-export async function getServerSideProps() {
-  const authCheck = await checkToken();
-
-  console.log(authCheck);
-  return {};
-}
-
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps, test }) {
   console.log("App rendering");
+  console.log(test);
   return (
     <>
       <Head>
@@ -27,6 +22,12 @@ export default function App({ Component, pageProps }) {
       </WrapperSt>
     </>
   );
+}
+
+App.getInitialProps = async (ctx) => {
+  console.log('hi');
+
+  return {test: 'test'};
 }
 
 const WrapperSt = styled.div`

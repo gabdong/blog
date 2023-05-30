@@ -1,7 +1,8 @@
 export default function Index() {
+  
   return (
     <>
-      <main></main>
+      <section></section>
     </>
   );
 }
