@@ -1,12 +1,14 @@
 import Head from "next/head";
 import "@/styles/globals.css";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 
-import Header from "@/components/Header";
+import wrapper from "@/store/configureStore";
 import { checkToken } from "@/apis/tokens";
 
-export default function App({ Component, pageProps, test }) {
+import Header from "@/components/Header";
+
+//TODO prop-types 적용
+function App({ Component, pageProps, test }) {
   console.log("App rendering");
   console.log(test);
   return (
@@ -48,3 +50,5 @@ const MainSt = styled.main`
   max-width: 100%;
   padding-bottom: 60px;
 `;
+
+export default wrapper.withRedux(App);
