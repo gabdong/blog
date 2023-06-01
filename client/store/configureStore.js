@@ -6,7 +6,7 @@ import rootReducer from "./modules/index";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const makeStore = () => {
+const configureStore = () => {
     const enhancer = isProduction
         ? compose(applyMiddleware(thunk))
         : composeWithDevTools(applyMiddleware(thunk));
@@ -15,6 +15,6 @@ const makeStore = () => {
     return store;
 };
 
-const wrapper = createWrapper(makeStore, { debug: !isProduction });
+const wrapper = createWrapper(configureStore, { debug: !isProduction });
 
 export default wrapper;

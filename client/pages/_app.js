@@ -1,6 +1,7 @@
 import Head from "next/head";
 import "@/styles/globals.css";
 import styled from "styled-components";
+import { Provider } from "react-redux";
 
 import wrapper from "@/store/configureStore";
 import { checkToken } from "@/apis/tokens";
@@ -8,11 +9,11 @@ import { checkToken } from "@/apis/tokens";
 import Header from "@/components/Header";
 
 //TODO prop-types 적용
-function App({ Component, pageProps, test }) {
-  console.log("App rendering");
-  console.log(test);
+function App({ Component, ...rest }) {
+  const { store, props: pageProps } = wrapper.useWrappedStore(rest);
+
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <title>Gabdong</title>
       </Head>
@@ -22,15 +23,15 @@ function App({ Component, pageProps, test }) {
           <Component {...pageProps} />
         </MainSt>
       </WrapperSt>
-    </>
+    </Provider>
   );
 }
 
-App.getInitialProps = async (ctx) => {
-  console.log('hi');
+// App.getInitialProps = async (ctx) => {
+//   console.log('hi');
 
-  return {test: 'test'};
-}
+//   return {test: 'test'};
+// }
 
 const WrapperSt = styled.div`
   display: flex;
@@ -51,4 +52,4 @@ const MainSt = styled.main`
   padding-bottom: 60px;
 `;
 
-export default wrapper.withRedux(App);
+export default App;

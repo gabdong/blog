@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import axios, { authCheckAxios } from "../utils/axios";
+import { loginUser } from "@/store/modules/user";
 
 import Input from "./Input";
 import Button from "./Button";
 
 export default function LoginModal({ modalHandler }) {
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -39,6 +42,8 @@ export default function LoginModal({ modalHandler }) {
       axios.defaults.headers.common.Authorization = accessToken; // axios accessToken 값 저장
       authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
 
+      console.log(authCheckAxios.defaults.headers.common.Authorization);
+      dispatch(loginUser(user));
       modalHandler();
     } catch (error) {
       console.error(error);

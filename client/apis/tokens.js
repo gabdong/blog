@@ -11,11 +11,13 @@ export function removeToken() {
 
 /**
  * * api요청의 accessToken 유효성을 검사, 재발급해주는 함수
+ * @param {Booelean} ssr: server side rendering 판별
  * @return status, user 정보, check auth result
  */
-export async function checkToken() {
+export async function checkToken(ssr) {
   try {
-    const result = await authCheckAxios.get("/apis/tokens/check-token");
+    const url = ssr ? `${process.env.REACT_APP_SERVER_URL}apis/tokens/check-token` : '/apis/tokens/check-token';
+    const result = await authCheckAxios.get(url);
 
     return result;
   } catch (err) { //TODO error handling

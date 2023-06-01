@@ -27,7 +27,7 @@ router.delete("/", async (req, res) => {
 //* token 유효성 검사, refreshToken만 있는경우 token 재발급
 router.get("/check-token", async (req, res) => {
   const { authorization } = req.headers;
-
+  console.log(req);
   try {
     const accessToken = authorization?.split(" ")[1];
     const checkAccessToken = token().check(accessToken, "access");
@@ -111,7 +111,6 @@ router.get("/check-token", async (req, res) => {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
       });
-
       res.json({
         msg: "SUCCESS",
         status: 200,
