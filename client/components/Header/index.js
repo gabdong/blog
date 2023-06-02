@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
-import { FaSearch as SearchIcon } from "react-icons/fa";
+// import { FaSearch as SearchIcon } from "react-icons/fa"; //TODO 검색기능 작업시 필요
+import { AiFillCaretDown as DownIcon } from "react-icons/ai";
 import Link from "next/link";
 
-import LinkButton from "./LinkButton";
-import LoginModal from "./LoginModal";
+import LinkButton from "@/components/LinkButton";
+import LoginModal from "@/components/LoginModal";
+import UserMenuWrap from "@/components/Header/UserMenuWrap";
 
 /**
  * * nav open
@@ -19,15 +22,52 @@ const navOpen = () => {
 };
 
 export default function Header() {
+  const user = useSelector(store => store.user);
   const [loginModalView, setloginModalView] = useState(false); // login modal control
   const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
 
   /**
    * * login modal handler
    */
-  const loginModalHandler = () => {
-    setloginModalView((prev) => !prev);
+  const loginModalHandler = (e) => {
+    e.preventDefault();
+
+    setloginModalView(prev => !prev);
   };
+
+  /**
+   * * user menu wrap handler
+   */
+  const userMenuWrapHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setUserMenuWrapView(prev => !prev);
+  }
+
+  useEffect(() => {
+    /**
+     * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
+     * @param {Event} e
+     */
+    const _closeUserMenuWrap = (e) => {
+      e.preventDefault();
+
+      if (
+        userMenuWrapView && (
+          !e.target.closest(".headerUserBtnWrap") ||
+          e.target.classList.contains(".menuWrapBtn")
+          // e.target.closest(".menuWrapBtn")
+        )
+      ) {
+        setUserMenuWrapView(false);
+        window.removeEventListener("click", _closeUserMenuWrap);
+      }
+    };
+
+    if (userMenuWrapView) window.addEventListener("click", _closeUserMenuWrap);
+    if (!userMenuWrapView) window.removeEventListener("click", _closeUserMenuWrap);
+  }, [userMenuWrapView]);
 
   return (
     <HeaderSt id="header">
@@ -44,15 +84,19 @@ export default function Header() {
         <HeaderButtonWrapSt>
           {/* //TODO 기능 완성 후 주석제거 */}
           {/* <SearchIcon className="serachIcon pcOnly"/> */}
-          {/* //TODO 새글 작성버튼 로그인 작업 후 진행 */}
-          {/* <LinkButton
-            classname="pcOnly"
-            text="새 글 작성"
-            href="/postEditor/new"
-          /> */}
-          <HeaderButtonSt className="buttonText" onClick={loginModalHandler}>
-            Login
+
+          {!user.isLogin ? null : (
+            <LinkButton
+              classname="pcOnly"
+              text="새 글 작성"
+              href="/postEditor/new"
+            />
+          )}
+          <HeaderButtonSt className={'buttonText' + user.isLogin ? 'headerUserBtnWrap' : ''} onClick={!user.isLogin ? loginModalHandler : userMenuWrapHandler}>
+            {!user.isLogin ? 'Login' : `${user.name} 님`}
+            {!user.isLogin ? null : <DownIconSt />}
           </HeaderButtonSt>
+          {user.isLogin && userMenuWrapView ? <UserMenuWrap /> : null}
         </HeaderButtonWrapSt>
       </HeaderInnerSt>
 
@@ -119,6 +163,8 @@ const HeaderButtonWrapSt = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+
+  position: relative;
 `;
 const HeaderButtonSt = styled.button`
   display: flex;
@@ -135,4 +181,8 @@ const HeaderButtonSt = styled.button`
   @media all and (max-width: 767px) {
     font-size: 0.9rem;
   }
+`;
+const DownIconSt = styled(DownIcon)`
+  margin-left: 4px;
+  font-size: 14px;
 `;

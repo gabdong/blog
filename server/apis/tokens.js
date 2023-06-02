@@ -27,15 +27,14 @@ router.delete("/", async (req, res) => {
 //* token 유효성 검사, refreshToken만 있는경우 token 재발급
 router.get("/check-token", async (req, res) => {
   const { authorization } = req.headers;
-  console.log(req);
+
   try {
     const accessToken = authorization?.split(" ")[1];
     const checkAccessToken = token().check(accessToken, "access");
 
     if (!checkAccessToken) {
       //* accessToken false일경우 refreshToken 검증
-      const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
-
+      const refreshTokenIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
       const [refreshTokenRes] = await db.query(
         `
         SELECT refresh_token AS refreshToken
@@ -107,7 +106,7 @@ router.get("/check-token", async (req, res) => {
 
       const hashIdx = hashIdxRes[0].hashIdx;
 
-      res.cookie("refreshToken", hashIdx, {
+      res.cookie("refreshTokenIdx", hashIdx, {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
       });

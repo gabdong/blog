@@ -42,7 +42,6 @@ export default function LoginModal({ modalHandler }) {
       axios.defaults.headers.common.Authorization = accessToken; // axios accessToken 값 저장
       authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
 
-      console.log(authCheckAxios.defaults.headers.common.Authorization);
       dispatch(loginUser(user));
       modalHandler();
     } catch (error) {
