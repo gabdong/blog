@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
@@ -45,28 +45,31 @@ export default function Header() {
     setUserMenuWrapView(prev => !prev);
   }
 
-  useEffect(() => {
-    /**
+  /**
      * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
      * @param {Event} e
      */
-    const _closeUserMenuWrap = (e) => {
-      e.preventDefault();
+  const closeUserMenuWrap = useMemo((e) => {
+    console.log(e);
+    // e.preventDefault();
+    // e.stopPropagation();
 
-      if (
-        userMenuWrapView && (
-          !e.target.closest(".headerUserBtnWrap") ||
-          e.target.classList.contains(".menuWrapBtn")
-          // e.target.closest(".menuWrapBtn")
-        )
-      ) {
-        setUserMenuWrapView(false);
-        window.removeEventListener("click", _closeUserMenuWrap);
-      }
-    };
+    if (
+      userMenuWrapView && (
+        !e.target.closest(".headerUserBtnWrap") ||
+        e.target.classList.contains(".menuWrapBtn")
+        // e.target.closest(".menuWrapBtn")
+      )
+    ) {
+      console.log('hi');
+      setUserMenuWrapView(false);
+      window.removeEventListener("click", closeUserMenuWrap);
+    }
+  }, []);
 
-    if (userMenuWrapView) window.addEventListener("click", _closeUserMenuWrap);
-    if (!userMenuWrapView) window.removeEventListener("click", _closeUserMenuWrap);
+  useEffect(() => {
+    if (userMenuWrapView) window.addEventListener("click", closeUserMenuWrap);
+    if (!userMenuWrapView) window.removeEventListener("click", closeUserMenuWrap);
   }, [userMenuWrapView]);
 
   return (

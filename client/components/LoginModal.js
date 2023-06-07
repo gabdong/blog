@@ -27,6 +27,7 @@ export default function LoginModal({ modalHandler }) {
    */
   const loginFn = async (e) => {
     e.preventDefault();
+
     const btn = e.currentTarget;
     btn.disabled = true;
 
@@ -43,8 +44,9 @@ export default function LoginModal({ modalHandler }) {
       authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
 
       dispatch(loginUser(user));
-      modalHandler();
+      modalHandler(e);
     } catch (error) {
+      //TODO 에러핸들링
       console.error(error);
     } finally {
       btn.disabled = false;
