@@ -6,7 +6,7 @@ const token = require("../config/jwt");
 
 //* refresh token 삭제
 router.delete("/", async (req, res) => {
-  const hashIdx = getCookie(req.headers.cookie, "refreshToken");
+  const hashIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
 
   await db.query(
     `
@@ -16,7 +16,7 @@ router.delete("/", async (req, res) => {
     [hashIdx]
   );
 
-  res.cookie("refreshToken", "", {
+  res.cookie("refreshTokenIdx", "", {
     httpOnly: true,
     maxAge: 0,
   });

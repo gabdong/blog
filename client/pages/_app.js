@@ -1,10 +1,9 @@
 import Head from "next/head";
-import "@/styles/globals.css";
 import styled from "styled-components";
 import { Provider } from "react-redux";
 
 import wrapper from "@/store/configureStore";
-import { checkToken } from "@/apis/tokens";
+import "@/styles/globals.css";
 
 import Header from "@/components/Header";
 
@@ -26,12 +25,6 @@ function App({ Component, ...rest }) {
     </Provider>
   );
 }
-
-// App.getInitialProps = async (ctx) => {
-//   console.log('hi');
-
-//   return {test: 'test'};
-// }
 
 const WrapperSt = styled.div`
   display: flex;

@@ -15,6 +15,7 @@ export default function Index({ pageProps }) {
 }
 
 export async function getServerSideProps(ctx) {
+  //TODO 로그인 확인 함수화
   const cookie = ctx.req.headers?.cookie;
 
   let user = null;
