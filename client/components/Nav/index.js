@@ -1,7 +1,17 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 export default function Nav() {
-    return <div></div>;
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const user = useSelector((store) => store.user);
+
+    setIsLogin(user.isLogin);
+  }, []);
+
+  return <div></div>;
 }
 
 const NavSt = styled.nav`

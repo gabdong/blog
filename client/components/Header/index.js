@@ -22,7 +22,7 @@ const navOpen = () => {
 };
 
 export default function Header() {
-  const user = useSelector(store => store.user);
+  const user = useSelector((store) => store.user);
   const [loginModalView, setloginModalView] = useState(false); // login modal control
   const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
 
@@ -32,7 +32,7 @@ export default function Header() {
   const loginModalHandler = (e) => {
     e.preventDefault();
 
-    setloginModalView(prev => !prev);
+    setloginModalView((prev) => !prev);
   };
 
   /**
@@ -42,13 +42,13 @@ export default function Header() {
     e.preventDefault();
     e.stopPropagation();
 
-    setUserMenuWrapView(prev => !prev);
-  }
+    setUserMenuWrapView((prev) => !prev);
+  };
 
   /**
-     * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
-     * @param {Event} e
-     */
+   * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
+   * @param {Event} e
+   */
   const closeUserMenuWrap = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -64,7 +64,8 @@ export default function Header() {
 
   useEffect(() => {
     if (userMenuWrapView) window.addEventListener("click", closeUserMenuWrap);
-    if (!userMenuWrapView) window.removeEventListener("click", closeUserMenuWrap);
+    if (!userMenuWrapView)
+      window.removeEventListener("click", closeUserMenuWrap);
   }, [userMenuWrapView]);
 
   return (
@@ -90,8 +91,11 @@ export default function Header() {
               href="/postEditor/new"
             />
           )}
-          <HeaderButtonSt className={'buttonText' + user.isLogin ? 'headerUserBtnWrap' : ''} onClick={!user.isLogin ? loginModalHandler : userMenuWrapHandler}>
-            {!user.isLogin ? 'Login' : `${user.name} 님`}
+          <HeaderButtonSt
+            className={"buttonText" + user.isLogin ? "headerUserBtnWrap" : ""}
+            onClick={!user.isLogin ? loginModalHandler : userMenuWrapHandler}
+          >
+            {!user.isLogin ? "Login" : `${user.name} 님`}
             {!user.isLogin ? null : <DownIconSt />}
           </HeaderButtonSt>
           {user.isLogin && userMenuWrapView ? <UserMenuWrap /> : null}

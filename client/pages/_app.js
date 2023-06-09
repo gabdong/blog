@@ -1,16 +1,23 @@
 import Head from "next/head";
+import "@/styles/globals.css";
 import styled from "styled-components";
 import { Provider } from "react-redux";
 
-import wrapper from "@/store/configureStore";
-import "@/styles/globals.css";
-
 import Header from "@/components/Header";
+import { checkToken } from "@/apis/tokens";
+import wrapper from "@/store/configureStore";
 
-//TODO prop-types 적용
-function App({ Component, ...rest }) {
+export async function getServerSideProps() {
+  const authCheck = await checkToken();
+
+  console.log(authCheck);
+  return {};
+}
+
+export default function App({ Component, ...rest }) {
   const { store, props: pageProps } = wrapper.useWrappedStore(rest);
 
+  console.log("App rendering");
   return (
     <Provider store={store}>
       <Head>
@@ -44,5 +51,3 @@ const MainSt = styled.main`
   max-width: 100%;
   padding-bottom: 60px;
 `;
-
-export default App;

@@ -8,6 +8,7 @@ export default function Index({ pageProps }) {
   const { user } = pageProps;
 
   useEffect(() => {
+    console.log("hi");
     if (user) dispatch(loginUser(user));
   }, []);
 
@@ -26,7 +27,7 @@ export async function getServerSideProps(ctx) {
   try {
     const authCheck = await checkToken(true, cookie);
     const accessToken = authCheck.data.newAccessToken;
-    user = {...authCheck.data.user};
+    user = { ...authCheck.data.user };
     user.accessToken = accessToken;
     user.isLogin = true;
   } catch (err) {
