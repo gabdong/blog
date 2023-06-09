@@ -8,7 +8,6 @@ export default function Index({ pageProps }) {
   const { user } = pageProps;
 
   useEffect(() => {
-    console.log("hi");
     if (user) dispatch(loginUser(user));
   }, []);
 

@@ -4,15 +4,8 @@ import styled from "styled-components";
 import { Provider } from "react-redux";
 
 import Header from "@/components/Header";
-import { checkToken } from "@/apis/tokens";
 import wrapper from "@/store/configureStore";
-
-export async function getServerSideProps() {
-  const authCheck = await checkToken();
-
-  console.log(authCheck);
-  return {};
-}
+import Nav from "@/components/Nav";
 
 export default function App({ Component, ...rest }) {
   const { store, props: pageProps } = wrapper.useWrappedStore(rest);
@@ -26,6 +19,7 @@ export default function App({ Component, ...rest }) {
       <WrapperSt>
         <Header />
         <MainSt id="main">
+          <Nav />
           <Component {...pageProps} />
         </MainSt>
       </WrapperSt>

@@ -1,15 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 export default function Nav() {
   const [isLogin, setIsLogin] = useState(false);
+  const user = useSelector((store) => store.user);
 
-  useEffect(() => {
-    const user = useSelector((store) => store.user);
-
-    setIsLogin(user.isLogin);
-  }, []);
+  // useEffect(() => {}, []);
 
   return <div></div>;
 }
@@ -63,7 +60,7 @@ const NavBackgroundSt = styled.div`
     }
   }
 `;
-const CloseBtnSt = styled(Close)`
-  font-size: 32px;
-  cursor: pointer;
-`;
+// const CloseBtnSt = styled(Close)`
+//   font-size: 32px;
+//   cursor: pointer;
+// `;
