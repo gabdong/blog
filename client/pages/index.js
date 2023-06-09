@@ -1,11 +1,15 @@
 import { checkToken } from "@/apis/tokens";
 import { loginUser } from "@/store/modules/user";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 export default function Index({ pageProps }) {
   const dispatch = useDispatch();
   const { user } = pageProps;
-  if (user) dispatch(loginUser(user));
+
+  useEffect(() => {
+    if (user) dispatch(loginUser(user));
+  }, []);
 
   return (
     <>
