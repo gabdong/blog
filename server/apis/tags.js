@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", tagList, totalPostCnt, privatePostCnt });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ msg: "태그리스트를 불러오지 못했습니다." });
   }
 });
