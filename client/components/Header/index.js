@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
 // import { FaSearch as SearchIcon } from "react-icons/fa"; //TODO 검색기능 작업시 필요
@@ -22,7 +22,7 @@ const navOpen = () => {
 };
 
 export default function Header() {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user, shallowEqual);
   const [loginModalView, setloginModalView] = useState(false); // login modal control
   const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
 

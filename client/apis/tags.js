@@ -1,13 +1,20 @@
-import axios from "../utils/axios";
+import axios from "@/utils/axios";
 
 /**
  * * 태그리스트 요청
  * @returns {Array} tagList
  */
 export async function getTagList() {
-  const tagListRes = await axios.get("/apis/tags/");
+  try {
+    const tagListRes = await axios.get("/apis/tags/");
 
-  return tagListRes;
+    return tagListRes;
+  } catch (err) {
+    const error = new Error(err.message);
+    error.status = err.status;
+
+    throw error;
+  }
 }
 
 /**
@@ -18,7 +25,7 @@ export async function getTagList() {
 export async function addTag(tagName) {
   const tagNameArr = tagName
     .replace(/(<([^>]+)>)/gi, "")
-    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "")  // eslint-disable-line
+    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "") // eslint-disable-line
     .split(",")
     .filter(Boolean);
 

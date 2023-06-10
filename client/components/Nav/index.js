@@ -1,14 +1,56 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 
+import { getTagList } from "@/apis/tags";
+import { useRouter } from "next/router";
+
+/**
+ * * mobile nav close
+ */
+const navClose = () => {
+  const nav = document.getElementById("nav");
+  const background = document.getElementById("navBackground");
+
+  nav.classList.remove("active");
+  background.classList.remove("active");
+};
+
 export default function Nav() {
-  const [isLogin, setIsLogin] = useState(false);
-  const user = useSelector((store) => store.user);
+  // const user = useSelector((store) => store.user, shallowEqual);
+  const { asPath } = useRouter();
+  const [tagLoading, setTagLoading] = useState(true);
+  const [tagData, setTagData] = useState({});
 
-  // useEffect(() => {}, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     // try {
+  //     //   const getTagListRes = await getTagList();
+  //     //   const { data: tagDataRes } = getTagListRes;
+  //     //   setTagData((prev) => {
+  //     //     return { ...prev, ...tagDataRes };
+  //     //   });
+  //     //   setTagLoading(false);
+  //     //   console.log(tagData);
+  //     // } catch (err) {
+  //     //   console.error(err.message);
+  //     // }
+  //   })();
+  // }, []);
 
-  return <div></div>;
+  console.log(tagData);
+  console.log(tagLoading);
+  return (
+    <>
+      {tagLoading ? (
+        <NavSt />
+      ) : (
+        <>
+          <NavBackgroundSt />
+        </>
+      )}
+    </>
+  );
 }
 
 const NavSt = styled.nav`
