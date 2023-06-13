@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
+import { RiCloseFill as Close } from "react-icons/ri";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import { getTagList } from "@/apis/tags";
-import { useRouter } from "next/router";
+
+import NavButton from "@/components/Nav/NavButton";
 
 /**
  * * mobile nav close
@@ -17,36 +20,79 @@ const navClose = () => {
 };
 
 export default function Nav() {
-  // const user = useSelector((store) => store.user, shallowEqual);
+  const user = useSelector((store) => store.user, shallowEqual);
+  const { isLogin } = user;
   const { asPath } = useRouter();
+
   const [tagLoading, setTagLoading] = useState(true);
-  const [tagData, setTagData] = useState({});
+  const [tagList, setTagList] = useState({});
+  const [totalPostCnt, setTotalPostCnt] = useState(0);
+  const [privatePostCnt, setPrivatePostCnt] = useState(0);
+  const [activeTagIdx, setActiveTagIdx] = useState(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     // try {
-  //     //   const getTagListRes = await getTagList();
-  //     //   const { data: tagDataRes } = getTagListRes;
-  //     //   setTagData((prev) => {
-  //     //     return { ...prev, ...tagDataRes };
-  //     //   });
-  //     //   setTagLoading(false);
-  //     //   console.log(tagData);
-  //     // } catch (err) {
-  //     //   console.error(err.message);
-  //     // }
-  //   })();
-  // }, []);
+  const getTagData = async () => {
+    const getTagListRes = await getTagList();
+    const { data: tagDataRes } = getTagListRes;
 
-  console.log(tagData);
-  console.log(tagLoading);
+    setTagList(tagDataRes.tagList);
+    setTotalPostCnt(tagDataRes.totalPostCnt);
+    setPrivatePostCnt(tagDataRes.privatePostCnt);
+    setTagLoading(false);
+  }
+
+  useEffect(() => {
+    try {
+      getTagData();
+    } catch (err) {
+      console.error(err.message);
+    }
+
+    if (asPath.includes("/post")) {
+      if (location.state?.activeTagIdx) {
+        setActiveTagIdx(Number(location.state.activeTagIdx));
+      } else {
+        const searchParams = new URLSearchParams(location.search);
+        setActiveTagIdx(Number(searchParams.get("tag")));
+      }
+    } else if (asPath.includes("/tag")) {
+      setActiveTagIdx(Number(asPath.replace("/tag/", "")));
+    } else {
+      setActiveTagIdx(null);
+    }
+  }, []);
+
   return (
     <>
       {tagLoading ? (
-        <NavSt />
+        <NavSt id="nav" />
       ) : (
         <>
-          <NavBackgroundSt />
+          <NavBackgroundSt id="navBackground" onClick={navClose} />
+          <NavSt id="nav">
+            <CloseBtnSt className="mobileOnly" onClick={navClose} />
+            <NavButton path="/tag/total?page=1" text={`Total (${totalPostCnt})`} active={asPath.replace('/tag/', '') === 'total' ? 'active' : ''}/> 
+            {Object.entries(tagList).map((tagData) => {
+              const tagIdx = tagData[0] !== 'total' ? Number(tagData[0]) : tagData[0];
+              const { auth, name, postCnt } = tagData[1];
+
+              const activeClass = activeTagIdx === tagIdx ? "active" : "";
+
+              //TODO 로그인계정 권한도 확인하기
+              if (auth === 1 && !isLogin) return "";
+
+              return (
+                <NavButton
+                  key={tagIdx}
+                  text={`${name} (${postCnt})`}
+                  path={`/tag/${tagIdx}?page=1`}
+                  active={activeClass}
+                />
+              );
+            })}
+
+            {isLogin ? <NavButton path="/tag/private?page=1" text={`Private (${privatePostCnt})`} /> : null}
+            {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
+          </NavSt>
         </>
       )}
     </>
@@ -102,7 +148,7 @@ const NavBackgroundSt = styled.div`
     }
   }
 `;
-// const CloseBtnSt = styled(Close)`
-//   font-size: 32px;
-//   cursor: pointer;
-// `;
+const CloseBtnSt = styled(Close)`
+  font-size: 32px;
+  cursor: pointer;
+`;
