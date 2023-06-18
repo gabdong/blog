@@ -15,18 +15,17 @@ export function removeToken() {
  * @param {String} cookie
  * @return status, user 정보, check auth result
  */
-export async function checkToken(ssr = false, cookie = '') {
+export async function checkToken(ssr = false, cookie = "") {
   if (cookie) authCheckAxios.defaults.headers.cookie = cookie;
 
   try {
-    const url = ssr ? `${process.env.REACT_APP_SERVER_URL}apis/tokens/check-token` : '/apis/tokens/check-token';
+    const url = ssr
+      ? `${process.env.REACT_APP_SERVER_URL}apis/tokens/check-token`
+      : "/apis/tokens/check-token";
     const result = await authCheckAxios.get(url);
-    
-    return result;
-  } catch (err) { //TODO error handling
-    const error = new Error(err.response.data.msg);
-    error.status = err.response.status;
 
-    throw error;
+    return result;
+  } catch (err) {
+    if (err.response.status !== 401) console.error(err.response.data.msg);
   }
 }

@@ -1,7 +1,13 @@
-import { checkToken } from "@/apis/tokens";
-import { loginUser } from "@/store/modules/user";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
+
+import { loginUser } from "@/store/modules/user";
+import { checkLogin } from "@/utils/utils";
+
+import Tab from "@/components/Tab";
+import Introduce from "@/components/Introduce";
+import PostList from "@/components/PostList";
 
 export default function Index({ pageProps }) {
   const dispatch = useDispatch();
@@ -13,25 +19,38 @@ export default function Index({ pageProps }) {
 
   return (
     <>
-      <section></section>
+      <HomeWrapSt>
+        <Tab
+          tabBtnList={{
+            latest: {
+              label: "최근게시물",
+              path: "/?tabItem=latestPostList",
+            },
+            introduce: {
+              label: "소개",
+              path: "/?tabItem=introduce",
+            },
+          }}
+          tabItemList={{
+            latestPostList: () => (
+              <PostList page={1} limit={9} paginationUsing={false} />
+            ),
+            introduce: () => <Introduce />,
+          }}
+          tabCnt={2}
+        />
+      </HomeWrapSt>
     </>
   );
 }
 
 export async function getServerSideProps(ctx) {
-  //TODO 로그인 확인 함수화
-  const cookie = ctx.req.headers?.cookie;
-
-  let user = null;
-  try {
-    const authCheck = await checkToken(true, cookie);
-    const accessToken = authCheck.data.newAccessToken;
-    user = { ...authCheck.data.user };
-    user.accessToken = accessToken;
-    user.isLogin = true;
-  } catch (err) {
-    console.log(err.message);
-  }
-
+  const user = await checkLogin(ctx);
   return { props: { user } };
 }
+
+const HomeWrapSt = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;

@@ -46,7 +46,6 @@ export default function LoginModal({ modalHandler }) {
       dispatch(loginUser(user));
       modalHandler(e);
     } catch (error) {
-      //TODO 에러핸들링
       console.error(error);
     } finally {
       btn.disabled = false;

@@ -6,21 +6,27 @@ const db = require("../config/db");
 router.get("/", async (req, res) => {
   try {
     const [selectTagListRes] = await db.query(
+      //* 태그리스트, 태그에 속한 게시글 갯수
       `
       SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
       FROM tags tags 
-      LEFT JOIN posts posts ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) AND posts.delete_datetime IS NULL AND posts.public='Y'
+      LEFT JOIN posts posts 
+        -- //* tag에 속하면서 삭제되지않고 공개인 게시글
+        ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) 
+        AND posts.delete_datetime IS NULL 
+        AND posts.public='Y'
       WHERE tags.delete_datetime IS NULL 
       GROUP BY tags.idx, tags.auth, tags.name
     `
     );
     const [postCntRes] = await db.query(
+      //* 전체 게시글, 비공개 게시글 갯수
       `
       SELECT 
         COUNT(CASE WHEN public='Y' THEN 1 END) AS totalPostCnt,
         COUNT(CASE WHEN public='N' THEN 1 END) AS privatePostCnt
       FROM posts 
-      WHERE delete_datetime IS NULL;
+      WHERE delete_datetime IS NULL
     `
     );
     const { totalPostCnt, privatePostCnt } = postCntRes[0];
@@ -33,7 +39,9 @@ router.get("/", async (req, res) => {
 
     res.json({ msg: "SUCCESS", tagList, totalPostCnt, privatePostCnt });
   } catch (err) {
-    res.status(500).json({ msg: "태그리스트를 불러오지 못했습니다." });
+    res
+      .status(500)
+      .json({ msg: "태그리스트를 불러오지 못했습니다. (ERR_CODE: TAGS_01)" });
   }
 });
 

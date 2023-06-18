@@ -10,10 +10,7 @@ export async function getTagList() {
 
     return tagListRes;
   } catch (err) {
-    const error = new Error(err.message);
-    error.status = err.status;
-
-    throw error;
+    console.error(err.response.data.msg);
   }
 }
 
@@ -22,7 +19,7 @@ export async function getTagList() {
  * @param {String} tagName
  * @param {Function} setTagList
  */
-export async function addTag(tagName) {
+export async function createTag(tagName) {
   const tagNameArr = tagName
     .replace(/(<([^>]+)>)/gi, "")
     .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "") // eslint-disable-line
