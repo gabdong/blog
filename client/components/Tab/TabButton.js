@@ -30,7 +30,7 @@ function TabButton({ name, index, tabCnt, path, location }) {
         return className;
       }}
       onClick={tabFn}
-      to={path}
+      href={path}
     >
       {name}
     </Link>

@@ -20,25 +20,25 @@ export default function Index({ pageProps }) {
   return (
     <>
       <HomeWrapSt>
-        {/* <Tab
+        <Tab
           tabBtnList={{
-            latest: {
-              label: "최근게시물",
-              path: "/?tabItem=latestPostList",
-            },
+            // latest: {
+            //   label: "최근게시물",
+            //   path: "/?tabItem=latestPostList",
+            // },
             introduce: {
               label: "소개",
               path: "/?tabItem=introduce",
             },
           }}
           tabItemList={{
-            latestPostList: () => (
-              <PostList page={1} limit={9} paginationUsing={false} />
-            ),
+            // latestPostList: () => (
+            //   <PostList page={1} limit={9} paginationUsing={false} />
+            // ),
             introduce: () => <Introduce />,
           }}
-          tabCnt={2}
-        /> */}
+          tabCnt={1}
+        />
       </HomeWrapSt>
     </>
   );
