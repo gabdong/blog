@@ -20,7 +20,7 @@ export default function Index({ pageProps }) {
   return (
     <>
       <HomeWrapSt>
-        <Tab
+        {/* <Tab
           tabBtnList={{
             latest: {
               label: "최근게시물",
@@ -38,7 +38,7 @@ export default function Index({ pageProps }) {
             introduce: () => <Introduce />,
           }}
           tabCnt={2}
-        />
+        /> */}
       </HomeWrapSt>
     </>
   );
@@ -46,7 +46,7 @@ export default function Index({ pageProps }) {
 
 export async function getServerSideProps(ctx) {
   const user = await checkLogin(ctx);
-  return { props: { user } };
+  return { props: { user: user } };
 }
 
 const HomeWrapSt = styled.section`

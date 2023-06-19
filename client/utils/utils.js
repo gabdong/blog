@@ -10,11 +10,12 @@ export const checkLogin = async (ctx) => {
   let user = null;
   try {
     const authCheck = await checkToken(true, cookie);
-    const accessToken = authCheck.data.newAccessToken;
-    user = { ...authCheck.data.user };
-    user.accessToken = accessToken;
-    user.isLogin = true;
-
+    if (authCheck) {
+      const accessToken = authCheck.data.newAccessToken;
+      user = { ...authCheck.data.user };
+      user.accessToken = accessToken;
+      user.isLogin = true;
+    }
     return user;
   } catch (err) {
     console.log(err.message);

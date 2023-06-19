@@ -10,7 +10,7 @@ import Nav from "@/components/Nav";
 export default function App({ Component, ...rest }) {
   const { store, props: pageProps } = wrapper.useWrappedStore(rest);
 
-  console.log("App rendering");
+  console.log("App rendering---------------------------------");
   return (
     <Provider store={store}>
       <Head>
