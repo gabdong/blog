@@ -21,6 +21,7 @@
     "react-redux": "^8.0.7",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
+    "remove-markdown": "^0.5.0",
     "styled-components": "^5.3.10"
   }
 }

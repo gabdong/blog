@@ -22,22 +22,22 @@ export default function Index({ pageProps }) {
       <HomeWrapSt>
         <Tab
           tabBtnList={{
-            // latest: {
-            //   label: "최근게시물",
-            //   path: "/?tabItem=latestPostList",
-            // },
+            latest: {
+              label: "최근게시물",
+              path: "/?tabItem=latestPostList",
+            },
             introduce: {
               label: "소개",
               path: "/?tabItem=introduce",
             },
           }}
           tabItemList={{
-            // latestPostList: () => (
-            //   <PostList page={1} limit={9} paginationUsing={false} />
-            // ),
+            latestPostList: () => (
+              <PostList page={1} limit={9} paginationUsing={false} />
+            ),
             introduce: () => <Introduce />,
           }}
-          tabCnt={1}
+          tabCnt={2}
         />
       </HomeWrapSt>
     </>
@@ -52,5 +52,6 @@ export async function getServerSideProps(ctx) {
 const HomeWrapSt = styled.section`
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 20px;
 `;

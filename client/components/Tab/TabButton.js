@@ -2,15 +2,15 @@ import Link from "next/link";
 
 /**
  * * tab
- * @param {Event} e
+ * @param {Object} data : { e, tabCnt, index }
  */
-const tabFn = (e) => {
-  const btn = e.currentTarget;
+const tabFn = ({...data}) => {
+  const btn = data.e.currentTarget;
   const tab = btn.closest(".tab");
   const border = tab.querySelector(".tabBorder");
 
   //* 탭 하단 border위치이동
-  border.style.left = `${(100 / tabCnt) * index}%`;
+  border.style.left = `${(100 / data.tabCnt) * data.index}%`;
 };
 
 /**
@@ -23,13 +23,8 @@ const tabFn = (e) => {
 function TabButton({ name, index, tabCnt, path, location }) {
   return (
     <Link
-      className={() => {
-        let className = "tabBtn";
-        if (location === path) className += " active";
-
-        return className;
-      }}
-      onClick={tabFn}
+      className={location === path ? `tabBtn active` : `tabBtn`}
+      onClick={(e) => tabFn({e, tabCnt, index})}
       href={path}
     >
       {name}

@@ -20,7 +20,7 @@ export default function App({ Component, ...rest }) {
         <Header />
         <MainSt id="main">
           <Nav />
-          <Component {...pageProps} />
+          <Component {...pageProps}/>
         </MainSt>
       </WrapperSt>
     </Provider>

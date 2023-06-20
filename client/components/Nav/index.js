@@ -60,7 +60,7 @@ export default function Nav() {
       setActiveTagIdx(null);
     }
   }, []);
-
+  
   return (
     <>
       {tagLoading ? (

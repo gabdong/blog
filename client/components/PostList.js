@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import removeMd from "remove-markdown";
+import removeMd from "remove-markdown";
 import Link from "next/link";
 
-import { getPostList } from "../apis/posts";
-// import Pagination from "../Pagination/Pagination";
+import { getPostList } from "@/apis/posts";
+// import Pagination from "@/Pagination/Pagination";
 
 function PostList({
   tagIdx = "",
@@ -65,7 +65,7 @@ function PostList({
               return (
                 <PostListLiSt key={idx} className="postListLi">
                   <PostLinkSt
-                    to={`/post/${idx}?tag=${tagIdx}`}
+                    href={`/post/${idx}?tag=${tagIdx}`}
                     state={{ activeTagIdx: tagIdx }}
                   >
                     {!thumbnail ? null : (

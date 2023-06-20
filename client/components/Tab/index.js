@@ -24,8 +24,8 @@ export default function Tab({ tabBtnList = {}, tabItemList = {}, tabCnt }) {
                 name={label}
                 index={i}
                 tabCnt={tabCnt}
-                path={asPath}
-                location={`/${asPath}`}
+                path={path}
+                location={`${asPath}`}
               />
             );
           })}
