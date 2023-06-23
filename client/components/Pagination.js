@@ -65,7 +65,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
             key={pageNum}
             className={() => {
               const currentPage = Number(router.query.page);
-              
+
               let className = "normalText";
               if (currentPage === pageNum) className += " active";
 

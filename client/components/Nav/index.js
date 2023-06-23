@@ -22,7 +22,7 @@ const navClose = () => {
 export default function Nav() {
   const user = useSelector((store) => store.user, shallowEqual);
   const { isLogin } = user;
-  const { asPath } = useRouter();
+  const { query } = useRouter();
 
   const [tagLoading, setTagLoading] = useState(true);
   const [tagList, setTagList] = useState({});
@@ -46,21 +46,9 @@ export default function Nav() {
   //? 랜더링 최적화 할수 있을지?
   useEffect(() => {
     getTagData();
+    setActiveTagIdx(query.tagIdx || query.tag);
+  }, [query.tagIdx, query.tag]);
 
-    if (asPath.includes("/post")) {
-      if (location.state?.activeTagIdx) {
-        setActiveTagIdx(Number(location.state.activeTagIdx));
-      } else {
-        const searchParams = new URLSearchParams(location.search);
-        setActiveTagIdx(Number(searchParams.get("tag")));
-      }
-    } else if (asPath.includes("/tag")) {
-      setActiveTagIdx(Number(asPath.replace("/tag/", "")));
-    } else {
-      setActiveTagIdx(null);
-    }
-  }, []);
-  
   return (
     <>
       {tagLoading ? (
@@ -73,14 +61,12 @@ export default function Nav() {
             <NavButton
               path="/tag/total?page=1"
               text={`Total (${totalPostCnt})`}
-              active={asPath.replace("/tag/", "") === "total" ? "active" : ""}
+              active={activeTagIdx === "total" ? "active" : ""}
             />
             {Object.entries(tagList).map((tagData) => {
               const tagIdx =
                 tagData[0] !== "total" ? Number(tagData[0]) : tagData[0];
               const { auth, name, postCnt } = tagData[1];
-
-              const activeClass = activeTagIdx === tagIdx ? "active" : "";
 
               //TODO 로그인계정 권한도 확인하기
               if (auth === 1 && !isLogin) return "";
@@ -90,7 +76,7 @@ export default function Nav() {
                   key={tagIdx}
                   text={`${name} (${postCnt})`}
                   path={`/tag/${tagIdx}?page=1`}
-                  active={activeClass}
+                  active={activeTagIdx === tagIdx ? "active" : ""}
                 />
               );
             })}

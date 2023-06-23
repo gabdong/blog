@@ -8,7 +8,7 @@ import axios from "axios";
 export async function getPostList(tagIdx, page, limit, paginationUsing) {
   try {
     const json = await axios.get(`/apis/posts/list/${tagIdx}`, {
-      params: { limit, page, paginationUsing }
+      params: { limit, page, paginationUsing },
     });
     return json.data;
   } catch (err) {

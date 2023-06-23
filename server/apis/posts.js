@@ -9,13 +9,14 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   const limit = Number(req.query.limit);
   const paginationUsing = Boolean(req.query.paginationUsing);
   const offset = (page - 1) * 10;
-  let tagCond = '';
-  if (tagIdx === 'private') {
+  let tagCond = "";
+  if (tagIdx === "private") {
     tagCond = "AND public='N'";
   } else {
     tagCond = "AND public='Y' ";
 
-    if (tagIdx && tagIdx !== 'total') tagCond += `AND JSON_CONTAINS(tags, '${tagIdx}') `;
+    if (tagIdx && tagIdx !== "total")
+      tagCond += `AND JSON_CONTAINS(tags, '${tagIdx}') `;
   }
 
   try {
@@ -73,7 +74,7 @@ router.get("/:postIdx", async (req, res) => {
       throw err;
     }
 
-    res.json({ msg: "SUCCESS", postData: postDataRes });
+    res.json({ msg: "SUCCESS", postData: postDataRes[0] });
   } catch (err) {
     if (err.status) {
       res.status(err.status).json({ msg: err.message });

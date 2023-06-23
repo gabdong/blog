@@ -6,10 +6,10 @@ import Link from "next/link";
 import { getPostList } from "@/apis/posts";
 import Pagination from "@/components/Pagination";
 
-function PostList({
+export default function PostList({
   tagIdx = "",
   page = 1,
-  limit = 10,
+  limit = 9,
   paginationUsing = true,
 }) {
   const [loading, setLoading] = useState(true);
@@ -111,6 +111,7 @@ function PostList({
 const PostListUlSt = styled.ul`
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
   gap: 20px;
 `;
 const PostListLiSt = styled.li`
@@ -149,9 +150,9 @@ const PostInfoWrapSt = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 14px;
-  
+
   height: 100%;
-  padding 16px;
+  padding: 16px;
 
   & > div {
     display: flex;
@@ -187,5 +188,3 @@ const PostInfoWrapSt = styled.div`
     }
   }
 `;
-
-export default React.memo(PostList);
