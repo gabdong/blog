@@ -1,7 +1,7 @@
 import Head from "next/head";
+import { Provider } from "react-redux";
 import "@/styles/globals.css";
 import styled from "styled-components";
-import { Provider } from "react-redux";
 
 import Header from "@/components/Header";
 import wrapper from "@/store/configureStore";

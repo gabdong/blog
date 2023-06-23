@@ -22,7 +22,7 @@ export default function Index({ pageProps }) {
       <HomeWrapSt>
         <Tab
           tabBtnList={{
-            latest: {
+            latestPostList: {
               label: "최근게시물",
               path: "/?tabItem=latestPostList",
             },

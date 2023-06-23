@@ -4,7 +4,7 @@ import removeMd from "remove-markdown";
 import Link from "next/link";
 
 import { getPostList } from "@/apis/posts";
-// import Pagination from "@/Pagination/Pagination";
+import Pagination from "@/components/Pagination";
 
 function PostList({
   tagIdx = "",

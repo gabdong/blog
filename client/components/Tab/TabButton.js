@@ -26,6 +26,7 @@ function TabButton({ name, index, tabCnt, path, location }) {
       className={location === path ? `tabBtn active` : `tabBtn`}
       onClick={(e) => tabFn({e, tabCnt, index})}
       href={path}
+      shallow={true}
     >
       {name}
     </Link>

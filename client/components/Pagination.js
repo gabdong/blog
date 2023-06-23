@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import React from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import Link from "next/link";
 import {
   MdNavigateNext as Next,
   MdNavigateBefore as Prev,
   MdFirstPage as FirstPage,
   MdLastPage as LastPage,
 } from "react-icons/md";
+import { useRouter } from "next/router";
 
 /**
  * @param Number totalCnt: 컨텐츠 총갯수
@@ -16,7 +17,7 @@ import {
  * @param Number limit: 컨텐츠 갯수
  */
 function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
-  const location = useLocation();
+  const router = useRouter();
 
   if (totalCnt <= limit) return null; // 컨텐츠 총갯수가 limit보다 작을경우 출력 x
 
@@ -43,13 +44,13 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
   return (
     <PaginationSt>
       {firstPageBtnUsing ? ( //* 첫번째 페이지
-        <Link to={`${path}?page=1`}>
+        <Link href={`${path}?page=1`}>
           <FirstPage />
         </Link>
       ) : null}
       {prevArrowUsing ? (
         <Link
-          to={`${path}?page=${
+          href={`${path}?page=${
             page - paginationCnt < 1 ? 1 : page - paginationCnt
           }`}
         >
@@ -60,27 +61,25 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
         let pageNum = startNum + i;
 
         return (
-          <NavLink
+          <Link
             key={pageNum}
             className={() => {
-              const currentPage = Number(
-                new URLSearchParams(location.search).get("page")
-              );
+              const currentPage = Number(router.query.page);
               
               let className = "normalText";
               if (currentPage === pageNum) className += " active";
 
               return className;
             }}
-            to={`${path}?page=${pageNum}`}
+            href={`${path}?page=${pageNum}`}
           >
             {pageNum}
-          </NavLink>
+          </Link>
         );
       })}
       {nextArrowUsing ? (
         <Link
-          to={`${path}?page=${
+          href={`${path}?page=${
             page + paginationCnt > lastNum ? lastNum : page + paginationCnt
           }`}
         >
@@ -88,7 +87,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
         </Link>
       ) : null}
       {lastPageBtnUsing ? ( //* 마지막페이지
-        <Link to={`${path}?page=${lastNum}`}>
+        <Link href={`${path}?page=${lastNum}`}>
           <LastPage />
         </Link>
       ) : null}
