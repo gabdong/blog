@@ -28,3 +28,20 @@ export async function getPost(postIdx) {
     throw err;
   }
 }
+
+/**
+ * * 게시글 삭제
+ * @param {Number} postIdx
+ * @param {Object} router
+ */
+export async function deletePost(postIdx, router) {
+  if (!window.confirm("게시글 삭제를 진행하시겠습니까?")) return;
+
+  try {
+    await axios.delete(`/apis/posts/${postIdx}`);
+
+    router.push("/");
+  } catch (err) {
+    console.error(err.response.data.msg);
+  }
+}
