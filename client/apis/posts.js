@@ -19,10 +19,14 @@ export async function getPostList(tagIdx, page, limit, paginationUsing) {
 /**
  * * 게시글 요청
  * @param {Number} postIdx
+ * @param {Boolean} ssr
  */
-export async function getPost(postIdx) {
+export async function getPost(postIdx, ssr = false) {
+  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}apis/posts/${postIdx}` : `/apis/posts/${postIdx}`;
+  
   try {
-    const json = await axios.get(`/apis/posts/${postIdx}`);
+    const json = await axios.get(path);
+    
     return json.data.postData;
   } catch (err) {
     throw err;

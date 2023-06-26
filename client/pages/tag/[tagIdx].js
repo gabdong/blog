@@ -1,10 +1,17 @@
-import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
+import { checkLogin } from "@/utils/utils";
 import PostList from "@/components/PostList";
+import { loginUser } from "@/store/modules/user";
 
-export default function Tag() {
-  const router = useRouter();
-  const { page, tagIdx } = router.query;
+export default function Tag({pageProps}) {
+    const dispatch = useDispatch();
+  const { page, tagIdx, user } = pageProps;
+
+  useEffect(() => {
+    if (user) dispatch(loginUser(user));
+  });
 
   return (
     <>
@@ -13,4 +20,12 @@ export default function Tag() {
       )}
     </>
   );
+}
+
+export async function getServerSideProps(ctx) {
+    const { query } = ctx;
+    const { page, tagIdx } = query;
+    const user = await checkLogin(ctx);
+
+    return { props: { page, tagIdx, user } };
 }

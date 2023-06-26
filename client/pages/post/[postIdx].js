@@ -11,38 +11,23 @@ import { checkLogin } from "@/utils/utils";
 
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
-  const { user } = pageProps;
-
   const router = useRouter();
-  const { postIdx } = router.query;
 
-  const [postData, setPostData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const { user, postData, postIdx } = pageProps;
 
-  /**
-   * * 게시글 정보 불러온뒤 상태설정해주는 함수
-   */
-  const getPostData = async () => {
-    setPostData(await getPost(postIdx));
-    setLoading(false);
-  };
+  //* markdown 문법 제거
+  postData.removeMdContent = removeMd(
+    postData.content.replace(/<\/?[^>]+(>|$)/g, "")
+  );
 
-  if (!loading) {
-    //* markdown 문법 제거
-    postData.removeMdContent = removeMd(
-      postData.content.replace(/<\/?[^>]+(>|$)/g, "")
-    );
-
-    if (postData.removeMdContent.length > 200)
-      postData.removeMdContent = postData.removeMdContent.substring(0, 200);
-  }
+  if (postData.removeMdContent.length > 200)
+    postData.removeMdContent = postData.removeMdContent.substring(0, 200);
 
   useEffect(() => {
-    if (postIdx) getPostData();
     if (user) dispatch(loginUser(user));
-  }, [postIdx]);
+  }, []);
 
-  return loading ? null : (
+  return (
     <>
       <PostWrapSt>
         {/* //* 제목 */}
@@ -84,8 +69,13 @@ export default function Post({ pageProps }) {
 }
 
 export async function getServerSideProps(ctx) {
+  const { query } = ctx;
+  const { postIdx } = query;
+
+  const postData = await getPost(postIdx, true);
   const user = await checkLogin(ctx);
-  return { props: { user: user } };
+
+  return { props: { user, postData, postIdx } };
 }
 
 const PostWrapSt = styled.section`
