@@ -4,10 +4,13 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 import removeMd from "remove-markdown";
 import styled from "styled-components";
+import dynamic from "next/dynamic";
 
 import { deletePost, getPost } from "@/apis/posts";
 import { loginUser } from "@/store/modules/user";
 import { checkLogin } from "@/utils/utils";
+
+const DynamicViewer= dynamic(() => import("@/components/DynamicViewer"), {ssr: false});
 
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
@@ -63,6 +66,14 @@ export default function Post({ pageProps }) {
             </PostButtonWrapSt>
           )}
         </div>
+
+        <ThumbnailWrap>
+          <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
+        </ThumbnailWrap>
+
+        <DynamicViewer 
+          initialValue={postData.content}
+        />
       </PostWrapSt>
     </>
   );

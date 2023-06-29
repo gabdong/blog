@@ -7,7 +7,7 @@ import { getPostList } from "@/apis/posts";
 import Pagination from "@/components/Pagination";
 
 export default function PostList({
-  tagIdx = "",
+  tagIdx = "total",
   page = 1,
   limit = 9,
   paginationUsing = true,
