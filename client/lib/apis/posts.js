@@ -22,7 +22,7 @@ export async function getPostList(tagIdx, page, limit, paginationUsing) {
  * @param {Boolean} ssr
  */
 export async function getPost(postIdx, ssr = false) {
-  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}apis/posts/${postIdx}` : `/apis/posts/${postIdx}`;
+  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}` : `/apis/posts/${postIdx}`;
   
   try {
     const json = await axios.get(path);
@@ -45,6 +45,18 @@ export async function deletePost(postIdx, router) {
     await axios.delete(`/apis/posts/${postIdx}`);
 
     router.push("/");
+  } catch (err) {
+    console.error(err.response.data.msg);
+  }
+}
+
+export async function getAllPosts(ssr = false) {
+  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/list/all` : `/apis/posts/list/all`;
+
+  try {
+    const json = await axios.get(path);
+
+    return json.data;
   } catch (err) {
     console.error(err.response.data.msg);
   }

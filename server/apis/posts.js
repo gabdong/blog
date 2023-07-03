@@ -5,18 +5,25 @@ const db = require("../config/db");
 //* 게시글 리스트 요청
 router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   const { tagIdx } = req.params;
-  const page = Number(req.query.page);
-  const limit = Number(req.query.limit);
   const paginationUsing = Boolean(req.query.paginationUsing);
-  const offset = (page - 1) * 10;
+
   let tagCond = "";
   if (tagIdx === "private") {
     tagCond = "AND public='N'";
-  } else {
+  } else if (tagIdx !== "all") {
     tagCond = "AND public='Y' ";
 
     if (tagIdx && tagIdx !== "total")
-      tagCond += `AND JSON_CONTAINS(tags, '${tagIdx}') `;
+      tagCond += `AND JSON_CONTAINS(tags, JSON_QUOTE('${tagIdx}')) `;
+  }
+
+  let limitCond = "";
+  if (req.query.page && req.query.limit) {
+    const page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+    const offset = (page - 1) * limit;
+
+    limitCond = `LIMIT ${limit} OFFSET ${offset}`;
   }
 
   try {
@@ -34,15 +41,13 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 
     const [postListRes] = await db.query(
       `
-      SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime 
+      SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime, tags 
       FROM posts 
       WHERE delete_datetime IS NULL 
       ${tagCond}
       ORDER BY datetime DESC, idx DESC 
-      LIMIT ? OFFSET ?
-    `,
-      [limit, offset]
-    );
+      ${limitCond}
+    `);
 
     res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
   } catch (err) {

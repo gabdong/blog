@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/lib/utils/axios";
 
 /**
  * * 태그리스트 요청
@@ -8,6 +8,7 @@ export async function getTagList() {
   try {
     const tagListRes = await axios.get("/apis/tags/");
 
+    console.log(tagListRes);
     return tagListRes;
   } catch (err) {
     console.error(err.response.data.msg);

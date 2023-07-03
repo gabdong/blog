@@ -6,9 +6,9 @@ import removeMd from "remove-markdown";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 
-import { deletePost, getPost } from "@/apis/posts";
+import { deletePost, getAllPosts, getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
-import { checkLogin } from "@/utils/utils";
+import { checkLogin } from "@/lib/utils/utils";
 
 const DynamicViewer= dynamic(() => import("@/components/DynamicViewer"), {ssr: false});
 
@@ -79,15 +79,41 @@ export default function Post({ pageProps }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const { query } = ctx;
-  const { postIdx } = query;
-
+export async function getStaticProps({ params }) {
+  const { postIdx } = params;
   const postData = await getPost(postIdx, true);
-  const user = await checkLogin(ctx);
 
-  return { props: { user, postData, postIdx } };
+  return {
+    props: {
+      postData,
+      postIdx
+    }
+  }
 }
+
+export async function getStaticPaths() {
+  const getAllPostsRes = await getAllPosts(true);
+  const { postList } = getAllPostsRes;
+
+  return {
+    paths: postList.map((post) => {
+      return {
+        params: { postIdx: post.idx.toString() }
+      }
+    }),
+    fallback: false
+  }
+}
+
+// export async function getServerSideProps(ctx) {
+//   const { query } = ctx;
+//   const { postIdx } = query;
+
+//   const postData = await getPost(postIdx, true);
+//   const user = await checkLogin(ctx);
+
+//   return { props: { user, postData, postIdx } };
+// }
 
 const PostWrapSt = styled.section`
   display: flex;

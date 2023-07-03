@@ -1,4 +1,4 @@
-import { checkToken } from "@/apis/tokens";
+import { checkToken } from "@/lib/apis/tokens";
 
 /**
  * * 로그인 확인

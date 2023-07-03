@@ -20,7 +20,7 @@ export async function checkToken(ssr = false, cookie = "") {
 
   try {
     const url = ssr
-      ? `${process.env.REACT_APP_SERVER_URL}apis/tokens/check-token`
+      ? `${process.env.REACT_APP_SERVER_URL}/apis/tokens/check-token`
       : "/apis/tokens/check-token";
     const result = await authCheckAxios.get(url);
 

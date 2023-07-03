@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-import { checkLogin } from "@/utils/utils";
+import { checkLogin } from "@/lib/utils/utils";
 import PostList from "@/components/PostList";
 import { loginUser } from "@/store/modules/user";
 

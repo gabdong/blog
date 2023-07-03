@@ -3,7 +3,7 @@ import styled from "styled-components";
 import removeMd from "remove-markdown";
 import Link from "next/link";
 
-import { getPostList } from "@/apis/posts";
+import { getPostList } from "@/lib/apis/posts";
 import Pagination from "@/components/Pagination";
 
 export default function PostList({

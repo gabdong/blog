@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         source: "/apis/:path*",
-        destination: `${process.env.REACT_APP_SERVER_URL}apis/:path*`,
+        destination: `${process.env.REACT_APP_SERVER_URL}/apis/:path*`,
       },
     ];
   },

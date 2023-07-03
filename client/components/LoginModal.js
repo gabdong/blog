@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import axios, { authCheckAxios } from "../utils/axios";
+import axios, { authCheckAxios } from "../lib/utils/axios";
 import { loginUser } from "@/store/modules/user";
 
 import Input from "./Input";

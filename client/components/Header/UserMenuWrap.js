@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 
-import { removeToken } from "@/apis/tokens";
+import { removeToken } from "@/lib/apis/tokens";
 import { logoutUser } from "@/store/modules/user";
 
 export default function UserMenuWrap() {

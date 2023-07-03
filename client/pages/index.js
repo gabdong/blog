@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { loginUser } from "@/store/modules/user";
-import { checkLogin } from "@/utils/utils";
+import { checkLogin } from "@/lib/utils/utils";
 
 import Tab from "@/components/Tab";
 import Introduce from "@/components/Introduce";

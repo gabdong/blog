@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { RiCloseFill as Close } from "react-icons/ri";
 
-import { getTagList } from "@/apis/tags";
+import { getTagList } from "@/lib/apis/tags";
 
 import NavButton from "@/components/Nav/NavButton";
 
@@ -41,13 +41,13 @@ export default function Nav() {
     setTotalPostCnt(tagDataRes.totalPostCnt);
     setPrivatePostCnt(tagDataRes.privatePostCnt);
     setTagLoading(false);
+    setActiveTagIdx(query.tagIdx || query.tag);
   };
 
   //? 랜더링 최적화 할수 있을지?
   useEffect(() => {
     getTagData();
-    setActiveTagIdx(query.tagIdx || query.tag);
-  }, [query.tagIdx, query.tag]);
+  }, [query.tagIdx]);
 
   return (
     <>
@@ -67,6 +67,7 @@ export default function Nav() {
               const tagIdx =
                 tagData[0] !== "total" ? Number(tagData[0]) : tagData[0];
               const { auth, name, postCnt } = tagData[1];
+              const activeClass = Number(activeTagIdx) === tagIdx || activeTagIdx === name ? 'active' : '';
 
               //TODO 로그인계정 권한도 확인하기
               if (auth === 1 && !isLogin) return "";
@@ -76,7 +77,7 @@ export default function Nav() {
                   key={tagIdx}
                   text={`${name} (${postCnt})`}
                   path={`/tag/${tagIdx}?page=1`}
-                  active={activeTagIdx === tagIdx ? "active" : ""}
+                  active={activeClass}
                 />
               );
             })}
