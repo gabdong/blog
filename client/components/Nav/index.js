@@ -44,7 +44,6 @@ export default function Nav() {
     setActiveTagIdx(query.tagIdx || query.tag);
   };
 
-  //? 랜더링 최적화 할수 있을지?
   useEffect(() => {
     getTagData();
   }, [query.tagIdx]);

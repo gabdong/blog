@@ -79,7 +79,7 @@ export default function Post({ pageProps }) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, ...rest }) {
   const { postIdx } = params;
   const postData = await getPost(postIdx, true);
 
@@ -104,16 +104,6 @@ export async function getStaticPaths() {
     fallback: false
   }
 }
-
-// export async function getServerSideProps(ctx) {
-//   const { query } = ctx;
-//   const { postIdx } = query;
-
-//   const postData = await getPost(postIdx, true);
-//   const user = await checkLogin(ctx);
-
-//   return { props: { user, postData, postIdx } };
-// }
 
 const PostWrapSt = styled.section`
   display: flex;

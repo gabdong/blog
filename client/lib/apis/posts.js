@@ -51,7 +51,7 @@ export async function deletePost(postIdx, router) {
 }
 
 export async function getAllPosts(ssr = false) {
-  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/list/all` : `/apis/posts/list/all`;
+  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/list/total` : `/apis/posts/list/total`;
 
   try {
     const json = await axios.get(path);

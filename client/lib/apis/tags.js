@@ -8,7 +8,6 @@ export async function getTagList() {
   try {
     const tagListRes = await axios.get("/apis/tags/");
 
-    console.log(tagListRes);
     return tagListRes;
   } catch (err) {
     console.error(err.response.data.msg);
