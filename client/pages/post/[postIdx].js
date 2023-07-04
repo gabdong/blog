@@ -10,7 +10,9 @@ import { deletePost, getAllPosts, getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
 import { checkLogin } from "@/lib/utils/utils";
 
-const DynamicViewer= dynamic(() => import("@/components/DynamicViewer"), {ssr: false});
+const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
+  ssr: false,
+});
 
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
@@ -71,9 +73,7 @@ export default function Post({ pageProps }) {
           <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
         </ThumbnailWrap>
 
-        <DynamicViewer 
-          initialValue={postData.content}
-        />
+        <DynamicViewer initialValue={postData.content} />
       </PostWrapSt>
     </>
   );
@@ -86,23 +86,24 @@ export async function getStaticProps({ params, ...rest }) {
   return {
     props: {
       postData,
-      postIdx
-    }
-  }
+      postIdx,
+    },
+  };
 }
 
 export async function getStaticPaths() {
   const getAllPostsRes = await getAllPosts(true);
+  console.log(getAllPostsRes);
   const { postList } = getAllPostsRes;
 
   return {
     paths: postList.map((post) => {
       return {
-        params: { postIdx: post.idx.toString() }
-      }
+        params: { postIdx: post.idx.toString() },
+      };
     }),
-    fallback: false
-  }
+    fallback: false,
+  };
 }
 
 const PostWrapSt = styled.section`
