@@ -93,7 +93,6 @@ export async function getStaticProps({ params, ...rest }) {
 
 export async function getStaticPaths() {
   const getAllPostsRes = await getAllPosts(true);
-  console.log(getAllPostsRes);
   const { postList } = getAllPostsRes;
 
   return {

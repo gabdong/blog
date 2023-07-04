@@ -22,11 +22,13 @@ export async function getPostList(tagIdx, page, limit, paginationUsing) {
  * @param {Boolean} ssr
  */
 export async function getPost(postIdx, ssr = false) {
-  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}` : `/apis/posts/${postIdx}`;
-  
+  const path = ssr
+    ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}`
+    : `/apis/posts/${postIdx}`;
+
   try {
     const json = await axios.get(path);
-    
+
     return json.data.postData;
   } catch (err) {
     throw err;
@@ -51,7 +53,9 @@ export async function deletePost(postIdx, router) {
 }
 
 export async function getAllPosts(ssr = false) {
-  const path = ssr ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/list/total` : `/apis/posts/list/total`;
+  const path = ssr
+    ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/list/total`
+    : `/apis/posts/list/total`;
 
   try {
     const json = await axios.get(path);
