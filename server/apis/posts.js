@@ -10,7 +10,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   let tagCond = "";
   if (tagIdx === "private") {
     tagCond = "AND public='N'";
-  } else if (tagIdx !== "all") {
+  } else {
     tagCond = "AND public='Y' ";
 
     if (tagIdx && tagIdx !== "total")
@@ -47,7 +47,8 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
       ${tagCond}
       ORDER BY datetime DESC, idx DESC 
       ${limitCond}
-    `);
+    `
+    );
 
     res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
   } catch (err) {
