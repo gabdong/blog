@@ -47,7 +47,8 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
       ${tagCond}
       ORDER BY datetime DESC, idx DESC 
       ${limitCond}
-    `);
+    `
+    );
 
     res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
   } catch (err) {
