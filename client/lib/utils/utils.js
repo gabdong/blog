@@ -4,8 +4,8 @@ import { checkToken } from "@/lib/apis/tokens";
  * * 로그인 확인
  * @param {Object} ctx
  */
-export const checkLogin = async (ctx) => {
-  const cookie = ctx.req.headers?.cookie;
+export const checkLogin = async (ctx = null) => {
+  const cookie = ctx ? ctx.req.headers?.cookie : null;
 
   let user = null;
   try {

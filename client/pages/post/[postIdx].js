@@ -82,7 +82,9 @@ export default function Post({ pageProps }) {
 export async function getStaticProps({ params, ...rest }) {
   const { postIdx } = params;
   const postData = await getPost(postIdx, true);
+  const user = await checkLogin();
 
+  console.log(user);
   return {
     props: {
       postData,
