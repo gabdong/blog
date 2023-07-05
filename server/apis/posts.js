@@ -10,11 +10,11 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   let tagCond = "";
   if (tagIdx === "private") {
     tagCond = "AND public='N'";
-  } else if (tagIdx !== "all") {
+  } else {
     tagCond = "AND public='Y' ";
 
     if (tagIdx && tagIdx !== "total")
-      tagCond += `AND JSON_CONTAINS(tags, JSON_QUOTE('${tagIdx}')) `;
+      tagCond += `AND JSON_CONTAINS(tags, '${tagIdx}') `;
   }
 
   let limitCond = "";
