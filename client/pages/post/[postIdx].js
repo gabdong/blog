@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 
 import { deletePost, getAllPosts, getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
-import { checkLogin } from "@/lib/utils/utils";
+import { checkLogin } from "@/lib/apis/tokens";
 
 const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
   ssr: false,
@@ -17,8 +17,9 @@ const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [user, setUser] = useState({});
 
-  const { user, postData, postIdx } = pageProps;
+  const { postData, postIdx } = pageProps;
 
   //* markdown 문법 제거
   postData.removeMdContent = removeMd(
@@ -29,8 +30,12 @@ export default function Post({ pageProps }) {
     postData.removeMdContent = postData.removeMdContent.substring(0, 200);
 
   useEffect(() => {
-    if (user) dispatch(loginUser(user));
-  }, []);
+    console.log(postIdx);
+    (async () => {
+      // setUser(await checkLogin());
+      // if (user) dispatch(loginUser(user));
+    })();
+  }, [postIdx]);
 
   return (
     <>
@@ -82,9 +87,7 @@ export default function Post({ pageProps }) {
 export async function getStaticProps({ params, ...rest }) {
   const { postIdx } = params;
   const postData = await getPost(postIdx, true);
-  const user = await checkLogin();
 
-  console.log(user);
   return {
     props: {
       postData,

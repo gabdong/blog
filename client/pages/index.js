@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { loginUser } from "@/store/modules/user";
-import { checkLogin } from "@/lib/utils/utils";
+import { checkLogin } from "@/lib/apis/tokens";
 
 import Tab from "@/components/Tab";
 import Introduce from "@/components/Introduce";
@@ -45,7 +45,7 @@ export default function Index({ pageProps }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const user = await checkLogin(ctx);
+  const user = await checkLogin(ctx.req.headers?.cookie);
   return { props: { user: user } };
 }
 

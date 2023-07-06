@@ -29,3 +29,24 @@ export async function checkToken(ssr = false, cookie = "") {
     if (err.response.status !== 401) console.error(err.response.data.msg);
   }
 }
+
+/**
+ * * 로그인 확인
+ * @param {Object} ctx
+ */
+export const checkLogin = async (cookie = null) => {
+  let user = null;
+  
+  try {
+    const authCheck = await checkToken(true, cookie);
+    if (authCheck) {
+      const accessToken = authCheck.data.newAccessToken;
+      user = { ...authCheck.data.user };
+      user.accessToken = accessToken;
+      user.isLogin = true;
+    }
+    return user;
+  } catch (err) {
+    console.log(err.message);
+  }
+};

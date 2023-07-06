@@ -1,9 +1,10 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-import { checkLogin } from "@/lib/utils/utils";
-import PostList from "@/components/PostList";
+import { checkLogin } from "@/lib/apis/tokens";
 import { loginUser } from "@/store/modules/user";
+
+import PostList from "@/components/PostList";
 
 export default function Tag({pageProps}) {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function Tag({pageProps}) {
 export async function getServerSideProps(ctx) {
     const { query } = ctx;
     const { page, tagIdx } = query;
-    const user = await checkLogin(ctx);
+    const user = await checkLogin(ctx.req.headers?.cookie);
 
     return { props: { page, tagIdx, user } };
 }
