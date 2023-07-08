@@ -54,4 +54,7 @@ const HomeWrapSt = styled.section`
   flex-direction: column;
   flex: 1;
   gap: 20px;
+
+  min-width: 0;
+  max-width: 100%;
 `;

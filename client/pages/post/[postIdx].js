@@ -118,8 +118,10 @@ const PostWrapSt = styled.section`
   gap: 20px;
   flex: 1;
 
-  padding-right: 20px;
+  min-width: 0;
+  max-width: 100%;
   height: 100%;
+  padding-right: 20px;
 
   @media screen and (max-width: 479px) {
     padding-right: 0px;
