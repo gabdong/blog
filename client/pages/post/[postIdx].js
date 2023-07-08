@@ -30,12 +30,11 @@ export default function Post({ pageProps }) {
     postData.removeMdContent = postData.removeMdContent.substring(0, 200);
 
   useEffect(() => {
-    console.log(postIdx);
     (async () => {
-      // setUser(await checkLogin());
-      // if (user) dispatch(loginUser(user));
+      setUser(await checkLogin());
+      if (user) dispatch(loginUser(user));
     })();
-  }, [postIdx]);
+  }, []);
 
   return (
     <>
@@ -103,7 +102,7 @@ export async function getStaticPaths() {
   return {
     paths: postList.map((post) => {
       return {
-        params: { postIdx: post.idx.toString() },
+        params: { postIdx: post.idx.toString(), tag: "total" },
       };
     }),
     fallback: false,

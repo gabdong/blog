@@ -34,11 +34,11 @@ export async function checkToken(ssr = false, cookie = "") {
  * * 로그인 확인
  * @param {Object} ctx
  */
-export const checkLogin = async (cookie = null) => {
+export const checkLogin = async (ssr = false, cookie = null) => {
   let user = null;
-  
+
   try {
-    const authCheck = await checkToken(true, cookie);
+    const authCheck = await checkToken(ssr, cookie);
     if (authCheck) {
       const accessToken = authCheck.data.newAccessToken;
       user = { ...authCheck.data.user };
@@ -47,6 +47,7 @@ export const checkLogin = async (cookie = null) => {
     }
     return user;
   } catch (err) {
+    console.log(err);
     console.log(err.message);
   }
 };

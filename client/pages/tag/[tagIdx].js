@@ -6,8 +6,8 @@ import { loginUser } from "@/store/modules/user";
 
 import PostList from "@/components/PostList";
 
-export default function Tag({pageProps}) {
-    const dispatch = useDispatch();
+export default function Tag({ pageProps }) {
+  const dispatch = useDispatch();
   const { page, tagIdx, user } = pageProps;
 
   useEffect(() => {
@@ -24,9 +24,9 @@ export default function Tag({pageProps}) {
 }
 
 export async function getServerSideProps(ctx) {
-    const { query } = ctx;
-    const { page, tagIdx } = query;
-    const user = await checkLogin(ctx.req.headers?.cookie);
+  const { query } = ctx;
+  const { page, tagIdx } = query;
+  const user = await checkLogin(true, ctx.req.headers?.cookie);
 
-    return { props: { page, tagIdx, user } };
+  return { props: { page, tagIdx, user } };
 }

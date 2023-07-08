@@ -22,7 +22,8 @@ const navClose = () => {
 export default function Nav() {
   const user = useSelector((store) => store.user, shallowEqual);
   const { isLogin } = user;
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query } = router;
 
   const [tagLoading, setTagLoading] = useState(true);
   const [tagList, setTagList] = useState({});
@@ -41,12 +42,18 @@ export default function Nav() {
     setTotalPostCnt(tagDataRes.totalPostCnt);
     setPrivatePostCnt(tagDataRes.privatePostCnt);
     setTagLoading(false);
-    setActiveTagIdx(query.tagIdx || query.tag);
+    if (query.tagIdx || query.tag) {
+      setActiveTagIdx(query.tagIdx || query.tag);
+    } else {
+      const urlParams = new URLSearchParams(window.location.search);
+      const activeTag = urlParams.get("tag");
+      setActiveTagIdx(activeTag);
+    }
   };
 
   useEffect(() => {
     getTagData();
-  }, [query.tagIdx]);
+  }, [router.asPath]);
 
   return (
     <>
@@ -66,7 +73,10 @@ export default function Nav() {
               const tagIdx =
                 tagData[0] !== "total" ? Number(tagData[0]) : tagData[0];
               const { auth, name, postCnt } = tagData[1];
-              const activeClass = Number(activeTagIdx) === tagIdx || activeTagIdx === name ? 'active' : '';
+              const activeClass =
+                Number(activeTagIdx) === tagIdx || activeTagIdx === name
+                  ? "active"
+                  : "";
 
               //TODO 로그인계정 권한도 확인하기
               if (auth === 1 && !isLogin) return "";
