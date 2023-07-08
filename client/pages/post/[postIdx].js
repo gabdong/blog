@@ -31,8 +31,11 @@ export default function Post({ pageProps }) {
 
   useEffect(() => {
     (async () => {
-      setUser(await checkLogin());
-      if (user) dispatch(loginUser(user));
+      const userData = await checkLogin();
+      setUser({ ...userData });
+      if (user) {
+        dispatch(loginUser(user));
+      }
     })();
   }, []);
 

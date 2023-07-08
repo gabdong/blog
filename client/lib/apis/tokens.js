@@ -47,7 +47,6 @@ export const checkLogin = async (ssr = false, cookie = null) => {
     }
     return user;
   } catch (err) {
-    console.log(err);
     console.log(err.message);
   }
 };
