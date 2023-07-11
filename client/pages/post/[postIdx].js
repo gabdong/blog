@@ -33,7 +33,7 @@ export default function Post({ pageProps }) {
     (async () => {
       const userData = await checkLogin();
       setUser({ ...userData });
-      if (user) {
+      if (Object.keys(user).length > 0) {
         dispatch(loginUser(user));
       }
     })();
