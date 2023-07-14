@@ -44,16 +44,12 @@ export default function Nav() {
     setTagLoading(false);
     if (query.tagIdx || query.tag) {
       setActiveTagIdx(query.tagIdx || query.tag);
-    } else {
-      const urlParams = new URLSearchParams(window.location.search);
-      const activeTag = urlParams.get("tag");
-      setActiveTagIdx(activeTag);
-    }
+    } 
   };
 
   useEffect(() => {
-    getTagData();
-  }, [router.asPath]);
+    if (router.isReady) getTagData();
+  }, [router.isReady, router.asPath]);
 
   return (
     <>

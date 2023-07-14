@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
 import Link from "next/link";
 import removeMd from "remove-markdown";
 import styled from "styled-components";
@@ -17,7 +17,7 @@ const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [user, setUser] = useState({});
+  const user = useStore(store => store.user);
 
   const { postData, postIdx } = pageProps;
 
@@ -31,13 +31,16 @@ export default function Post({ pageProps }) {
 
   useEffect(() => {
     (async () => {
-      const userData = await checkLogin();
-      setUser({ ...userData });
-      if (Object.keys(user).length > 0) {
-        dispatch(loginUser(user));
+      if (router.isReady) {
+        const userData = await checkLogin();
+        if (userData && Object.keys(userData).length > 0) {
+          dispatch(loginUser(userData));
+        } else {
+          if (router.query.tag == 'private') router.push('/?tabItem=latestPostList');
+        }
       }
     })();
-  }, []);
+  }, [router.isReady]);
 
   return (
     <>
@@ -105,7 +108,7 @@ export async function getStaticPaths() {
   return {
     paths: postList.map((post) => {
       return {
-        params: { postIdx: post.idx.toString(), tag: "total" },
+        params: { postIdx: post.idx.toString() },
       };
     }),
     fallback: false,
