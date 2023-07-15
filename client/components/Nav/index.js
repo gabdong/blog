@@ -44,7 +44,7 @@ export default function Nav() {
     setTagLoading(false);
     if (query.tagIdx || query.tag) {
       setActiveTagIdx(query.tagIdx || query.tag);
-    } 
+    }
   };
 
   useEffect(() => {

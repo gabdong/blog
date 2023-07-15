@@ -53,8 +53,8 @@ export async function deletePost(postIdx, router) {
 }
 
 /**
- * * 모든 게시글을 불러오는 요청
- * @param {Boolean} ssr 
+ * * 모든 게시글을 불러오는 요청(비공개 게시글포함)
+ * @param {Boolean} ssr
  * @returns {Ojbect}
  */
 export async function getAllPosts(ssr = false) {

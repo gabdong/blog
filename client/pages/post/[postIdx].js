@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch, useStore } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import removeMd from "remove-markdown";
 import styled from "styled-components";
-import dynamic from "next/dynamic";
 
 import { deletePost, getAllPosts, getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
@@ -17,9 +17,9 @@ const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
 export default function Post({ pageProps }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const user = useStore(store => store.user);
-
+  const user = useSelector((store) => store.user, shallowEqual);
   const { postData, postIdx } = pageProps;
+  const [loading, setLoading] = useState(true);
 
   //* markdown 문법 제거
   postData.removeMdContent = removeMd(
@@ -31,65 +31,73 @@ export default function Post({ pageProps }) {
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
+
+      //* 로그인, 페이지 권한 확인
       if (router.isReady) {
         const userData = await checkLogin();
         if (userData && Object.keys(userData).length > 0) {
           dispatch(loginUser(userData));
         } else {
-          if (router.query.tag == 'private') router.push('/?tabItem=latestPostList');
+          if (router.query.tag == "private")
+            router.push("/?tabItem=latestPostList");
         }
+
+        setLoading(false);
       }
     })();
-  }, [router.isReady]);
+  }, [router.isReady, user.isLogin]);
 
   return (
     <>
-      <PostWrapSt>
-        {/* //* 제목 */}
-        <h2 className="headline">{postData.subject}</h2>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {/* //* 작성자, 작성일 */}
-          <PostInfoWrapSt>
-            <h3 className="subTitle">{postData.memberName}</h3>
-            <p className="normalText">
-              {new Date(postData.updateDatetime).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })}
-            </p>
-          </PostInfoWrapSt>
-
-          {/* //* 수정, 삭제 버튼 */}
-          {postData.memberIdx !== user?.idx ? null : (
-            <PostButtonWrapSt>
-              <Link
-                className="buttonText"
-                href={`/postEditor/edit?post=${postIdx}`}
-              >
-                수정
-              </Link>
-              <p
-                className="buttonText"
-                onClick={() => deletePost(postIdx, router)}
-              >
-                삭제
+      {loading ? null : (
+        <PostWrapSt>
+          {/* //* 제목 */}
+          <h2 className="headline">{postData.subject}</h2>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            {/* //* 작성자, 작성일 */}
+            <PostInfoWrapSt>
+              <h3 className="subTitle">{postData.memberName}</h3>
+              <p className="normalText">
+                {new Date(postData.updateDatetime).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
               </p>
-            </PostButtonWrapSt>
-          )}
-        </div>
+            </PostInfoWrapSt>
 
-        <ThumbnailWrap>
-          <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
-        </ThumbnailWrap>
+            {/* //* 수정, 삭제 버튼 */}
+            {postData.memberIdx !== user?.idx ? null : (
+              <PostButtonWrapSt>
+                <Link
+                  className="buttonText"
+                  href={`/postEditor/edit?post=${postIdx}`}
+                >
+                  수정
+                </Link>
+                <p
+                  className="buttonText"
+                  onClick={() => deletePost(postIdx, router)}
+                >
+                  삭제
+                </p>
+              </PostButtonWrapSt>
+            )}
+          </div>
 
-        <DynamicViewer initialValue={postData.content} />
-      </PostWrapSt>
+          <ThumbnailWrap>
+            <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
+          </ThumbnailWrap>
+
+          <DynamicViewer initialValue={postData.content} />
+        </PostWrapSt>
+      )}
     </>
   );
 }
 
-export async function getStaticProps({ params, ...rest }) {
+export async function getStaticProps({ params }) {
   const { postIdx } = params;
   const postData = await getPost(postIdx, true);
 

@@ -113,6 +113,9 @@ const PostListUlSt = styled.ul`
   flex-wrap: wrap;
   flex: 1;
   gap: 20px;
+
+  min-width: 0;
+  max-width: 100%;
 `;
 const PostListLiSt = styled.li`
   width: calc(100% / 3 - 14px);
