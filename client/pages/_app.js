@@ -1,11 +1,11 @@
 import Head from "next/head";
 import { Provider } from "react-redux";
-import "@/styles/globals.css";
 import styled from "styled-components";
 
 import Header from "@/components/Header";
 import wrapper from "@/store/configureStore";
 import Nav from "@/components/Nav";
+import "@/styles/globals.css";
 
 export default function App({ Component, ...rest }) {
   const { store, props: pageProps } = wrapper.useWrappedStore(rest);
