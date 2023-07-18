@@ -12,15 +12,9 @@ const WithAuthorization = (Component) => {
 
     useEffect(() => {
       (async () => {
-        const userData = await checkLogin() || {};
 
-        if (userData.isLogin) {
-          dispatch(loginUser(userData));
-        } else if (router.query.tagIdx === 'private' || router.query.tag === 'private') {
-          router.push('/?tabItem=latestPostList');
-        }
       })();
-    }, [router.isReady, user.isLogin, router.query.tagIdx, router.query.tag, router.query.page]);
+    }, [ user.isLogin, router.query.tagIdx, router.query.tag, router.query.page]);
 
     const tagIdx = router.query.tagIdx;
     const tag = router.query.tag;
