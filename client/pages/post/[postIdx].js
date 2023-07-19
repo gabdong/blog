@@ -119,7 +119,7 @@ export async function getStaticPaths() {
         params: { postIdx: post.idx.toString() },
       };
     }),
-    fallback: false,
+    fallback: "blocking",
   };
 }
 

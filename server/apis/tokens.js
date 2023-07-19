@@ -59,9 +59,9 @@ router.get("/check-token", async (req, res) => {
         throw err;
       }
 
-      const { idx } = checkRefreshToken;
-      const newAccessToken = token().access(idx);
-      const newRefreshToken = token().refresh(idx);
+      const { idx: memberIdx } = checkRefreshToken;
+      const newAccessToken = token().access(memberIdx);
+      const newRefreshToken = token().refresh(memberIdx);
 
       const [userRes] = await db.query(
         `
@@ -69,7 +69,7 @@ router.get("/check-token", async (req, res) => {
         FROM members
         WHERE idx=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (userRes.length === 0) {
@@ -86,7 +86,7 @@ router.get("/check-token", async (req, res) => {
         refresh_token=? 
         WHERE member=?
       `,
-        [newRefreshToken, idx]
+        [newRefreshToken, memberIdx]
       );
 
       const [hashIdxRes] = await db.query(
@@ -95,7 +95,7 @@ router.get("/check-token", async (req, res) => {
         FROM tokens 
         WHERE member=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (hashIdxRes.length === 0) {
@@ -118,14 +118,14 @@ router.get("/check-token", async (req, res) => {
         user,
       });
     } else {
-      const { idx } = checkAccessToken;
+      const { idx: memberIdx } = checkAccessToken;
       const [userRes] = await db.query(
         `
         SELECT idx, id, name, phone, email
         FROM members
         WHERE idx=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (userRes.length === 0) {
