@@ -1,12 +1,11 @@
+import { useRouter } from "next/router";
+
 import PostList from "@/components/PostList";
 import WithAuthorization from "@/components/WithAuthorization";
 
-function Tag({tagIdx, page}) {
-  return (
-    <>
-      <PostList tagIdx={tagIdx} page={Number(page)} limit={9} />
-    </>
-  );
-}
+export default function Tag() {
+  const router = useRouter();
+  const { tagIdx, page } = router.query;
 
-export default WithAuthorization(Tag);
+  return WithAuthorization(PostList)({ tagIdx, page });
+}

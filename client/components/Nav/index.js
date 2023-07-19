@@ -51,7 +51,7 @@ export default function Nav() {
 
   useEffect(() => {
     if (router.isReady) getTagData();
-  }, [router.asPath]);
+  }, [router.asPath, router.isReady]);
 
   return (
     <>

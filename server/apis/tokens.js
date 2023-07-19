@@ -99,8 +99,8 @@ router.get("/check-token", async (req, res) => {
       );
 
       if (hashIdxRes.length === 0) {
-        const err = new Error("토큰 hash idx요청을 실패하였습니다.");
-        err.status = 500;
+        const err = new Error("토큰 hash idx 정보가 없습니다.");
+        err.status = 404;
         throw err;
       }
 
