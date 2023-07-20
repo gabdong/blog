@@ -31,10 +31,11 @@ export async function checkToken(ssr = false, cookie = "") {
 }
 
 /**
- * * 로그인 확인
+ * * 로그인 확인 후 redux user data return
  * @param {Object} ctx
+ * @return {Object} user
  */
-export const checkLogin = async (ssr = false, cookie = null) => {
+export const checkLogin = async (ssr = false, cookie = "") => {
   let user = null;
 
   try {
