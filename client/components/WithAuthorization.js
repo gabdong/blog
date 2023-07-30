@@ -14,14 +14,9 @@ const WithAuthorization = (Component) => (props) => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
-  //TODO 게시글 로드전에 로그인 확인할 방법찾기
   useEffect(() => {
     (async () => {
-      if (
-        router.isReady &&
-        (router.query.tagIdx === "private" || router.query.tag === "private") &&
-        !user.isLogin
-      ) {
+      if (router.isReady && !user.isLogin) {
         const userData = await checkLogin();
 
         if (userData && userData.isLogin) {
