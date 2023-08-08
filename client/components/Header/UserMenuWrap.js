@@ -4,16 +4,24 @@ import Link from "next/link";
 
 import { removeToken } from "@/lib/apis/tokens";
 import { logoutUser } from "@/store/modules/user";
+import { useRouter } from "next/router";
 
 export default function UserMenuWrap() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
+  console.log(router);
   /**
    * * logout
    */
   const logoutFn = () => {
     removeToken();
     dispatch(logoutUser());
+
+    const url = router.asPath;
+    if (url.includes('private') || url.includes('/postEditor/new')) {
+      router.push('/?tabItem=latestPostList');
+    }
   };
 
   return (

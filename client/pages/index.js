@@ -46,7 +46,7 @@ export default function Index({ pageProps }) {
 
 export async function getServerSideProps(ctx) {
   const user = await checkLogin(true, ctx.req.headers?.cookie);
-  return { props: { user: user } };
+  return { props: { user } };
 }
 
 const HomeWrapSt = styled.section`

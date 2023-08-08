@@ -6,7 +6,7 @@ import { checkLogin } from "@/lib/apis/tokens";
 import { loginUser } from "@/store/modules/user";
 
 /**
- * * component 권한 확인
+ * * CSR component 권한 확인
  * @param {Component} Component
  */
 const WithAuthorization = (Component) => (props) => {
