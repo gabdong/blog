@@ -24,6 +24,7 @@ import { getTagList } from "@/lib/apis/tags";
 import { checkLogin } from "@/lib/apis/tokens";
 import { loginUser } from "@/store/modules/user";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
+import { getPost } from "@/lib/apis/posts";
 // import { getPost } from "../apis/posts";
 // import Button from "../components/Button/Button";
 // import Input from "../components/Input/Input";
@@ -32,23 +33,52 @@ import { ssrRequireAuthentication } from "@/lib/utils/utils";
 export default function PostEditor() {
   const router = useRouter();
   const dispatch = useDispatch();
-  // const [postType, setPostType] = useState();
   const { type: postType } = router.query;
   const user = useSelector((store) => store.user);
 
+  //* varaiable
+  const postIdx = router.query.post;
+
+  //* state
+  const [subject, setSubject] = useState("");
+  const [content, setContent] = useState("");
+  const [selectedTag, setSelectedTag] = useState([]);
+
+  /**
+   * 제목, 내용, 태그 -> state
+   */
   useEffect(() => {
     (async () => {
+      if (!router.isReady) return;
+
       const userData = await checkLogin();
 
       if (userData && userData.isLogin) {
         dispatch(loginUser(userData));
 
         const getTagListRes = await getTagList();
+        const { data: tagDataRes } = getTagListRes;
+
+        if (postType === "edit") {
+          const postDataRes = await getPost(Number(postIdx));
+
+          setSubject(postDataRes.subject);
+          setContent(postDataRes.content);
+          setSelectedTag(postDataRes.tags);
+          console.log(postDataRes);
+        }
+
+        console.log(tagDataRes);
       } else {
+        //* 로그인 안했을경우 게시글 작성불가
         router.push("/?tabItem=latestPostList");
       }
     })();
-  }, []);
+  }, [router.isReady]);
 
-  return <div></div>;
+  console.log(subject);
+  console.log(content);
+  console.log(selectedTag);
+
+  return !router.isReady ? null : <div></div>;
 }
