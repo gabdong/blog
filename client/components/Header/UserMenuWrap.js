@@ -10,7 +10,6 @@ export default function UserMenuWrap() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  console.log(router);
   /**
    * * logout
    */
