@@ -22,7 +22,7 @@ const WithAuthorization = (Component) => (props) => {
         if (userData && userData.isLogin) {
           dispatch(loginUser(userData));
         } else {
-          router.push("/?tabItem=latestPostList");
+          if (router.asPath.includes('private')) router.push("/?tabItem=latestPostList");
         }
       }
     })();
