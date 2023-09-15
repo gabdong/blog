@@ -21,19 +21,19 @@ import { useDispatch, useSelector } from "react-redux";
 // import axios from "../utils/axios";
 // import { uploadImage } from "../apis/images";
 import { getTagList } from "@/lib/apis/tags";
-import { checkLogin } from "@/lib/apis/tokens";
-import { loginUser } from "@/store/modules/user";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { getPost } from "@/lib/apis/posts";
+import { loginUser } from "@/store/modules/user";
 // import { getPost } from "../apis/posts";
 // import Button from "../components/Button/Button";
 // import Input from "../components/Input/Input";
 // import Radio from "../components/Radio/Radio";
 
-export default function PostEditor() {
-  const router = useRouter();
+export default function PostEditor({ pageProps }) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { type: postType } = router.query;
+  const { userData } = pageProps;
   const user = useSelector((store) => store.user);
 
   //* varaiable
@@ -50,29 +50,25 @@ export default function PostEditor() {
   useEffect(() => {
     (async () => {
       if (!router.isReady) return;
-
-      const userData = await checkLogin();
-
-      if (userData && userData.isLogin) {
+      if (userData && userData.isLogin && !user.isLogin)
         dispatch(loginUser(userData));
 
-        const getTagListRes = await getTagList();
-        const { data: tagDataRes } = getTagListRes;
+      //* 로그인 안했을경우 게시글 작성불가
+      if (!userData.isLogin) router.push("/tabItem=lastPostList");
 
-        if (postType === "edit") {
-          const postDataRes = await getPost(Number(postIdx));
+      const getTagListRes = await getTagList();
+      const { data: tagDataRes } = getTagListRes;
 
-          setSubject(postDataRes.subject);
-          setContent(postDataRes.content);
-          setSelectedTag(postDataRes.tags);
-          console.log(postDataRes);
-        }
+      if (postType === "edit") {
+        const postDataRes = await getPost(Number(postIdx));
 
-        console.log(tagDataRes);
-      } else {
-        //* 로그인 안했을경우 게시글 작성불가
-        router.push("/?tabItem=latestPostList");
+        setSubject(postDataRes.subject);
+        setContent(postDataRes.content);
+        setSelectedTag(postDataRes.tags);
+        console.log(postDataRes);
       }
+
+      console.log(tagDataRes);
     })();
   }, [router.isReady]);
 
@@ -82,3 +78,5 @@ export default function PostEditor() {
 
   return !router.isReady ? null : <div></div>;
 }
+
+export const getServerSideProps = ssrRequireAuthentication();

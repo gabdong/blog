@@ -1,16 +1,16 @@
-import { getAllPosts, getPost } from "@/lib/apis/posts";
-
-import WithAuthorization from "@/components/WithAuthorization";
-import PostContent from "@/components/PostContent";
-import { ssrRequireAuthentication } from "@/lib/utils/utils";
+import { getPost } from "@/lib/apis/posts";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
+import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { loginUser } from "@/store/modules/user";
 
-export default function Post({ ...props }) {
+import PostContent from "@/components/PostContent";
+
+export default function Post({ pageProps }) {
   const dispatch = useDispatch();
-  const { userData } = props.pageProps;
-  const { postIdx, postData } = props.pageProps.gsspProps;
+  const { userData } = pageProps;
+  const { postIdx, postData } = pageProps.gsspProps;
 
   useEffect(() => {
     if (userData && userData.isLogin) dispatch(loginUser(userData));
@@ -25,34 +25,3 @@ export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
 
   return { postIdx, postData };
 });
-
-// export const getServerSideProps = ssrRequireAuthentication((ctx) => {
-//   const { postIdx } = ctx;
-
-//   console.log(postIdx);
-// });
-// export async function getStaticProps({ params }) {
-//   const { postIdx } = params;
-//   const postData = await getPost(postIdx, true);
-
-//   return {
-//     props: {
-//       postData,
-//       postIdx,
-//     },
-//   };
-// }
-
-// export async function getStaticPaths() {
-//   const getAllPostsRes = await getAllPosts(true);
-//   const { postList } = getAllPostsRes;
-
-//   return {
-//     paths: postList.map((post) => {
-//       return {
-//         params: { postIdx: post.idx.toString() },
-//       };
-//     }),
-//     fallback: "blocking",
-//   };
-// }
