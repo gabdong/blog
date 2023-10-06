@@ -28,7 +28,6 @@ export default function Header() {
 
   /**
    * * login modal handler
-   */
   const loginModalHandler = (e) => {
     e.preventDefault();
 
@@ -78,6 +77,7 @@ export default function Header() {
         <Link href="/?tabItem=latestPostList">
           <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
         </Link>
+        <p>{process.env.NEXT_PUBLIC_MOBILE_WIDTH}</p>
 
         {/* //* button wrap */}
         <HeaderButtonWrapSt>
@@ -118,7 +118,7 @@ const HeaderSt = styled.header`
   top: 0;
   z-index: 21;
 
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     flex-direction: column;
   }
 `;
@@ -131,7 +131,7 @@ const HeaderInnerSt = styled.div`
   height: 80px;
   position: relative;
 
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     height: 56px;
     min-height: 56px;
   }
@@ -154,7 +154,7 @@ const LogoSt = styled.h1`
   color: var(--primary-color);
   cursor: pointer;
 
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -180,7 +180,7 @@ const HeaderButtonSt = styled.button`
     color: #ffffff;
   }
 
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     font-size: 0.9rem;
   }
 `;

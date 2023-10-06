@@ -42,8 +42,9 @@ export default function Nav() {
     setTotalPostCnt(tagDataRes.totalPostCnt);
     setPrivatePostCnt(tagDataRes.privatePostCnt);
     setTagLoading(false);
+
     if (query.tagIdx || query.tag) {
-      setActiveTagIdx(query.tagIdx || query.tag);
+      setActiveTagIdx(query.tagIdx ?? query.tag);
     } else {
       setActiveTagIdx(null);
     }
