@@ -1,3 +1,6 @@
+/**
+ *
+ */
 import axios from "../utils/axios";
 import { authCheckAxios } from "../utils/axios";
 
@@ -17,7 +20,7 @@ export function removeToken() {
  */
 export async function checkToken(ssr = false, cookie = "") {
   if (cookie) authCheckAxios.defaults.headers.cookie = cookie;
-  
+
   try {
     const url = ssr
       ? `${process.env.REACT_APP_SERVER_URL}/apis/tokens/check-token`

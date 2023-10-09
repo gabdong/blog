@@ -5,7 +5,7 @@ import TabButton from "@/components/Tab/TabButton";
 
 export default function Tab({ tabBtnList = {}, tabItemList = {}, tabCnt }) {
   const router = useRouter();
-  const {asPath} = router;
+  const { asPath } = router;
   const activeTab = router.query.tabItem || Object.keys(tabItemList)[0];
   const activeIndex = Object.keys(tabItemList).indexOf(activeTab);
 
@@ -67,10 +67,6 @@ const TabButtonWrapSt = styled.div`
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
-  }
-
-  & .tabBtn.active {
-    color: var(--primary-color);
   }
 `;
 const TabButtonContainerSt = styled.div`

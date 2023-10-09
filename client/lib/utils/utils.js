@@ -2,7 +2,7 @@ import { checkLogin } from "@/lib/apis/tokens";
 
 /**
  * * SSR 권한확인
- * @param {Function} gssp
+ * @param {Function} gssp : getServerSideProps
  * @returns {Object}
  */
 export function ssrRequireAuthentication(gssp = null) {
