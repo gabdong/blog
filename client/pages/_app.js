@@ -20,6 +20,7 @@ export default function App({ Component, ...rest }) {
       </Head>
       <WrapperSt>
         <Header />
+        <ModalSt id="modal" />
         <MainSt id="main">
           <Nav />
           <Component {...pageProps} />
@@ -46,4 +47,10 @@ const MainSt = styled.main`
   width: 1200px;
   max-width: 100%;
   padding-bottom: 60px;
+`;
+const ModalSt = styled.aside`
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
 `;
