@@ -28,6 +28,7 @@ export default function Header() {
 
   /**
    * * login modal handler
+   */
   const loginModalHandler = (e) => {
     e.preventDefault();
 
@@ -77,7 +78,6 @@ export default function Header() {
         <Link href="/?tabItem=latestPostList">
           <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
         </Link>
-        <p>{process.env.NEXT_PUBLIC_MOBILE_WIDTH}</p>
 
         {/* //* button wrap */}
         <HeaderButtonWrapSt>
@@ -103,7 +103,7 @@ export default function Header() {
       </HeaderInnerSt>
 
       {/* //* login modal */}
-      {loginModalView ? <LoginModal modalHandler={loginModalHandler} /> : null}
+      {loginModalView && <LoginModal modalHandler={loginModalHandler} />}
     </HeaderSt>
   );
 }

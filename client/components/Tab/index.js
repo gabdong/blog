@@ -68,10 +68,6 @@ const TabButtonWrapSt = styled.div`
     cursor: pointer;
     transition: var(--transition);
   }
-
-  & .tabBtn.active {
-    color: var(--primary-color);
-  }
 `;
 const TabButtonContainerSt = styled.div`
   display: flex;
