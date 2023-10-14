@@ -1,21 +1,12 @@
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-
 import PostList from "@/components/PostList";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
-import { loginUser } from "@/store/modules/user";
-import { useEffect } from "react";
+import { setUser } from "@/lib/apis/tokens";
 
 export default function Tag({ pageProps }) {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const { userData, urlParams } = pageProps;
+  const { tagIdx, page } = urlParams;
 
-  const { userData } = pageProps;
-  const { tagIdx, page } = router.query;
-
-  useEffect(() => {
-    if (userData && userData.isLogin) dispatch(loginUser(userData));
-  }, [userData]);
+  setUser(userData);
 
   return <PostList tagIdx={tagIdx} page={page} />;
 }

@@ -43,10 +43,15 @@ const WrapperSt = styled.div`
 `;
 const MainSt = styled.main`
   display: flex;
+  gap: 20px;
 
   width: 1200px;
   max-width: 100%;
   padding-bottom: 60px;
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    display: block;
+  }
 `;
 const ModalSt = styled.aside`
   position: fixed;

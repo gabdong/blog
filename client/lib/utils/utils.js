@@ -6,8 +6,7 @@ import { checkLogin } from "@/lib/apis/tokens";
  * @returns {Object}
  */
 export function ssrRequireAuthentication(gssp = null) {
-  return async (ctx) => {
-    const { req, res } = ctx;
+  return async ({ req, query }) => {
     const { url } = req;
     const userData = await checkLogin(true, req.headers?.cookie);
 
@@ -22,6 +21,6 @@ export function ssrRequireAuthentication(gssp = null) {
 
     const gsspProps = typeof gssp == "function" ? await gssp(ctx) : null;
 
-    return { props: { userData, gsspProps } };
+    return { props: { userData, gsspProps, urlParams: { ...query } } };
   };
 }

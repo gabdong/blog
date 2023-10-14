@@ -60,7 +60,11 @@ export default function Nav() {
         <NavSt id="nav" />
       ) : (
         <>
-          <NavBackgroundSt id="navBackground" onClick={navClose} />
+          <NavBackgroundSt
+            id="navBackground"
+            className="mobileOnly"
+            onClick={navClose}
+          />
           <NavSt id="nav">
             <CloseBtnSt className="mobileOnly" onClick={navClose} />
             <NavButton
@@ -108,12 +112,11 @@ const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
   gap: 8px;
+
   width: 140px;
   min-width: 140px;
 
   @media all and (max-width: 767px) {
-    gap: 12px;
-
     width: 80%;
     height: 100%;
     padding: 20px;
@@ -141,7 +144,7 @@ const NavSt = styled.nav`
   }
 `;
 const NavBackgroundSt = styled.div`
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     &.active {
       width: 100%;
       height: 100%;

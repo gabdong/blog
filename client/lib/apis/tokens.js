@@ -1,8 +1,20 @@
 /**
- *
+ * @info 로그인 권한 등 관리 api
  */
+import { useDispatch } from "react-redux";
 import axios from "../utils/axios";
 import { authCheckAxios } from "../utils/axios";
+import { loginUser } from "@/store/modules/user";
+
+/**
+ * * set redux user data
+ * @param {Object} userData
+ */
+export function setUser(userData) {
+  const dispatch = useDispatch();
+
+  if (userData && userData.isLogin) dispatch(loginUser(userData));
+}
 
 /**
  * * 로그아웃시 권한을 제거해주는 함수
