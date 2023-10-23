@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
       alt = duplicatedImgRes[0].alt;
     }
 
-    res.json({ msg: "SUCCESS", url, alt });
+    res.json({ msg: "OK", url, alt });
   } catch (err) {
     res.status(500).json({ msg: "중복된 이미지검사를 실패하였습니다." });
   }
@@ -53,7 +53,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
       [userIdx, size, originalname, name, location, alt, mimetype]
     );
 
-    res.json({ msg: "SUCCESS", url: location });
+    res.json({ msg: "OK", url: location });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "이미지 업로드를 실패하였습니다." });

@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24, // 1일
       httpOnly: true,
     });
-    res.json({ msg: "SUCCESS", user, accessToken });
+    res.json({ msg: "OK", user, accessToken });
   } catch (err) {
     if (err.statusCode) {
       res.status(err.statusCode).json({ msg: err.message });

@@ -21,7 +21,7 @@ router.delete("/", async (req, res) => {
     maxAge: 0,
   });
 
-  res.json({ msg: "SUCCESS" });
+  res.json({ msg: "OK" });
 });
 
 //* token 유효성 검사, refreshToken만 있는경우 token 재발급
@@ -111,7 +111,7 @@ router.get("/check-token", async (req, res) => {
         httpOnly: true,
       });
       res.json({
-        msg: "SUCCESS",
+        msg: "OK",
         status: 200,
         newAccessToken,
         auth: true,
@@ -135,7 +135,7 @@ router.get("/check-token", async (req, res) => {
       }
 
       const user = userRes[0];
-      res.json({ msg: "SUCCESS", status: 200, auth: true, user });
+      res.json({ msg: "OK", status: 200, auth: true, user });
     }
   } catch (err) {
     if (err.status) {

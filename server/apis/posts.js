@@ -52,7 +52,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
     `
     );
 
-    res.json({ msg: "SUCCESS", postList: postListRes, totalCnt });
+    res.json({ msg: "OK", postList: postListRes, totalCnt });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
@@ -82,7 +82,7 @@ router.get("/:postIdx", async (req, res) => {
       throw err;
     }
 
-    res.json({ msg: "SUCCESS", postData: postDataRes[0] });
+    res.json({ msg: "OK", postData: postDataRes[0] });
   } catch (err) {
     if (err.status) {
       res.status(err.status).json({ msg: err.message });
@@ -122,7 +122,7 @@ router.post("/", async (req, res) => {
       ]
     );
 
-    res.json({ msg: "SUCCESS", postIdx: insertPostRes.insertId });
+    res.json({ msg: "OK", postIdx: insertPostRes.insertId });
   } catch (err) {
     res.status(500).json({ msg: "게시판 업로드를 실패하였습니다." });
   }
@@ -162,7 +162,7 @@ router.put("/:postIdx", async (req, res) => {
       ]
     );
 
-    res.json({ msg: "SUCCESS" });
+    res.json({ msg: "OK" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "게시글 수정을 실패하였습니다." });
@@ -183,7 +183,7 @@ router.delete("/:postIdx", async (req, res) => {
       [postIdx]
     );
 
-    res.json({ msg: "SUCCESS" });
+    res.json({ msg: "OK" });
   } catch (err) {
     res.status(500).json({ msg: "게시글 삭제를 실패하였습니다." });
   }

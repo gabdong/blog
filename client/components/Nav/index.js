@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { RiCloseFill as Close } from "react-icons/ri";
 
-import { getTagList } from "@/lib/apis/tags";
+import useTagData from "@/lib/hooks/useTagData";
 
 import NavButton from "@/components/Nav/NavButton";
 
@@ -24,39 +24,16 @@ export default function Nav() {
   const { isLogin } = user;
   const router = useRouter();
   const { query } = router;
-
-  const [tagLoading, setTagLoading] = useState(true);
-  const [tagList, setTagList] = useState({});
-  const [totalPostCnt, setTotalPostCnt] = useState(0);
-  const [privatePostCnt, setPrivatePostCnt] = useState(0);
+  const { tagData, tagLoaidng: isLoading } = useTagData(router.isReady);
   const [activeTagIdx, setActiveTagIdx] = useState(null);
 
-  /**
-   * * 태그데이터 가져온 뒤 상태설정해주는 함수
-   */
-  const getTagData = async () => {
-    const getTagListRes = await getTagList();
-    const { data: tagDataRes } = getTagListRes;
-
-    setTagList(tagDataRes.tagList);
-    setTotalPostCnt(tagDataRes.totalPostCnt);
-    setPrivatePostCnt(tagDataRes.privatePostCnt);
-    setTagLoading(false);
-
-    if (query.tagIdx || query.tag) {
-      setActiveTagIdx(query.tagIdx ?? query.tag);
-    } else {
-      setActiveTagIdx(null);
-    }
-  };
-
   useEffect(() => {
-    if (router.isReady) getTagData();
-  }, [router.asPath, router.isReady]);
+    if (router.isReady) setActiveTagIdx(query.tagIdx ?? query.tag);
+  }, [query]);
 
   return (
     <>
-      {tagLoading ? (
+      {isLoading ? (
         <NavSt id="nav" />
       ) : (
         <>
@@ -69,13 +46,12 @@ export default function Nav() {
             <CloseBtnSt className="mobileOnly" onClick={navClose} />
             <NavButton
               path="/tag/total?page=1"
-              text={`Total (${totalPostCnt})`}
+              text={`Total (${tagData.totalPostCnt})`}
               active={activeTagIdx === "total" ? "active" : ""}
             />
-            {Object.entries(tagList).map((tagData) => {
-              const tagIdx =
-                tagData[0] !== "total" ? Number(tagData[0]) : tagData[0];
-              const { auth, name, postCnt } = tagData[1];
+            {Object.entries(tagData.tagList).map((data) => {
+              const tagIdx = data[0] !== "total" ? Number(data[0]) : data[0];
+              const { auth, name, postCnt } = data[1];
               const activeClass =
                 Number(activeTagIdx) === tagIdx || activeTagIdx === name
                   ? "active"
@@ -97,7 +73,7 @@ export default function Nav() {
             {isLogin ? (
               <NavButton
                 path="/tag/private?page=1"
-                text={`Private (${privatePostCnt})`}
+                text={`Private (${tagData.privatePostCnt})`}
               />
             ) : null}
             {isLogin ? <NavButton path="/settings" text="Settings" /> : null}

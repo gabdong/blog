@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
       tagList[idx] = { auth, name, postCnt };
     }
 
-    res.json({ msg: "SUCCESS", tagList, totalPostCnt, privatePostCnt });
+    res.json({ msg: "OK", tagList, totalPostCnt, privatePostCnt });
   } catch (err) {
     res
       .status(500)
@@ -90,7 +90,7 @@ router.post("/", async (req, res) => {
     }
   }
 
-  res.json({ msg: "SUCCESS" });
+  res.json({ msg: "OK" });
 });
 
 //* 태그 수정
@@ -124,7 +124,7 @@ router.put("/:tagIdx", async (req, res) => {
         [name, tagIdx]
       );
 
-      res.json({ msg: "SUCCESS" });
+      res.json({ msg: "OK" });
     }
   } catch (err) {
     if (err.status) {
@@ -149,7 +149,7 @@ router.delete("/:tagIdx", async (req, res) => {
       [tagIdx]
     );
 
-    res.json({ msg: "SUCCESS" });
+    res.json({ msg: "OK" });
   } catch (err) {
     res.status(500).json({ msg: "태그 삭제를 실패하였습니다." });
   }

@@ -22,6 +22,7 @@ const navOpen = () => {
 };
 
 export default function Header() {
+  console.log('Header');
   const user = useSelector((store) => store.user, shallowEqual);
   const [loginModalView, setloginModalView] = useState(false); // login modal control
   const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
@@ -63,9 +64,11 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    if (userMenuWrapView) window.addEventListener("click", closeUserMenuWrap);
-    if (!userMenuWrapView)
+    if (userMenuWrapView) {
+      window.addEventListener("click", closeUserMenuWrap);
+    } else {
       window.removeEventListener("click", closeUserMenuWrap);
+    }
   }, [userMenuWrapView]);
 
   return (

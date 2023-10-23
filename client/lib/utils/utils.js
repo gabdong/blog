@@ -6,9 +6,9 @@ import { checkLogin } from "@/lib/apis/tokens";
  * @returns {Object}
  */
 export function ssrRequireAuthentication(gssp = null) {
-  return async ({ req, query }) => {
-    const { url } = req;
-    const userData = await checkLogin(true, req.headers?.cookie);
+  return async (ctx) => {
+    const { query, req: { url } } = ctx;
+    const userData = await checkLogin(true, ctx.req.headers?.cookie);
 
     if (url.includes("private") && (!userData || !userData.isLogin)) {
       return {
