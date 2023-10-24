@@ -1,14 +1,23 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import Link from "next/link";
 
 import { removeToken } from "@/lib/apis/tokens";
 import { logoutUser } from "@/store/modules/user";
-import { useRouter } from "next/router";
 
-export default function UserMenuWrap() {
+export default function UserMenuWrap({ closeUserMenuWrapFn }) {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  useEffect(() => {
+    window.addEventListener("click", closeUserMenuWrapFn);
+
+    return () => {
+      window.removeEventListener("click", closeUserMenuWrapFn);
+    }
+  }, []);
 
   /**
    * * logout

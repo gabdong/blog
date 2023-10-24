@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import axios, { authCheckAxios } from "../lib/utils/axios";
@@ -7,19 +7,12 @@ import { loginUser } from "@/store/modules/user";
 
 import Input from "./Input";
 import Button from "./Button";
+import useInput from "@/lib/hooks/useInput";
 
 export default function LoginModal({ modalHandler }) {
   const dispatch = useDispatch();
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-
-  //* id, password handler
-  const idHandler = (e) => {
-    setId(e.target.value);
-  };
-  const passwordHandler = (e) => {
-    setPassword(e.target.value);
-  };
+  const [id, idHandler] = useInput('');
+  const [password, passwordHandler] = useInput('');
 
   /**
    * * 로그인

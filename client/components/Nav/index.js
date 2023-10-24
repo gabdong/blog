@@ -24,7 +24,7 @@ export default function Nav() {
   const { isLogin } = user;
   const router = useRouter();
   const { query } = router;
-  const { tagData, tagLoaidng: isLoading } = useTagData(router.isReady);
+  const { tagData, tagLoaidng } = useTagData(router.isReady);
   const [activeTagIdx, setActiveTagIdx] = useState(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Nav() {
 
   return (
     <>
-      {isLoading ? (
+      {tagLoaidng ? (
         <NavSt id="nav" />
       ) : (
         <>

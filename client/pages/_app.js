@@ -36,8 +36,6 @@ const WrapperSt = styled.div`
   align-items: center;
   gap: 40px;
 
-  width: 1600px;
-  max-width: 90%;
   margin: 0 auto;
   user-select: none;
 `;
@@ -45,8 +43,8 @@ const MainSt = styled.main`
   display: flex;
   gap: 20px;
 
-  width: 1200px;
-  max-width: 100%;
+  width: 1280px;
+  max-width: 90%;
   padding-bottom: 60px;
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {

@@ -24,8 +24,8 @@ const navOpen = () => {
 export default function Header() {
   console.log('Header');
   const user = useSelector((store) => store.user, shallowEqual);
-  const [loginModalView, setloginModalView] = useState(false); // login modal control
-  const [userMenuWrapView, setUserMenuWrapView] = useState(false); // login 돼있을경우 user menu control
+  const [loginModalView, setloginModalView] = useState(false);
+  const [userMenuWrapView, setUserMenuWrapView] = useState(false);
 
   /**
    * * login modal handler
@@ -50,7 +50,7 @@ export default function Header() {
    * * userMenuWrap 이외영역 클릭시 userMenuWrap 닫기
    * @param {Event} e
    */
-  const closeUserMenuWrap = useCallback((e) => {
+  const closeUserMenuWrap = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -59,17 +59,8 @@ export default function Header() {
       e.target.classList.contains(".menuWrapBtn")
     ) {
       setUserMenuWrapView(false);
-      window.removeEventListener("click", closeUserMenuWrap);
     }
-  }, []);
-
-  useEffect(() => {
-    if (userMenuWrapView) {
-      window.addEventListener("click", closeUserMenuWrap);
-    } else {
-      window.removeEventListener("click", closeUserMenuWrap);
-    }
-  }, [userMenuWrapView]);
+  }
 
   return (
     <HeaderSt id="header">
@@ -101,7 +92,7 @@ export default function Header() {
             {!user.isLogin ? "Login" : `${user.name} 님`}
             {!user.isLogin ? null : <DownIconSt />}
           </HeaderButtonSt>
-          {user.isLogin && userMenuWrapView ? <UserMenuWrap /> : null}
+          {user.isLogin && userMenuWrapView ? <UserMenuWrap closeUserMenuWrapFn={closeUserMenuWrap}/> : null}
         </HeaderButtonWrapSt>
       </HeaderInnerSt>
 
@@ -131,7 +122,9 @@ const HeaderInnerSt = styled.div`
   align-items: center;
 
   width: 100%;
+  max-width: 90%;
   height: 80px;
+  margin: 0 auto;
   position: relative;
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
