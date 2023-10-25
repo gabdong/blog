@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import LinkButton from "@/components/LinkButton";
 import LoginModal from "@/components/LoginModal";
 import UserMenuWrap from "@/components/Header/UserMenuWrap";
+import Modal from "../Modal";
 
 /**
  * * nav open
@@ -22,7 +23,6 @@ const navOpen = () => {
 };
 
 export default function Header() {
-  console.log('Header');
   const user = useSelector((store) => store.user, shallowEqual);
   const [loginModalView, setloginModalView] = useState(false);
   const [userMenuWrapView, setUserMenuWrapView] = useState(false);
@@ -62,9 +62,22 @@ export default function Header() {
     }
   }
 
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      const { scrollY } = window;
+      const header_inner = document.getElementById('header_inner');
+
+      if (scrollY > 100) {
+        header_inner.classList.add('active');
+      } else {
+        header_inner.classList.remove('active');
+      }
+    }, { passive: true });
+  }, []);
+
   return (
     <HeaderSt id="header">
-      <HeaderInnerSt>
+      <HeaderInnerSt id="header_inner">
         {/* //* nav button */}
         <NavIconSt className="mobileOnly" onClick={navOpen} />
 
@@ -97,7 +110,7 @@ export default function Header() {
       </HeaderInnerSt>
 
       {/* //* login modal */}
-      {loginModalView && <LoginModal modalHandler={loginModalHandler} />}
+      {loginModalView && <Modal component={<LoginModal modalHandler={loginModalHandler}/>} />}
     </HeaderSt>
   );
 }
@@ -106,7 +119,7 @@ const HeaderSt = styled.header`
   display: flex;
 
   width: 100%;
-  background: var(--dark);
+  backdrop-filter: blur(5px);
   position: sticky;
   left: 0;
   top: 0;
@@ -126,6 +139,11 @@ const HeaderInnerSt = styled.div`
   height: 80px;
   margin: 0 auto;
   position: relative;
+  transition: var(--transition);
+
+  &.active {
+    height: 45px;
+  }
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     height: 56px;

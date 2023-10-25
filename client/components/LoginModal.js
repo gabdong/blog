@@ -82,7 +82,6 @@ const LoginModalSt = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
 `;
 const LoginModalOverlay = styled.div`
   width: 100%;

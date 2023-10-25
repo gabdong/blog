@@ -48,7 +48,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
           <FirstPage />
         </Link>
       ) : null}
-      {prevArrowUsing ? (
+      {prevArrowUsing ? ( //* 이전페이지그룹
         <Link
           href={`${path}?page=${
             page - paginationCnt < 1 ? 1 : page - paginationCnt
@@ -57,6 +57,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
           <Prev />
         </Link>
       ) : null}
+      //* 페이지
       {Array.from({ length: paginationLength }).map((a, i) => {
         let pageNum = startNum + i;
 
@@ -77,7 +78,7 @@ function Pagination({ totalCnt, page, paginationCnt = 10, path, limit = 10 }) {
           </Link>
         );
       })}
-      {nextArrowUsing ? (
+      {nextArrowUsing ? ( //* 다음페이지그룹
         <Link
           href={`${path}?page=${
             page + paginationCnt > lastNum ? lastNum : page + paginationCnt

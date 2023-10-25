@@ -20,11 +20,11 @@ export default function App({ Component, ...rest }) {
       </Head>
       <WrapperSt>
         <Header />
-        <ModalSt id="modal" />
         <MainSt id="main">
           <Nav />
           <Component {...pageProps} />
         </MainSt>
+        <ModalSt id="modal" />
       </WrapperSt>
     </Provider>
   );
@@ -55,5 +55,5 @@ const ModalSt = styled.aside`
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 22;
 `;

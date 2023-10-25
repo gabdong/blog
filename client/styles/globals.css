@@ -67,7 +67,6 @@ html, body {
   height: 100%;
   background: var(--dark);
   color: #ffffff;
-  overflow-y: auto;
 }
 body {
 line-height: 1;
