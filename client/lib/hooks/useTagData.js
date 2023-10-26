@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import { getTagList } from "../apis/tags";
 
 /**
- * * 태그정보를 가져오는 Hook
- * @param {Boolean} isReady 
+ * * 태그정보를 가져오는 Hook - 태그변경사항 있을시 반영위해 memoization하지 않음
  * @returns {Object}
  */
-export default function useTagData(isReady) {
+export default function useTagData() {
+    const router = useRouter();
+    const { query } = router;
     const [tagData, setTagData] = useState({tagList: {}, tagLoading: true});
-    const [tagLoading, setTagLoading] = useState(true);
 
     useEffect(() => {
-        if (isReady) {
-            (async () => {
-                const getTagListRes = await getTagList();
-                const { data: tagDataRes } = getTagListRes;
-    
-                setTagData({
-                    tagList: tagDataRes.tagList,
-                    totalPostCnt: tagDataRes.totalPostCnt,
-                    privatePostCnt: tagDataRes.privatePostCnt
-                });
+        (async () => {
+            const getTagListRes = await getTagList();
+            const { data: tagDataRes } = getTagListRes;
 
-                setTagLoading(false);
-            })();
-        }
-    }, [isReady]);
+            setTagData({
+                tagList: tagDataRes.tagList,
+                totalPostCnt: tagDataRes.totalPostCnt,
+                privatePostCnt: tagDataRes.privatePostCnt,
+                tagLoading: false,
+                activeTagIdx: query.tagIdx ?? query.tag
+            });
+        })();
+    }, [query]);
 
-    return { tagData, tagLoading };
+    return { tagData };
 }

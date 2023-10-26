@@ -63,11 +63,11 @@ export default function Header() {
   }
 
   useEffect(() => {
+    const header_inner = document.getElementById('header_inner');
     window.addEventListener('scroll', () => {
       const { scrollY } = window;
-      const header_inner = document.getElementById('header_inner');
 
-      if (scrollY > 100) {
+      if (scrollY > 50) {
         header_inner.classList.add('active');
       } else {
         header_inner.classList.remove('active');

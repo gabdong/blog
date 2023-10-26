@@ -7,6 +7,11 @@ import Link from "next/link";
 import { removeToken } from "@/lib/apis/tokens";
 import { logoutUser } from "@/store/modules/user";
 
+/**
+ * 로그인했을경우 이름영역 클릭시 보이는 드롭다운
+ * @param {Object} props
+ * @param {Function} props.closeUserMenuWrapFn 드롭다운 닫아주는 함수
+ */
 export default function UserMenuWrap({ closeUserMenuWrapFn }) {
   const dispatch = useDispatch();
   const router = useRouter();

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { RiCloseFill as Close } from "react-icons/ri";
@@ -22,18 +20,12 @@ const navClose = () => {
 export default function Nav() {
   const user = useSelector((store) => store.user, shallowEqual);
   const { isLogin } = user;
-  const router = useRouter();
-  const { query } = router;
-  const { tagData, tagLoaidng } = useTagData(router.isReady);
-  const [activeTagIdx, setActiveTagIdx] = useState(null);
-
-  useEffect(() => {
-    if (router.isReady) setActiveTagIdx(query.tagIdx ?? query.tag);
-  }, [query]);
+  const { tagData } = useTagData();
+  const { tagLoading, activeTagIdx } = tagData;
 
   return (
     <>
-      {tagLoaidng ? (
+      {tagLoading ? (
         <NavSt id="nav" />
       ) : (
         <>
