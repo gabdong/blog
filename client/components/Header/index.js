@@ -110,7 +110,7 @@ export default function Header() {
       </HeaderInnerSt>
 
       {/* //* login modal */}
-      {loginModalView && <Modal component={<LoginModal modalHandler={loginModalHandler}/>} />}
+      {<Modal modalView={loginModalView} component={<LoginModal modalHandler={loginModalHandler}/>} />}
     </HeaderSt>
   );
 }

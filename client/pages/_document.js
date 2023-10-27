@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head></Head>
-        <body>
+        <body className="scroll">
           <Main />
           <NextScript />
         </body>
