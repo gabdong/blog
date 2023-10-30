@@ -6,6 +6,15 @@ import Link from "next/link";
 import { getPostList } from "@/lib/apis/posts";
 import Pagination from "@/components/Pagination";
 
+/**
+ * * 게시글 리스트
+ * @param {Object} props
+ * @param {String} props.tagIdx
+ * @param {Number} props.page
+ * @param {Number} props.limit
+ * @param {Boolean} props.paginationUsing
+ * @returns {JSX.Element}
+ */
 export default function PostList({
   tagIdx = "total",
   page = 1,
@@ -31,7 +40,7 @@ export default function PostList({
       setTotalCnt(totalCnt);
       setLoading(false);
     })();
-  }, [tagIdx, page, limit, paginationUsing]);
+  }, [tagIdx, page]);
 
   return (
     <>
@@ -65,8 +74,7 @@ export default function PostList({
               return (
                 <PostListLiSt key={idx} className="postListLi">
                   <PostLinkSt
-                    href={`/post/${idx}?tag=${tagIdx}`}
-                    state={{ activeTagIdx: tagIdx }}
+                    href={`/post/${idx}?tagIdx=${tagIdx}`}
                   >
                     {!thumbnail ? null : (
                       <PostThumbnailSt

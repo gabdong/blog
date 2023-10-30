@@ -22,7 +22,7 @@ export default function useTagData() {
                 totalPostCnt: tagDataRes.totalPostCnt,
                 privatePostCnt: tagDataRes.privatePostCnt,
                 tagLoading: false,
-                activeTagIdx: query.tagIdx ?? query.tag
+                activeTagIdx: query.tagIdx
             });
         })();
     }, [query]);
