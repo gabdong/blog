@@ -25,6 +25,7 @@ const ButtonSt = styled.button`
   color: #ffffff;
   border-radius: var(--border-radius);
   transition: var(--transition);
+  text-align: center;
   cursor: pointer;
 
   &:hover {

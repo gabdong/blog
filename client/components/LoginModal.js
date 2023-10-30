@@ -8,6 +8,12 @@ import Input from "./Input";
 import Button from "./Button";
 import useInput from "@/lib/hooks/useInput";
 
+/**
+ * * 로그인모달
+ * @param {Object} props
+ * @param {Function} props.modalHandler - 모달 display 조절
+ * @returns {JSX.Element}
+ */
 export default function LoginModal({ modalHandler }) {
   const dispatch = useDispatch();
   const [id, idHandler] = useInput('');
@@ -49,21 +55,21 @@ export default function LoginModal({ modalHandler }) {
       <LoginModalOverlay onClick={modalHandler} />
       <LoginModalContent>
         <LoginForm>
-          <h2 className="headline">Welcome</h2>
+          <h2 className="headline">Login</h2>
           <Input
             placeholder="Username"
             value={id}
             onChange={idHandler}
-            style={{ width: "100%" }}
+            style={{ width: "100%", color: 'var(--dark)' }}
           />
           <Input
             placeholder="Password"
             type="password"
             value={password}
             onChange={passwordHandler}
-            style={{ width: "100%" }}
+            style={{ width: "100%", color: 'var(--dark)' }}
           />
-          <Button text="Login" onClick={loginFn} />
+          <Button text="Login" onClick={loginFn} style={{padding: '12px', marginTop: '10px', background: 'var(--primary-color)', color: 'var(--primary-text-color)'}} />
         </LoginForm>
       </LoginModalContent>
     </LoginModalSt>
@@ -95,7 +101,7 @@ const LoginModalContent = styled.div`
   max-width: 90%;
   padding: 0 20px;
   border-radius: var(--border-radius);
-  background: var(--dark-l);
+  background: #ffffff;
   position: relative;
   z-index: 1;
 `;
@@ -111,11 +117,7 @@ const LoginForm = styled.form`
 
   h2 {
     align-self: flex-start;
-    margin-bottom: 24px;
-  }
-
-  button {
-    align-self: flex-end;
-    margin-top: 10px;
+    margin-bottom: 20px;
+    color: var(--dark);
   }
 `;

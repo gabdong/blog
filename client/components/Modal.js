@@ -1,11 +1,10 @@
 import { createPortal } from "react-dom";
 
 /**
- * 
+ * * Modal Portal
  * @param {Object} props
  * @param {JSX.Element} props.component - 모달 컴포넌트
  * @param {Boolean} props.modalView - 모달 디스플레이여부
- * @returns 
  */
 export default function Modal({component, modalView}) {
     if (typeof window === "undefined") return <></>;

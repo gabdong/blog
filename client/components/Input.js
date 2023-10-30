@@ -25,9 +25,9 @@ export default function Input({
 }
 
 const InputSt = styled.input`
-  padding: 8px 0px;
-  border: none;
-  border-bottom: 2px solid #ddd;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
   cursor: pointer;
   color: #ffffff;
   transition: var(--transition);
@@ -35,6 +35,6 @@ const InputSt = styled.input`
   &:active,
   &:focus,
   &:hover {
-    border-bottom: 2px solid var(--primary-color);
+    border: 1px solid var(--primary-color);
   }
 `;
