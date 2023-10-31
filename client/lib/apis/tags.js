@@ -7,7 +7,7 @@ import axios from "@/lib/utils/axios";
 export async function getTagList() {
   try {
     const tagListRes = await axios.get("/apis/tags/");
-
+    
     return tagListRes;
   } catch (err) {
     console.error(err.response.data.msg);

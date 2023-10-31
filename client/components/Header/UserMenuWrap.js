@@ -27,9 +27,10 @@ export default function UserMenuWrap({ closeUserMenuWrapFn }) {
   /**
    * * logout
    */
-  const logoutFn = () => {
+  const logoutFn = (e) => {
     removeToken();
     dispatch(logoutUser());
+    closeUserMenuWrapFn(e);
 
     const url = router.asPath;
     if (url.includes('private') || url.includes('/postEditor/new')) {

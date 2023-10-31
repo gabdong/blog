@@ -31,8 +31,6 @@ export default function Header() {
    * * login modal handler
    */
   const loginModalHandler = (e) => {
-    e.preventDefault();
-
     setloginModalView((prev) => !prev);
   };
 
@@ -40,9 +38,6 @@ export default function Header() {
    * * user menu wrap handler
    */
   const userMenuWrapHandler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
     setUserMenuWrapView((prev) => !prev);
   };
 
@@ -51,33 +46,31 @@ export default function Header() {
    * @param {Event} e
    */
   const closeUserMenuWrap = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
     if (
-      !e.target.closest(".headerUserBtnWrap") ||
-      e.target.classList.contains(".menuWrapBtn")
+      !e.target.closest(".headerUserBtnWrap") 
+      || e.target.classList.contains(".menuWrapBtn")
+      || e.target.closest(".menuWrapBtn")
     ) {
       setUserMenuWrapView(false);
     }
   }
 
   useEffect(() => {
-    const header_inner = document.getElementById('header_inner');
+    const headerInner = document.getElementById('headerInner');
+
     window.addEventListener('scroll', () => {
       const { scrollY } = window;
-
       if (scrollY > 50) {
-        header_inner.classList.add('active');
+        headerInner.classList.add('active');
       } else {
-        header_inner.classList.remove('active');
+        headerInner.classList.remove('active');
       }
     }, { passive: true });
   }, []);
 
   return (
     <HeaderSt id="header">
-      <HeaderInnerSt id="header_inner">
+      <HeaderInnerSt id="headerInner">
         {/* //* nav button */}
         <NavIconSt className="mobileOnly" onClick={navOpen} />
 

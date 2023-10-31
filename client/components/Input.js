@@ -1,6 +1,7 @@
+import { forwardRef } from "react";
 import styled from "styled-components";
 
-export default function Input({
+const Input = forwardRef(({
   type = "text",
   name,
   placeholder,
@@ -8,7 +9,7 @@ export default function Input({
   style = {},
   onChange,
   onKeyUp,
-}) {
+}, ref) => {
   return (
     <InputSt
       type={type}
@@ -20,9 +21,10 @@ export default function Input({
       onChange={onChange}
       onKeyUp={onKeyUp}
       autoComplete="false"
+      ref={ref}
     />
   );
-}
+});
 
 const InputSt = styled.input`
   padding: 8px 12px;
@@ -38,3 +40,5 @@ const InputSt = styled.input`
     border: 1px solid var(--primary-color);
   }
 `;
+
+export default Input;

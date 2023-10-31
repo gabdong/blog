@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { useEffect, useRef } from "react";
 
 import axios, { authCheckAxios } from "../lib/utils/axios";
 import { loginUser } from "@/store/modules/user";
+import useInput from "@/lib/hooks/useInput";
 
 import Input from "./Input";
 import Button from "./Button";
-import useInput from "@/lib/hooks/useInput";
 
 /**
  * * 로그인모달
@@ -16,6 +17,7 @@ import useInput from "@/lib/hooks/useInput";
  */
 export default function LoginModal({ modalHandler }) {
   const dispatch = useDispatch();
+  const idInputRef = useRef(null);
   const [id, idHandler] = useInput('');
   const [password, passwordHandler] = useInput('');
 
@@ -50,6 +52,10 @@ export default function LoginModal({ modalHandler }) {
     }
   };
 
+  useEffect(() => {
+    idInputRef.current.focus();
+  }, []);
+
   return (
     <LoginModalSt>
       <LoginModalOverlay onClick={modalHandler} />
@@ -61,6 +67,8 @@ export default function LoginModal({ modalHandler }) {
             value={id}
             onChange={idHandler}
             style={{ width: "100%", color: 'var(--dark)' }}
+            onKeyUp={(e) => e.key === 'Enter' ?? loginFn()}
+            ref={idInputRef}
           />
           <Input
             placeholder="Password"
@@ -68,6 +76,7 @@ export default function LoginModal({ modalHandler }) {
             value={password}
             onChange={passwordHandler}
             style={{ width: "100%", color: 'var(--dark)' }}
+            onKeyUp={(e) => e.key === 'Enter' ?? loginFn()}
           />
           <Button text="Login" onClick={loginFn} style={{padding: '12px', marginTop: '10px', background: 'var(--primary-color)', color: 'var(--primary-text-color)'}} />
         </LoginForm>
