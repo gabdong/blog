@@ -9,12 +9,12 @@ export default function Button({
 }) {
   return (
     <ButtonSt
-      className={`buttonText ${classname}`}
+      className={`${classname}`}
       as={as}
       style={style}
       onClick={onClick}
     >
-      {text}
+      <span className='buttonText'>{text}</span>
     </ButtonSt>
   );
 }

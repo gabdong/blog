@@ -2,9 +2,11 @@
  * @info 로그인 권한 등 관리 api
  */
 import { useDispatch } from "react-redux";
+
 import axios from "../utils/axios";
 import { authCheckAxios } from "../utils/axios";
 import { loginUser } from "@/store/modules/user";
+import { useEffect } from "react";
 
 /**
  * * set redux user data
@@ -13,7 +15,9 @@ import { loginUser } from "@/store/modules/user";
 export function setUser(userData) {
   const dispatch = useDispatch();
 
-  if (userData && userData.isLogin) dispatch(loginUser(userData));
+  useEffect(() => {
+    if (userData && userData.isLogin) dispatch(loginUser(userData));
+  }, [userData]);
 }
 
 /**
