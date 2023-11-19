@@ -1,30 +1,27 @@
 import { forwardRef } from "react";
 import styled from "styled-components";
 
-const Input = forwardRef(({
-  type = "text",
-  name,
-  placeholder,
-  value,
-  style = {},
-  onChange,
-  onKeyUp,
-}, ref) => {
-  return (
-    <InputSt
-      type={type}
-      name={name}
-      className="inputText"
-      placeholder={placeholder}
-      style={style}
-      value={value}
-      onChange={onChange}
-      onKeyUp={onKeyUp}
-      autoComplete="false"
-      ref={ref}
-    />
-  );
-});
+const Input = forwardRef(
+  (
+    { type = "text", name, placeholder, value, style = {}, onChange, onKeyUp },
+    ref
+  ) => {
+    return (
+      <InputSt
+        type={type}
+        name={name}
+        className="inputText"
+        placeholder={placeholder}
+        style={style}
+        value={value}
+        onChange={onChange}
+        onKeyUp={onKeyUp}
+        autoComplete="false"
+        ref={ref}
+      />
+    );
+  }
+);
 
 const InputSt = styled.input`
   padding: 8px 12px;

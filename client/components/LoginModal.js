@@ -18,8 +18,8 @@ import Button from "./Button";
 export default function LoginModal({ modalHandler }) {
   const dispatch = useDispatch();
   const idInputRef = useRef(null);
-  const [id, idHandler] = useInput('');
-  const [password, passwordHandler] = useInput('');
+  const [id, idHandler] = useInput("");
+  const [password, passwordHandler] = useInput("");
 
   /**
    * * 로그인
@@ -66,8 +66,14 @@ export default function LoginModal({ modalHandler }) {
             placeholder="Username"
             value={id}
             onChange={idHandler}
-            style={{ width: "100%", color: 'var(--dark)' }}
-            onKeyUp={(e) => e.key === 'Enter' ?? loginFn()}
+            style={{
+              width: "100%",
+              color: "var(--gray-l)",
+              border: "none",
+              borderBottom: "1px solid #ddd",
+              borderRadius: "0px",
+            }}
+            onKeyUp={(e) => e.key === "Enter" ?? loginFn()}
             ref={idInputRef}
           />
           <Input
@@ -75,10 +81,25 @@ export default function LoginModal({ modalHandler }) {
             type="password"
             value={password}
             onChange={passwordHandler}
-            style={{ width: "100%", color: 'var(--dark)' }}
-            onKeyUp={(e) => e.key === 'Enter' ?? loginFn()}
+            style={{
+              width: "100%",
+              color: "var(--gray-l)",
+              border: "none",
+              borderBottom: "1px solid #ddd",
+              borderRadius: "0px",
+            }}
+            onKeyUp={(e) => e.key === "Enter" ?? loginFn()}
           />
-          <Button text="Login" onClick={loginFn} style={{padding: '12px', marginTop: '10px', background: 'var(--primary-color)', color: 'var(--primary-text-color)'}} />
+          <Button
+            text="Login"
+            onClick={loginFn}
+            style={{
+              padding: "12px",
+              marginTop: "10px",
+              background: "var(--primary-color)",
+              color: "var(--primary-text-color)",
+            }}
+          />
         </LoginForm>
       </LoginModalContent>
     </LoginModalSt>
@@ -99,7 +120,7 @@ const LoginModalSt = styled.div`
 const LoginModalOverlay = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
   position: fixed;
   left: 0;
   top: 0;
@@ -110,7 +131,7 @@ const LoginModalContent = styled.div`
   max-width: 90%;
   padding: 0 20px;
   border-radius: var(--border-radius);
-  background: #ffffff;
+  background: var(--dark);
   position: relative;
   z-index: 1;
 `;
@@ -122,11 +143,10 @@ const LoginForm = styled.form`
 
   width: 100%;
   height: 100%;
-  color: #ffffff;
+  color: var(--gray-l);
 
   h2 {
     align-self: flex-start;
     margin-bottom: 20px;
-    color: var(--dark);
   }
 `;
