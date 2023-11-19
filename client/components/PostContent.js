@@ -99,7 +99,7 @@ const PostButtonWrapSt = styled.div`
   }
 
   & > .buttonText:hover {
-    color: var(--primary-color);
+    color: #ffffff;
   }
 `;
 const ThumbnailWrap = styled.div`

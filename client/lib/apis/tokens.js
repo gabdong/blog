@@ -12,7 +12,7 @@ import { loginUser } from "@/store/modules/user";
  * * set redux user data
  * @param {Object} userData
  */
-export function setUser(userData) {
+export function setReduxUser(userData) {
   const dispatch = useDispatch();
 
   useEffect(() => {

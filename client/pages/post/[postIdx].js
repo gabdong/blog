@@ -1,20 +1,22 @@
 import { getPost } from "@/lib/apis/posts";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
-import { loginUser } from "@/store/modules/user";
+import { setReduxUser } from "@/lib/apis/tokens";
 
 import PostContent from "@/components/PostContent";
 
+/**
+ * * 게시글
+ * @param {Object} props
+ * @param {Object} props.pageProps
+ * @param {Object} props.pageProps.userData - 로그인한 유저정보
+ * @param {Object} props.pageProps.gsspProps - 게시글idx, 게시글정보
+ * @returns {JSX.Element} 게시글 component
+ */
 export default function Post({ pageProps }) {
-  const dispatch = useDispatch();
   const { userData } = pageProps;
   const { postIdx, postData } = pageProps.gsspProps;
 
-  useEffect(() => {
-    if (userData && userData.isLogin) dispatch(loginUser(userData));
-  }, [userData]);
+  setReduxUser(userData);
 
   return <PostContent postIdx={postIdx} postData={postData} />;
 }
