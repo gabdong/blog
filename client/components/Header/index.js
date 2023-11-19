@@ -47,25 +47,30 @@ export default function Header() {
    */
   const closeUserMenuWrap = (e) => {
     if (
-      !e.target.closest(".headerUserBtnWrap") 
-      || e.target.classList.contains(".menuWrapBtn")
-      || e.target.closest(".menuWrapBtn")
+      !e.target.closest(".headerUserBtnWrap") ||
+      e.target.classList.contains(".menuWrapBtn") ||
+      e.target.closest(".menuWrapBtn")
     ) {
       setUserMenuWrapView(false);
     }
-  }
+  };
 
   useEffect(() => {
-    const headerInner = document.getElementById('headerInner');
+    const header = document.getElementById("header");
 
-    window.addEventListener('scroll', () => {
-      const { scrollY } = window;
-      if (scrollY > 50) {
-        headerInner.classList.add('active');
-      } else {
-        headerInner.classList.remove('active');
-      }
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        const { scrollY } = window;
+
+        if (scrollY > 50) {
+          header.classList.add("active");
+        } else {
+          header.classList.remove("active");
+        }
+      },
+      { passive: true }
+    );
   }, []);
 
   return (
@@ -98,12 +103,19 @@ export default function Header() {
             {!user.isLogin ? "Login" : `${user.name} 님`}
             {!user.isLogin ? null : <DownIconSt />}
           </HeaderButtonSt>
-          {user.isLogin && userMenuWrapView ? <UserMenuWrap closeUserMenuWrapFn={closeUserMenuWrap}/> : null}
+          {user.isLogin && userMenuWrapView ? (
+            <UserMenuWrap closeUserMenuWrapFn={closeUserMenuWrap} />
+          ) : null}
         </HeaderButtonWrapSt>
       </HeaderInnerSt>
 
       {/* //* login modal */}
-      {<Modal modalView={loginModalView} component={<LoginModal modalHandler={loginModalHandler}/>} />}
+      {
+        <Modal
+          modalView={loginModalView}
+          component={<LoginModal modalHandler={loginModalHandler} />}
+        />
+      }
     </HeaderSt>
   );
 }
@@ -112,14 +124,25 @@ const HeaderSt = styled.header`
   display: flex;
 
   width: 100%;
-  backdrop-filter: blur(5px);
-  position: sticky;
+  height: 80px;
+  position: fixed;
   left: 0;
   top: 0;
   z-index: 21;
+  transition: var(--transition);
+
+  &.active {
+    height: 45px;
+    backdrop-filter: blur(5px);
+  }
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     flex-direction: column;
+    height: 56px;
+
+    &.active {
+      height: 56px;
+    }
   }
 `;
 const HeaderInnerSt = styled.div`
@@ -129,19 +152,9 @@ const HeaderInnerSt = styled.div`
 
   width: 100%;
   max-width: 90%;
-  height: 80px;
+  height: 100%;
   margin: 0 auto;
   position: relative;
-  transition: var(--transition);
-
-  &.active {
-    height: 45px;
-  }
-
-  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
-    height: 56px;
-    min-height: 56px;
-  }
 `;
 const NavIconSt = styled(NavIcon)`
   font-size: 20px;

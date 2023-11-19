@@ -45,10 +45,12 @@ const MainSt = styled.main`
 
   width: 1280px;
   max-width: 90%;
+  padding-top: 80px;
   padding-bottom: 60px;
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     display: block;
+    padding-top: 56px;
   }
 `;
 const ModalSt = styled.aside`

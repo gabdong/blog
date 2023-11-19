@@ -30,6 +30,10 @@ const NavButtonSt = styled(Link)`
   cursor: pointer;
   transition: var(--transition);
 
+  &:hover {
+    color: #ffffff;
+  }
+
   &.active {
     color: var(--primary-color);
     font-weight: 700;

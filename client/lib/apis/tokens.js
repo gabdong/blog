@@ -1,12 +1,12 @@
 /**
  * @info 로그인 권한 등 관리 api
  */
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import axios from "../utils/axios";
 import { authCheckAxios } from "../utils/axios";
 import { loginUser } from "@/store/modules/user";
-import { useEffect } from "react";
 
 /**
  * * set redux user data
