@@ -31,7 +31,7 @@ export async function getPost(postIdx, ssr = false) {
 
     return json.data.postData;
   } catch (err) {
-    throw err;
+    return { status: err.response.status, msg: err.response.data.msg };
   }
 }
 

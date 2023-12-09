@@ -29,6 +29,15 @@ export function ssrRequireAuthentication(gssp = null) {
 
     const gsspProps = typeof gssp == "function" ? await gssp(ctx) : null;
 
+    //* getServerSideProps 함수에서 redirect 있을경우
+    if (gsspProps && gsspProps.redirect) {
+      return {
+        redirect: {
+          destination: gsspProps.redirect,
+        },
+        props: {},
+      };
+    }
     return { props: { userData, gsspProps, urlParams: { ...query } } };
   };
 }

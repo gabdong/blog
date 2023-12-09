@@ -3,43 +3,25 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-//* markdown editor
-// import "@toast-ui/editor/dist/toastui-editor.css";
-// import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-// import "tui-color-picker/dist/tui-color-picker.css";
-// import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
-// import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-// import codeSyntax from "@toast-ui/editor-plugin-code-syntax-highlight";
-// import "@toast-ui/editor/dist/i18n/ko-kr";
-// import { Editor } from "@toast-ui/react-editor";
-
-//* editor theme
-// import Prism from "prismjs";
-// import "prismjs/themes/prism.css";
-// import "prismjs/components/prism-clojure";
-
-// import axios from "../utils/axios";
-// import { uploadImage } from "../apis/images";
 import { getTagList } from "@/lib/apis/tags";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
-// import { getPost } from "../apis/posts";
-// import Button from "../components/Button/Button";
-// import Input from "../components/Input/Input";
-// import Radio from "../components/Radio/Radio";
+import { setReduxUser } from "@/lib/apis/tokens";
 
+/**
+ * * 게시글 에디터
+ * @param {Object} props
+ * @returns {JSX.Element}
+ */
 export default function PostEditor({ pageProps }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const { type: postType } = router.query;
   const { userData } = pageProps;
-  const user = useSelector((store) => store.user);
 
-  //* varaiable
+  setReduxUser(userData);
+
   const postIdx = router.query.post;
-
-  //* state
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
   const [selectedTag, setSelectedTag] = useState([]);
@@ -49,10 +31,6 @@ export default function PostEditor({ pageProps }) {
    */
   useEffect(() => {
     (async () => {
-      if (!router.isReady) return;
-      if (userData && userData.isLogin && !user.isLogin)
-        dispatch(loginUser(userData));
-
       //* 로그인 안했을경우 게시글 작성불가
       if (!userData.isLogin) router.push("/tabItem=lastPostList");
 
@@ -65,18 +43,24 @@ export default function PostEditor({ pageProps }) {
         setSubject(postDataRes.subject);
         setContent(postDataRes.content);
         setSelectedTag(postDataRes.tags);
-        console.log(postDataRes);
       }
 
       console.log(tagDataRes);
     })();
-  }, [router.isReady]);
+  }, [postIdx]);
 
   console.log(subject);
   console.log(content);
   console.log(selectedTag);
 
-  return !router.isReady ? null : <div></div>;
+  return !router.isReady ? null : <EditorWrapSt></EditorWrapSt>;
 }
+
+const EditorWrapSt = styled.article`
+  display: flex;
+  gap: 10px;
+
+  width: 100%;
+`;
 
 export const getServerSideProps = ssrRequireAuthentication();

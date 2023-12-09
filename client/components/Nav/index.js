@@ -5,6 +5,7 @@ import { RiCloseFill as Close } from "react-icons/ri";
 import useTagData from "@/lib/hooks/useTagData";
 
 import NavButton from "@/components/Nav/NavButton";
+import { useRouter } from "next/router";
 
 /**
  * * mobile nav close
@@ -17,9 +18,24 @@ const navClose = () => {
   background.classList.remove("active");
 };
 
+/**
+ * * 태그 네비게이션
+ * @returns {JSX.Element}
+ */
 export default function Nav() {
+  //* 출력 안할 페이지 설정
+  const router = useRouter();
+  const { asPath } = router;
+  const noNavPages = ["/postEditor", "/404"];
+  for (const noNavPage of noNavPages) {
+    if (asPath.includes(`${noNavPage}`)) return null;
+  }
+
+  //* 로그인 정보
   const user = useSelector((store) => store.user, shallowEqual);
   const { isLogin } = user;
+
+  //* 태그정보
   const { tagData } = useTagData();
   const { tagLoading, activeTagIdx } = tagData;
 

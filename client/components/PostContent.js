@@ -1,5 +1,4 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import removeMd from "remove-markdown";
 import styled from "styled-components";
 
@@ -7,18 +6,21 @@ import { deletePost } from "@/lib/apis/posts";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
-const DynamicViewer = dynamic(() => import("@/components/DynamicViewer"), {
-  ssr: false,
-});
-
+/**
+ * * 게시글 내용
+ * @param {Object} props
+ * @param {Object} props.postData
+ * @param {Number} props.postIdx
+ * @returns {JSX.Element}
+ */
 export default function PostContent({ postData, postIdx }) {
   const router = useRouter();
   const user = useSelector((store) => store.user);
-
   //* markdown 문법 제거 -> 메타태그용
   postData.removeMdContent = removeMd(
     postData.content.replace(/<\/?[^>]+(>|$)/g, "")
   );
+
   if (postData.removeMdContent.length > 200)
     postData.removeMdContent = postData.removeMdContent.substring(0, 200);
 
@@ -59,11 +61,15 @@ export default function PostContent({ postData, postIdx }) {
           )}
         </div>
 
-        <ThumbnailWrap>
+        {/* //* 썸네일 */}
+        <ThumbnailWrapSt>
           <img src={postData.thumbnail} alt={postData.thumbnailAlt} />
-        </ThumbnailWrap>
+        </ThumbnailWrapSt>
 
-        <DynamicViewer initialValue={postData.content} />
+        {/* //* 내용 */}
+        <PostContentSt
+          dangerouslySetInnerHTML={{ __html: postData.html }}
+        ></PostContentSt>
       </PostWrapSt>
     </>
   );
@@ -102,7 +108,7 @@ const PostButtonWrapSt = styled.div`
     color: #ffffff;
   }
 `;
-const ThumbnailWrap = styled.div`
+const ThumbnailWrapSt = styled.div`
   width: 100%;
   text-align: center;
 
@@ -115,4 +121,7 @@ const ThumbnailWrap = styled.div`
       max-width: 90%;
     }
   }
+`;
+const PostContentSt = styled.div`
+  word-break: break-all;
 `;

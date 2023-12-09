@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 :root {
   --primary-color: #1561F0;
   --primary-color-d: #061238;
@@ -36,6 +37,13 @@
 @font-face {
   font-family: "Ubuntu-Regular";
   src: url("/assets/fonts/Ubuntu-Regular.ttf");
+}
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
 html, body, div, span, applet, object, iframe,

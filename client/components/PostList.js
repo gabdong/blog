@@ -73,10 +73,12 @@ export default function PostList({
 
               return (
                 <PostListLiSt key={idx} className="postListLi">
-                  <PostLinkSt
-                    href={`/post/${idx}?tagIdx=${tagIdx}`}
-                  >
-                    {!thumbnail ? null : (
+                  <PostLinkSt href={`/post/${idx}?tagIdx=${tagIdx}`}>
+                    {!thumbnail ? (
+                      <PostThumbnailSt>
+                        <span className="material-symbols-outlined">image</span>
+                      </PostThumbnailSt>
+                    ) : (
                       <PostThumbnailSt
                         style={{
                           background: `url(${thumbnail})`,
@@ -155,6 +157,16 @@ const PostLinkSt = styled(Link)`
 `;
 const PostThumbnailSt = styled.div`
   padding-top: 52%;
+  background: linear-gradient(310deg, var(--dark), #222222, #000000);
+  position: relative;
+
+  & > span {
+    font-size: 38px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 const PostInfoWrapSt = styled.div`
   display: flex;
@@ -168,8 +180,8 @@ const PostInfoWrapSt = styled.div`
   & > div {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: start;
+    gap: 10px;
 
     height: 80px;
   }

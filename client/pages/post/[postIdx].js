@@ -1,6 +1,8 @@
 import { getPost } from "@/lib/apis/posts";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { setReduxUser } from "@/lib/apis/tokens";
+import markdownToHtml from "@/lib/utils/markdownToHtml";
+import sanitizeHtml from "@/lib/utils/sanitizeHtml";
 
 import PostContent from "@/components/PostContent";
 
@@ -23,7 +25,16 @@ export default function Post({ pageProps }) {
 
 export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
   const { postIdx } = ctx.params;
-  const postData = postIdx ? await getPost(postIdx, true) : null;
+
+  if (!postIdx) return {};
+
+  const postData = await getPost(postIdx, true);
+
+  //* error
+  if (postData.status) return { redirect: `/${postData.status}` };
+
+  const html = await markdownToHtml(postData.content);
+  postData.html = sanitizeHtml(html);
 
   return { postIdx, postData };
 });
