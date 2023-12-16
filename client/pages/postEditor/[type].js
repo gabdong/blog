@@ -8,6 +8,7 @@ import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { getPost } from "@/lib/apis/posts";
 import { loginUser } from "@/store/modules/user";
 import { setReduxUser } from "@/lib/apis/tokens";
+import wrapper from "@/store/configureStore";
 
 /**
  * * 게시글 에디터
@@ -15,43 +16,21 @@ import { setReduxUser } from "@/lib/apis/tokens";
  * @returns {JSX.Element}
  */
 export default function PostEditor({ pageProps }) {
+  console.log(pageProps);
+  const { postData, userData } = pageProps;
   const router = useRouter();
-  const { type: postType } = router.query;
-  const { userData } = pageProps;
 
   setReduxUser(userData);
 
+  // console.log(postData);
   const postIdx = router.query.post;
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
   const [selectedTag, setSelectedTag] = useState([]);
 
-  /**
-   * 제목, 내용, 태그 -> state
-   */
-  useEffect(() => {
-    (async () => {
-      //* 로그인 안했을경우 게시글 작성불가
-      if (!userData.isLogin) router.push("/tabItem=lastPostList");
-
-      const getTagListRes = await getTagList();
-      const { data: tagDataRes } = getTagListRes;
-
-      if (postType === "edit") {
-        const postDataRes = await getPost(Number(postIdx));
-
-        setSubject(postDataRes.subject);
-        setContent(postDataRes.content);
-        setSelectedTag(postDataRes.tags);
-      }
-
-      console.log(tagDataRes);
-    })();
-  }, [postIdx]);
-
-  console.log(subject);
-  console.log(content);
-  console.log(selectedTag);
+  // console.log(subject);
+  // console.log(content);
+  // console.log(selectedTag);
 
   return !router.isReady ? null : <EditorWrapSt></EditorWrapSt>;
 }
@@ -63,4 +42,15 @@ const EditorWrapSt = styled.article`
   width: 100%;
 `;
 
-export const getServerSideProps = ssrRequireAuthentication();
+export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
+  const { type } = ctx.params;
+
+  if (type != "edit") return {};
+
+  const postData = await getPost(postIdx, true);
+
+  //* error
+  if (postData.status) return { redirect: `/${postData.status}` };
+
+  return { postData };
+});

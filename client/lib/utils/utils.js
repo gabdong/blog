@@ -1,4 +1,5 @@
 import { checkLogin } from "@/lib/apis/tokens";
+import wrapper from "@/store/configureStore";
 
 /**
  * * SSR 권한확인
@@ -7,7 +8,7 @@ import { checkLogin } from "@/lib/apis/tokens";
  * @returns {Object} { props: { userData, gsspProps, urlParams: { ...query } } }
  */
 export function ssrRequireAuthentication(gssp = null) {
-  return async (ctx) => {
+  return wrapper.getServerSideProps((store) => async (ctx) => {
     const {
       query,
       req: { url },
@@ -15,8 +16,8 @@ export function ssrRequireAuthentication(gssp = null) {
     const userData = await checkLogin(true, ctx.req.headers?.cookie);
 
     //* private page로 접근시 로그인 확인
-    const privatePage = ["private", "settings", "postEditor"];
-    for (const privateKey of privatePage) {
+    const privatePages = ["private", "settings", "postEditor"];
+    for (const privateKey of privatePages) {
       if (url.includes(privateKey) && (!userData || !userData.isLogin)) {
         return {
           redirect: {
@@ -27,6 +28,7 @@ export function ssrRequireAuthentication(gssp = null) {
       }
     }
 
+    //TODO userdata redux dispatch
     const gsspProps = typeof gssp == "function" ? await gssp(ctx) : null;
 
     //* getServerSideProps 함수에서 redirect 있을경우
@@ -39,5 +41,5 @@ export function ssrRequireAuthentication(gssp = null) {
       };
     }
     return { props: { userData, gsspProps, urlParams: { ...query } } };
-  };
+  });
 }
