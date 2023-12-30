@@ -45,6 +45,7 @@ router.get("/check-token", async (req, res) => {
       );
 
       if (refreshTokenRes.length === 0) {
+        //* refreshToken 없을경우
         const err = new Error("권한이 없습니다.");
         err.status = 401;
         throw err;
@@ -54,6 +55,7 @@ router.get("/check-token", async (req, res) => {
       const checkRefreshToken = token().check(refreshToken, "refresh");
 
       if (!checkRefreshToken) {
+        //* refreshToken 권한이 없을경우
         const err = new Error("권한이 없습니다.");
         err.status = 401;
         throw err;
