@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/lib/utils/axios";
 
 /**
  * * 게시글 리스트 요청
@@ -27,7 +27,8 @@ export async function getPost(postIdx, ssr = false) {
     : `/apis/posts/${postIdx}`;
 
   try {
-    const json = await axios.get(path);
+    const body = { checkAuth: true };
+    const json = await axios.get(path, body);
 
     return json.data.postData;
   } catch (err) {

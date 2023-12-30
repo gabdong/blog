@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 
-import axios, { authCheckAxios } from "../lib/utils/axios";
+import axios, { authCheckAxios } from "@/lib/utils/axios";
 import { loginUser } from "@/store/modules/user";
 import useInput from "@/lib/hooks/useInput";
 
@@ -17,6 +18,7 @@ import Button from "./Button";
  */
 export default function LoginModal({ modalHandler }) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const idInputRef = useRef(null);
   const [id, idHandler] = useInput("");
   const [password, passwordHandler] = useInput("");
@@ -44,6 +46,7 @@ export default function LoginModal({ modalHandler }) {
       authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
 
       dispatch(loginUser(user));
+      router.reload();
       modalHandler(e);
     } catch (error) {
       console.error(error);

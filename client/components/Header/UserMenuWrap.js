@@ -21,7 +21,7 @@ export default function UserMenuWrap({ closeUserMenuWrapFn }) {
 
     return () => {
       window.removeEventListener("click", closeUserMenuWrapFn);
-    }
+    };
   }, []);
 
   /**
@@ -30,10 +30,7 @@ export default function UserMenuWrap({ closeUserMenuWrapFn }) {
   const logoutFn = (e) => {
     removeToken();
     dispatch(logoutUser());
-    closeUserMenuWrapFn(e);
-
-    const url = router.asPath;
-    (url.includes('private') || url.includes('/postEditor/new')) && router.push('/?tabItem=latestPostList');
+    router.reload();
   };
 
   return (

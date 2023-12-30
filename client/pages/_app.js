@@ -8,7 +8,7 @@ import Nav from "@/components/Nav";
 import "@/styles/globals.css";
 
 export default function App({ Component, ...rest }) {
-  const { store, props: pageProps } = wrapper.useWrappedStore(rest);
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   console.log(
     "---------------------------------App rendering---------------------------------"
@@ -19,10 +19,10 @@ export default function App({ Component, ...rest }) {
         <title>Gabdong</title>
       </Head>
       <WrapperSt>
-        <Header />
+        <Header {...props} />
         <MainSt id="main">
-          <Nav />
-          <Component {...pageProps} />
+          <Nav {...props} />
+          <Component {...props} />
         </MainSt>
         <ModalSt id="modal" />
       </WrapperSt>

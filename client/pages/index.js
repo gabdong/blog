@@ -1,22 +1,12 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { loginUser } from "@/store/modules/user";
-import { checkLogin } from "@/lib/apis/tokens";
+import { ssrRequireAuthentication } from "@/lib/utils/utils";
 
 import Tab from "@/components/Tab";
 import Introduce from "@/components/Introduce";
 import PostList from "@/components/PostList";
 
-export default function Index({ pageProps }) {
-  const dispatch = useDispatch();
-  const { user } = pageProps;
-
-  useEffect(() => {
-    if (user) dispatch(loginUser(user));
-  }, []);
-
+export default function Index({}) {
   return (
     <>
       <HomeWrapSt>
@@ -44,10 +34,7 @@ export default function Index({ pageProps }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const user = await checkLogin(true, ctx.req.headers?.cookie);
-  return { props: { user } };
-}
+export const getServerSideProps = ssrRequireAuthentication();
 
 const HomeWrapSt = styled.section`
   display: flex;

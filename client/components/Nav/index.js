@@ -1,11 +1,10 @@
-import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { RiCloseFill as Close } from "react-icons/ri";
 
 import useTagData from "@/lib/hooks/useTagData";
 
 import NavButton from "@/components/Nav/NavButton";
-import { useRouter } from "next/router";
 
 /**
  * * mobile nav close
@@ -22,7 +21,7 @@ const navClose = () => {
  * * 태그 네비게이션
  * @returns {JSX.Element}
  */
-export default function Nav() {
+export default function Nav({ pageProps }) {
   //* 출력 안할 페이지 설정
   const router = useRouter();
   const { asPath } = router;
@@ -32,7 +31,7 @@ export default function Nav() {
   }
 
   //* 로그인 정보
-  const user = useSelector((store) => store.user, shallowEqual);
+  const { user } = pageProps;
   const { isLogin } = user;
 
   //* 태그정보

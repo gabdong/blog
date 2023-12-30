@@ -1,6 +1,5 @@
 import PostList from "@/components/PostList";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
-import { setReduxUser } from "@/lib/apis/tokens";
 
 /**
  * * 태그에 속한 게시글리스트
@@ -12,11 +11,8 @@ import { setReduxUser } from "@/lib/apis/tokens";
  */
 export default function Tag({ pageProps }) {
   const {
-    userData,
     urlParams: { tagIdx, page },
   } = pageProps;
-
-  setReduxUser(userData);
 
   return <PostList tagIdx={tagIdx} page={page} />;
 }

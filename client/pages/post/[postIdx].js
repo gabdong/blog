@@ -1,6 +1,5 @@
 import { getPost } from "@/lib/apis/posts";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
-import { setReduxUser } from "@/lib/apis/tokens";
 import markdownToHtml from "@/lib/utils/markdownToHtml";
 import sanitizeHtml from "@/lib/utils/sanitizeHtml";
 
@@ -15,10 +14,7 @@ import PostContent from "@/components/PostContent";
  * @returns {JSX.Element} 게시글 component
  */
 export default function Post({ pageProps }) {
-  const { userData } = pageProps;
   const { postIdx, postData } = pageProps.gsspProps;
-
-  setReduxUser(userData);
 
   return <PostContent postIdx={postIdx} postData={postData} />;
 }
@@ -29,6 +25,8 @@ export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
   if (!postIdx) return {};
 
   const postData = await getPost(postIdx, true);
+
+  // console.log(postData);
 
   //* error
   if (postData.status) return { redirect: `/${postData.status}` };

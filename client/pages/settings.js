@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import { setReduxUser } from "@/lib/apis/tokens";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 
 import TagSettings from "@/components/Settings/TagSettings";
@@ -13,10 +12,6 @@ import TagSettings from "@/components/Settings/TagSettings";
  * @returns {JSX.Element}
  */
 export default function Settings({ pageProps }) {
-  const { userData } = pageProps;
-
-  setReduxUser(userData);
-
   return (
     <SettingWrapSt>
       <TagSettings />

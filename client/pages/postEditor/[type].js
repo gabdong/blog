@@ -1,14 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
 
 import { getTagList } from "@/lib/apis/tags";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { getPost } from "@/lib/apis/posts";
-import { loginUser } from "@/store/modules/user";
-import { setReduxUser } from "@/lib/apis/tokens";
-import wrapper from "@/store/configureStore";
 
 /**
  * * 게시글 에디터
@@ -17,10 +13,8 @@ import wrapper from "@/store/configureStore";
  */
 export default function PostEditor({ pageProps }) {
   console.log(pageProps);
-  const { postData, userData } = pageProps;
+  const { postData } = pageProps;
   const router = useRouter();
-
-  setReduxUser(userData);
 
   // console.log(postData);
   const postIdx = router.query.post;

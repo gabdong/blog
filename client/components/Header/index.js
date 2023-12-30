@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FiMenu as NavIcon } from "react-icons/fi";
 // import { FaSearch as SearchIcon } from "react-icons/fa"; //TODO 검색기능 작업시 필요
@@ -22,8 +21,8 @@ const navOpen = () => {
   background.classList.add("active");
 };
 
-export default function Header() {
-  const user = useSelector((store) => store.user, shallowEqual);
+export default function Header({ pageProps }) {
+  const { user } = pageProps;
   const [loginModalView, setloginModalView] = useState(false);
   const [userMenuWrapView, setUserMenuWrapView] = useState(false);
 

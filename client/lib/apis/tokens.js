@@ -4,8 +4,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import axios from "../utils/axios";
-import { authCheckAxios } from "../utils/axios";
+import axios from "@/lib/utils/axios";
+import { authCheckAxios } from "@/lib/utils/axios";
 import { loginUser } from "@/store/modules/user";
 
 /**
