@@ -45,7 +45,13 @@ export async function checkToken(ssr = false, cookie = "") {
 
     return result;
   } catch (err) {
-    if (err.response?.status !== 401) console.error(err.response?.data.msg);
+    switch (err.response.status) {
+      case 401:
+        console.error(err.response?.data.msg);
+        break;
+      default:
+        console.error(err.response?.data.msg);
+    }
   }
 }
 

@@ -19,20 +19,27 @@ export default function Post({ pageProps }) {
   return <PostContent postIdx={postIdx} postData={postData} />;
 }
 
-export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
-  const { postIdx } = ctx.params;
+export const getServerSideProps = ssrRequireAuthentication(
+  async (ctx, user) => {
+    const { postIdx } = ctx.params;
 
-  if (!postIdx) return {};
+    if (!postIdx) return {};
 
-  const postData = await getPost(postIdx, true);
+    const postData = await getPost({ postIdx, ssr: true, user });
 
-  // console.log(postData);
+    //* error
+    if (postData.status) {
+      switch (postData.status) {
+        case 404:
+          return { redirect: `/?tabItem=latestPostList` };
+        case 401:
+          return { redirect: `/?tabItem=latestPostList` };
+      }
+    }
 
-  //* error
-  if (postData.status) return { redirect: `/${postData.status}` };
+    const html = await markdownToHtml(postData.content);
+    postData.html = sanitizeHtml(html);
 
-  const html = await markdownToHtml(postData.content);
-  postData.html = sanitizeHtml(html);
-
-  return { postIdx, postData };
-});
+    return { postIdx, postData };
+  }
+);

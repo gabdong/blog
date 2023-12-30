@@ -21,14 +21,13 @@ export async function getPostList(tagIdx, page, limit, paginationUsing) {
  * @param {Number} postIdx
  * @param {Boolean} ssr
  */
-export async function getPost(postIdx, ssr = false) {
+export async function getPost({ postIdx, ssr = false, user = {} }) {
   const path = ssr
     ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}`
     : `/apis/posts/${postIdx}`;
 
   try {
-    const body = { checkAuth: true };
-    const json = await axios.get(path, body);
+    const json = await axios.get(path, { data: { user } });
 
     return json.data.postData;
   } catch (err) {

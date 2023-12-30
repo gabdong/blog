@@ -33,7 +33,7 @@ export function ssrRequireAuthentication(gssp = null) {
     //* redux dispatch user data
     if (user && user.isLogin) store.dispatch(loginUser(user));
 
-    const gsspProps = typeof gssp == "function" ? await gssp(ctx) : null;
+    const gsspProps = typeof gssp == "function" ? await gssp(ctx, user) : null;
 
     //* getServerSideProps 함수에서 redirect 있을경우
     if (gsspProps && gsspProps.redirect) {

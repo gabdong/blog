@@ -36,15 +36,17 @@ const EditorWrapSt = styled.article`
   width: 100%;
 `;
 
-export const getServerSideProps = ssrRequireAuthentication(async (ctx) => {
-  const { type } = ctx.params;
+export const getServerSideProps = ssrRequireAuthentication(
+  async (ctx, user) => {
+    const { type } = ctx.params;
 
-  if (type != "edit") return {};
+    if (type != "edit") return {};
 
-  const postData = await getPost(postIdx, true);
+    const postData = await getPost({ postIdx, ssr: true, user });
 
-  //* error
-  if (postData.status) return { redirect: `/${postData.status}` };
+    //* error
+    if (postData.status) return { redirect: `/${postData.status}` };
 
-  return { postData };
-});
+    return { postData };
+  }
+);

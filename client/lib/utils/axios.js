@@ -18,7 +18,8 @@ instance.interceptors.request.use(
     if (!config.data) return config;
 
     let checkAuth, // 로그인 판별여부
-      isFormData = false; // config에 FormData가 있는지 판별 -> user 값 넣는 방법 다름
+      isFormData = false, // config에 FormData가 있는지 판별 -> user 값 넣는 방법 다름
+      ssr = false;
 
     if (config.data instanceof FormData) {
       config.headers["Content-Type"] = "multipart/form-data";
@@ -29,11 +30,12 @@ instance.interceptors.request.use(
       config.headers["Content-Type"] = "application/json";
 
       checkAuth = config.data.checkAuth;
+      if (config.data.ssr) ssr = config.data.ssr;
     }
 
     if (checkAuth === true) {
       //* check auth
-      const checkAuthResult = await checkToken();
+      const checkAuthResult = await checkToken(ssr);
 
       const { newAccessToken } = checkAuthResult.data;
       const { user } = checkAuthResult.data;
@@ -53,7 +55,6 @@ instance.interceptors.request.use(
     return config;
   },
   (err) => {
-    console.log(err);
     return Promise.reject(err);
   }
 );
