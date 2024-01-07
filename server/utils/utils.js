@@ -21,3 +21,15 @@ exports.getCookie = (str, target) => {
 
   return null;
 };
+
+/**
+ * * Throw error
+ * @param {Number} status
+ * @param {String} message
+ */
+exports.throwError = (status, message) => {
+  const err = new Error(message);
+  err.status = status;
+
+  throw err;
+};

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const { throwError } = require("../utils/utils.js");
 
 //* 게시글 리스트 요청
 router.get(["/list/:tagIdx", "/list"], async (req, res) => {
@@ -77,10 +78,12 @@ router.get("/:postIdx", async (req, res) => {
     );
 
     if (postDataRes.length === 0) {
-      const err = new Error("게시글 정보가 존재하지 않습니다.");
-      err.status = 404;
+      console.log("hi");
+      throwError(404, "게시글 정보가 존재하지 않습니다.");
+      // const err = new Error("게시글 정보가 존재하지 않습니다.");
+      // err.status = 404;
 
-      throw err;
+      // throw err;
     }
 
     //* 비공개 게시글 권한조회

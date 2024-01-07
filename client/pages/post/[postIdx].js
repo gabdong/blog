@@ -29,11 +29,12 @@ export const getServerSideProps = ssrRequireAuthentication(
 
     //* error
     if (postData.status) {
+      //TODO 에러종류별 동작다르게할지?
       switch (postData.status) {
         case 404:
-          return { redirect: `/?tabItem=latestPostList` };
+          return { redirect: `/${postData.status}` };
         case 401:
-          return { redirect: `/?tabItem=latestPostList` };
+          return { redirect: `/${postData.status}` };
       }
     }
 

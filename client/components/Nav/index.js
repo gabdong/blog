@@ -22,21 +22,23 @@ const navClose = () => {
  * @returns {JSX.Element}
  */
 export default function Nav({ pageProps }) {
-  //* 출력 안할 페이지 설정
   const router = useRouter();
-  const { asPath } = router;
-  const noNavPages = ["/postEditor", "/404"];
-  for (const noNavPage of noNavPages) {
-    if (asPath.includes(`${noNavPage}`)) return null;
-  }
 
   //* 로그인 정보
-  const { user } = pageProps;
-  const { isLogin } = user;
+  const {
+    user: { isLogin },
+  } = pageProps;
 
   //* 태그정보
   const { tagData } = useTagData();
   const { tagLoading, activeTagIdx } = tagData;
+
+  //* 출력 안할 페이지 설정
+  const { asPath } = router;
+  const noNavPages = ["/postEditor", "/404", "/401"];
+  for (const noNavPage of noNavPages) {
+    if (asPath.includes(`${noNavPage}`)) return null;
+  }
 
   return (
     <>

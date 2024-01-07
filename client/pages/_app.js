@@ -9,6 +9,8 @@ import "@/styles/globals.css";
 
 export default function App({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest);
+  const errorPages = ["/401", "/404"];
+  const pathname = rest.router.route;
 
   console.log(
     "---------------------------------App rendering---------------------------------"
@@ -19,9 +21,9 @@ export default function App({ Component, ...rest }) {
         <title>Gabdong</title>
       </Head>
       <WrapperSt>
-        <Header {...props} />
+        {!errorPages.includes(pathname) && <Header {...props} />}
         <MainSt id="main">
-          <Nav {...props} />
+          {!errorPages.includes(pathname) && <Nav {...props} />}
           <Component {...props} />
         </MainSt>
         <ModalSt id="modal" />

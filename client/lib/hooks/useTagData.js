@@ -8,24 +8,24 @@ import { getTagList } from "../apis/tags";
  * @returns {Object}
  */
 export default function useTagData() {
-    const router = useRouter();
-    const { query } = router;
-    const [tagData, setTagData] = useState({tagList: {}, tagLoading: true});
+  const router = useRouter();
+  const { query } = router;
+  const [tagData, setTagData] = useState({ tagList: {}, tagLoading: true });
 
-    useEffect(() => {
-        (async () => {
-            const getTagListRes = await getTagList();
-            const { data: tagDataRes } = getTagListRes;
+  useEffect(() => {
+    (async () => {
+      const getTagListRes = await getTagList();
+      const { data: tagDataRes } = getTagListRes;
 
-            setTagData({
-                tagList: tagDataRes.tagList,
-                totalPostCnt: tagDataRes.totalPostCnt,
-                privatePostCnt: tagDataRes.privatePostCnt,
-                tagLoading: false,
-                activeTagIdx: query.tagIdx
-            });
-        })();
-    }, [query]);
+      setTagData({
+        tagList: tagDataRes.tagList,
+        totalPostCnt: tagDataRes.totalPostCnt,
+        privatePostCnt: tagDataRes.privatePostCnt,
+        tagLoading: false,
+        activeTagIdx: query.tagIdx,
+      });
+    })();
+  }, [query]);
 
-    return { tagData };
+  return { tagData };
 }
