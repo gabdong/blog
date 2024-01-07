@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import removeMd from "remove-markdown";
 import Link from "next/link";
+import { MdImage } from "react-icons/md";
 
 import { getPostList } from "@/lib/apis/posts";
+
 import Pagination from "@/components/Pagination";
 
 /**
@@ -76,7 +78,7 @@ export default function PostList({
                   <PostLinkSt href={`/post/${idx}?tagIdx=${tagIdx}`}>
                     {!thumbnail ? (
                       <PostThumbnailSt>
-                        <span className="material-symbols-outlined">image</span>
+                        <MdImage />
                       </PostThumbnailSt>
                     ) : (
                       <PostThumbnailSt
@@ -160,7 +162,7 @@ const PostThumbnailSt = styled.div`
   background: linear-gradient(310deg, var(--dark), #222222, #000000);
   position: relative;
 
-  & > span {
+  & > svg {
     font-size: 38px;
     position: absolute;
     left: 50%;

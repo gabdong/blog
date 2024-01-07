@@ -8,7 +8,7 @@ import Link from "next/link";
 import LinkButton from "@/components/LinkButton";
 import LoginModal from "@/components/LoginModal";
 import UserMenuWrap from "@/components/Header/UserMenuWrap";
-import Modal from "../Modal";
+import Modal from "@/components/Modal";
 
 /**
  * * nav open

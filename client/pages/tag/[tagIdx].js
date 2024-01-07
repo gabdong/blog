@@ -1,5 +1,6 @@
-import PostList from "@/components/PostList";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
+
+import PostList from "@/components/PostList";
 
 /**
  * * 태그에 속한 게시글리스트
