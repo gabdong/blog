@@ -68,7 +68,7 @@ router.get("/:postIdx", async (req, res) => {
   try {
     const [postDataRes] = await db.query(
       `
-      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.thumbnail_alt AS thumbnailAlt, posts.public 
+      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.thumbnail_alt AS thumbnailAlt, posts.public, posts.idx 
       FROM posts posts 
       INNER JOIN members members ON members.idx=posts.member
       WHERE posts.idx=? 
@@ -77,14 +77,8 @@ router.get("/:postIdx", async (req, res) => {
       [postIdx]
     );
 
-    if (postDataRes.length === 0) {
-      console.log("hi");
+    if (postDataRes.length === 0)
       throwError(404, "게시글 정보가 존재하지 않습니다.");
-      // const err = new Error("게시글 정보가 존재하지 않습니다.");
-      // err.status = 404;
-
-      // throw err;
-    }
 
     //* 비공개 게시글 권한조회
     if (postDataRes[0].public === "N" && !user.isLogin) {

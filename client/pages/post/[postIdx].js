@@ -14,22 +14,27 @@ import PostContent from "@/components/PostContent";
  * @returns {JSX.Element} 게시글 component
  */
 export default function Post({ pageProps }) {
-  const { postIdx, postData } = pageProps.gsspProps;
+  const {
+    user,
+    gsspProps: { postIdx, postData },
+  } = pageProps;
 
-  return <PostContent postIdx={postIdx} postData={postData} />;
+  return <PostContent postIdx={postIdx} postData={postData} user={user} />;
 }
 
 export const getServerSideProps = ssrRequireAuthentication(
   async (ctx, user) => {
     const { postIdx } = ctx.params;
 
-    if (!postIdx) return {};
+    if (!postIdx)
+      return {
+        redirect: "/404",
+      };
 
     const postData = await getPost({ postIdx, ssr: true, user });
 
     //* error
     if (postData.status) {
-      //TODO 에러종류별 동작다르게할지?
       switch (postData.status) {
         case 404:
           return { redirect: `/${postData.status}` };

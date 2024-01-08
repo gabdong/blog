@@ -15,7 +15,8 @@ export function ssrRequireAuthentication(gssp = null) {
       req: { url },
     } = ctx;
     let user = await checkLogin(true, ctx.req.headers?.cookie);
-    if (!user) user = store.getState().user;
+    let prevUser = store.getState().user;
+    if (!user) user = { ...prevUser };
 
     //* private page로 접근시 로그인 확인
     const privatePages = ["private", "settings", "postEditor"];
@@ -31,7 +32,7 @@ export function ssrRequireAuthentication(gssp = null) {
     }
 
     //* redux dispatch user data
-    if (user && user.isLogin) store.dispatch(loginUser(user));
+    if (prevUser.isLogin != user.isLogin) store.dispatch(loginUser(user));
 
     const gsspProps = typeof gssp == "function" ? await gssp(ctx, user) : null;
 

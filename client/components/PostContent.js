@@ -13,9 +13,9 @@ import { useSelector } from "react-redux";
  * @param {Number} props.postIdx
  * @returns {JSX.Element}
  */
-export default function PostContent({ postData, postIdx }) {
+export default function PostContent({ postData, postIdx, user }) {
   const router = useRouter();
-  const user = useSelector((store) => store.user);
+  // const user = useSelector((store) => store.user);
   //* markdown 문법 제거 -> 메타태그용
   postData.removeMdContent = removeMd(
     postData.content.replace(/<\/?[^>]+(>|$)/g, "")

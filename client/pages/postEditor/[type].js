@@ -1,10 +1,11 @@
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getTagList } from "@/lib/apis/tags";
 import { ssrRequireAuthentication } from "@/lib/utils/utils";
 import { getPost } from "@/lib/apis/posts";
+import useInput from "@/lib/hooks/useInput";
+import Editor from "@/components/Editor";
+import Input from "@/components/Input";
 
 /**
  * * 게시글 에디터
@@ -12,25 +13,27 @@ import { getPost } from "@/lib/apis/posts";
  * @returns {JSX.Element}
  */
 export default function PostEditor({ pageProps }) {
-  console.log(pageProps);
-  const { postData } = pageProps;
-  const router = useRouter();
+  const postData = pageProps.gsspProps.postData;
 
-  // console.log(postData);
-  const postIdx = router.query.post;
-  const [subject, setSubject] = useState("");
-  const [content, setContent] = useState("");
+  const postIdx = postData?.idx;
+  const [subject, subjectHandler] = useInput(postData?.subject ?? "");
+  const [content, setContent] = useState(postData?.content ?? "");
   const [selectedTag, setSelectedTag] = useState([]);
+  const contentHandler = useCallback((value) => {
+    setContent(value);
+  }, []);
 
-  // console.log(subject);
-  // console.log(content);
-  // console.log(selectedTag);
-
-  return !router.isReady ? null : <EditorWrapSt></EditorWrapSt>;
+  return (
+    <EditorWrapSt>
+      <Input defaultValue={subject} onChange={subjectHandler} />
+      <Editor value={content} onChange={contentHandler} />
+    </EditorWrapSt>
+  );
 }
 
 const EditorWrapSt = styled.article`
   display: flex;
+  flex-direction: column;
   gap: 10px;
 
   width: 100%;
@@ -42,6 +45,7 @@ export const getServerSideProps = ssrRequireAuthentication(
 
     if (type != "edit") return {};
 
+    const postIdx = ctx.query.post;
     const postData = await getPost({ postIdx, ssr: true, user });
 
     //* error

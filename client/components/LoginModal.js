@@ -67,7 +67,7 @@ export default function LoginModal({ modalHandler }) {
           <h2 className="headline">Login</h2>
           <Input
             placeholder="Username"
-            value={id}
+            defaultValue={id}
             onChange={idHandler}
             style={{
               width: "100%",
@@ -82,7 +82,7 @@ export default function LoginModal({ modalHandler }) {
           <Input
             placeholder="Password"
             type="password"
-            value={password}
+            defaultValue={password}
             onChange={passwordHandler}
             style={{
               width: "100%",

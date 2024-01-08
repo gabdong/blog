@@ -150,10 +150,15 @@ const HeaderInnerSt = styled.div`
   align-items: center;
 
   width: 100%;
-  max-width: 90%;
+  max-width: 1920px;
   height: 100%;
   margin: 0 auto;
+  padding: 0px 40px;
   position: relative;
+
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    max-width: 90%;
+  }
 `;
 const NavIconSt = styled(NavIcon)`
   font-size: 20px;

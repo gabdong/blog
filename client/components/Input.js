@@ -3,7 +3,15 @@ import styled from "styled-components";
 
 const Input = forwardRef(
   (
-    { type = "text", name, placeholder, value, style = {}, onChange, onKeyUp },
+    {
+      type = "text",
+      name,
+      placeholder,
+      defaultValue,
+      style = {},
+      onChange,
+      onKeyUp,
+    },
     ref
   ) => {
     return (
@@ -13,7 +21,7 @@ const Input = forwardRef(
         className="inputText"
         placeholder={placeholder}
         style={style}
-        value={value}
+        value={defaultValue}
         onChange={onChange}
         onKeyUp={onKeyUp}
         autoComplete="false"
