@@ -7,34 +7,19 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-//* axios instance로 token 검증 요청시 무한루프 문제가 생겨 token검증용 axios instance 생성
-export const authCheckAxios = axios.create({
-  timeout: 1000,
-  withCredentials: true,
-});
-
 instance.interceptors.request.use(
   async (config) => {
     if (!config.data) return config;
 
-    let checkAuth, // 로그인 판별여부
-      isFormData = false, // config에 FormData가 있는지 판별 -> user 값 넣는 방법 다름
-      ssr = false;
+    const isFormData = config.data instanceof FormData;
+    const checkAuth = isFormData
+      ? config.data.get("checkAuth") === "true"
+      : config.data.checkAuth; // 로그인 판별여부
+    const isCheckToken = config.data.isCheckToken || false; // 토큰검증요청 여부
+    const ssr = isFormData ? false : config.data.ssr;
 
-    if (config.data instanceof FormData) {
-      config.headers["Content-Type"] = "multipart/form-data";
-
-      checkAuth = config.data.get("checkAuth") === "true";
-      isFormData = true;
-    } else {
-      config.headers["Content-Type"] = "application/json";
-
-      checkAuth = config.data.checkAuth;
-      if (config.data.ssr) ssr = config.data.ssr;
-    }
-
-    if (checkAuth === true) {
-      //* check auth
+    if (checkAuth === true && isCheckToken === false) {
+      //* check auth - 권한없을경우 throw error
       const checkAuthResult = await checkToken(ssr);
 
       const { newAccessToken } = checkAuthResult.data;
@@ -51,7 +36,6 @@ instance.interceptors.request.use(
         instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
       }
     }
-
     return config;
   },
   (err) => {

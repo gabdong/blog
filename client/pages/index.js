@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { ssrRequireAuthentication } from "@/lib/utils/utils";
+import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
 
 import Tab from "@/components/Tab";
 import Introduce from "@/components/Introduce";

@@ -1,5 +1,5 @@
 import { getPost } from "@/lib/apis/posts";
-import { ssrRequireAuthentication } from "@/lib/utils/utils";
+import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
 import markdownToHtml from "@/lib/utils/markdownToHtml";
 import sanitizeHtml from "@/lib/utils/sanitizeHtml";
 

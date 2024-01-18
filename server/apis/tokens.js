@@ -35,6 +35,14 @@ router.get("/check-token", async (req, res) => {
     if (!checkAccessToken) {
       //* accessToken false일경우 refreshToken 검증
       const refreshTokenIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
+
+      if (!refreshTokenIdx) {
+        //* refreshToken 없을경우
+        const err = new Error("권한이 없습니다.");
+        err.status = 401;
+        throw err;
+      }
+
       const [refreshTokenRes] = await db.query(
         `
         SELECT refresh_token AS refreshToken
@@ -45,7 +53,7 @@ router.get("/check-token", async (req, res) => {
       );
 
       if (refreshTokenRes.length === 0) {
-        //* refreshToken 없을경우
+        //* refreshToken 정보가 없을경우
         const err = new Error("권한이 없습니다.");
         err.status = 401;
         throw err;

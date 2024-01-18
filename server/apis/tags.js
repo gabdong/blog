@@ -155,4 +155,11 @@ router.delete("/:tagIdx", async (req, res) => {
   }
 });
 
+//* 태그검색
+router.get("/searchTag", async (req, res) => {
+  const { searchWord } = req.query;
+
+  res.json({ msg: "OK" });
+});
+
 module.exports = router;

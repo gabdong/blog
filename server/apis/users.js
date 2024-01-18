@@ -84,6 +84,7 @@ router.post("/login", async (req, res) => {
       );
     }
 
+    //* set cookie refreshToken
     res.cookie("refreshTokenIdx", hashIdx, {
       maxAge: 1000 * 60 * 60 * 24, // 1일
       httpOnly: true,

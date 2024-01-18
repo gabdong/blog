@@ -27,9 +27,11 @@ export async function getPost({ postIdx, ssr = false, user = {} }) {
     : `/apis/posts/${postIdx}`;
 
   try {
-    const json = await axios.get(path, { data: { user } });
+    const getPostRes = await axios.get(path, {
+      params: { user },
+    });
 
-    return json.data.postData;
+    return getPostRes.data.postData;
   } catch (err) {
     return { status: err.response.status, msg: err.response.data.msg };
   }

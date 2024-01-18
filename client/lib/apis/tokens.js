@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import axios from "@/lib/utils/axios";
-import { authCheckAxios } from "@/lib/utils/axios";
 import { loginUser } from "@/store/modules/user";
 
 /**
@@ -35,13 +34,15 @@ export function removeToken() {
  * @return status, user 정보, check auth result
  */
 export async function checkToken(ssr = false, cookie = "") {
-  if (cookie) authCheckAxios.defaults.headers.cookie = cookie;
+  if (cookie) axios.defaults.headers.cookie = cookie;
 
   try {
     const url = ssr
       ? `${process.env.REACT_APP_SERVER_URL}/apis/tokens/check-token`
       : "/apis/tokens/check-token";
-    const result = await authCheckAxios.get(url);
+    const result = await axios.get(url, {
+      data: { isCheckToken: true },
+    });
 
     return result;
   } catch (err) {

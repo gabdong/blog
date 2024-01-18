@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
-import axios, { authCheckAxios } from "@/lib/utils/axios";
-import { loginUser } from "@/store/modules/user";
+import axios from "@/lib/utils/axios";
 import useInput from "@/lib/hooks/useInput";
 
 import Input from "./Input";
@@ -17,7 +15,6 @@ import Button from "./Button";
  * @returns {JSX.Element}
  */
 export default function LoginModal({ modalHandler }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const idInputRef = useRef(null);
   const [id, idHandler] = useInput("");
@@ -39,13 +36,8 @@ export default function LoginModal({ modalHandler }) {
     const body = { id, password };
 
     try {
-      const res = await axios.post("/apis/users/login", body);
-      const { user, accessToken } = res.data;
+      await axios.post("/apis/users/login", body);
 
-      axios.defaults.headers.common.Authorization = accessToken; // axios accessToken 값 저장
-      authCheckAxios.defaults.headers.common.Authorization = accessToken; // 권한 check axios accessToken 값 저장
-
-      dispatch(loginUser(user));
       router.reload();
       modalHandler(e);
     } catch (error) {
@@ -72,12 +64,10 @@ export default function LoginModal({ modalHandler }) {
             style={{
               width: "100%",
               color: "var(--gray-l)",
-              border: "none",
-              borderBottom: "1px solid #ddd",
-              borderRadius: "0px",
             }}
             onKeyUp={(e) => e.key === "Enter" ?? loginFn()}
             ref={idInputRef}
+            border="bottom"
           />
           <Input
             placeholder="Password"
@@ -87,11 +77,9 @@ export default function LoginModal({ modalHandler }) {
             style={{
               width: "100%",
               color: "var(--gray-l)",
-              border: "none",
-              borderBottom: "1px solid #ddd",
-              borderRadius: "0px",
             }}
             onKeyUp={(e) => e.key === "Enter" ?? loginFn()}
+            border="bottom"
           />
           <Button
             text="Login"

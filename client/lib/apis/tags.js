@@ -7,10 +7,25 @@ import axios from "@/lib/utils/axios";
 export async function getTagList() {
   try {
     const tagListRes = await axios.get("/apis/tags/");
-    
+
     return tagListRes;
   } catch (err) {
     console.error(err.response.data.msg);
+  }
+}
+
+/**
+ * * 검색된 태그 요청
+ * @param {String} searchWord
+ */
+export async function getSearchTag(searchWord) {
+  if (searchWord) {
+    try {
+      const searchTagRes = await axios.get("/apis/tags/searchTag", {
+        params: { searchWord },
+        data: { params: { test: "test" } },
+      });
+    } catch (err) {}
   }
 }
 

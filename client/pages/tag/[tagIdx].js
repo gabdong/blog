@@ -1,4 +1,4 @@
-import { ssrRequireAuthentication } from "@/lib/utils/utils";
+import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
 
 import PostList from "@/components/PostList";
 

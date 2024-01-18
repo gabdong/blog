@@ -63,7 +63,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 //* 게시글 요청
 router.get("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
-  const { user } = req.body;
+  const { user } = req.query;
 
   try {
     const [postDataRes] = await db.query(
@@ -81,12 +81,8 @@ router.get("/:postIdx", async (req, res) => {
       throwError(404, "게시글 정보가 존재하지 않습니다.");
 
     //* 비공개 게시글 권한조회
-    if (postDataRes[0].public === "N" && !user.isLogin) {
-      const err = new Error("게시글 권한이 없습니다.");
-      err.status = 401;
-
-      throw err;
-    }
+    if (postDataRes[0].public === "N" && !user.isLogin)
+      throwError(401, "게시글 권한이 없습니다.");
 
     res.json({ msg: "OK", postData: postDataRes[0] });
   } catch (err) {

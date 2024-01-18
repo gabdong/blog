@@ -1,6 +1,12 @@
 import { forwardRef } from "react";
 import styled from "styled-components";
 
+/**
+ * * Input
+ * @param {Object} props
+ * @param {String} props.type
+ * @param {String} props.placeholder
+ */
 const Input = forwardRef(
   (
     {
@@ -11,6 +17,7 @@ const Input = forwardRef(
       style = {},
       onChange,
       onKeyUp,
+      border = "all",
     },
     ref
   ) => {
@@ -26,6 +33,7 @@ const Input = forwardRef(
         onKeyUp={onKeyUp}
         autoComplete="false"
         ref={ref}
+        border={border}
       />
     );
   }
@@ -33,16 +41,22 @@ const Input = forwardRef(
 
 const InputSt = styled.input`
   padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
+  ${(props) =>
+    props.border == "all"
+      ? "border: 1px solid #ddd;"
+      : `border-${props.border} 1px solid #ddd;`}
+  ${(props) =>
+    props.border == "all" ? "border-radius: var(--border-radius);" : ""}
   cursor: pointer;
-  color: #ffffff;
   transition: var(--transition);
 
   &:active,
   &:focus,
   &:hover {
-    border: 1px solid var(--primary-color);
+    ${(props) =>
+      props.border == "all"
+        ? "border: 1px solid var(--primary-color);"
+        : `border-${props.border} : 1px solid var(--primary-color);`}
   }
 `;
 

@@ -62,7 +62,7 @@ export default function Header({ pageProps }) {
       () => {
         const { scrollY } = window;
 
-        if (scrollY > 50) {
+        if (scrollY > 0) {
           header.classList.add("active");
         } else {
           header.classList.remove("active");
@@ -131,7 +131,7 @@ const HeaderSt = styled.header`
   transition: var(--transition);
 
   &.active {
-    height: 45px;
+    height: 60px;
     backdrop-filter: blur(5px);
   }
 

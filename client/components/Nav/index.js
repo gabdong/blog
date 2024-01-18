@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import { RiCloseFill as Close } from "react-icons/ri";
 
 import useTagData from "@/lib/hooks/useTagData";
@@ -16,28 +15,32 @@ const navClose = () => {
   nav.classList.remove("active");
   background.classList.remove("active");
 };
-
 /**
  * * 태그 네비게이션
  * @returns {JSX.Element}
  */
 export default function Nav({ pageProps }) {
-  const router = useRouter();
-
   //* 로그인 정보
   const {
     user: { isLogin },
+    url,
   } = pageProps;
 
   //* 태그정보
-  const { tagData } = useTagData();
-  const { tagLoading, activeTagIdx } = tagData;
+  const {
+    tagData: {
+      tagLoading,
+      activeTagIdx,
+      tagList,
+      privatePostCnt,
+      totalPostCnt,
+    },
+  } = useTagData();
 
   //* 출력 안할 페이지 설정
-  const { asPath } = router;
   const noNavPages = ["/postEditor", "/404", "/401"];
   for (const noNavPage of noNavPages) {
-    if (asPath.includes(`${noNavPage}`)) return null;
+    if (url.includes(`${noNavPage}`)) return null;
   }
 
   return (
@@ -55,10 +58,10 @@ export default function Nav({ pageProps }) {
             <CloseBtnSt className="mobileOnly" onClick={navClose} />
             <NavButton
               path="/tag/total?page=1"
-              text={`Total (${tagData.totalPostCnt})`}
+              text={`Total (${totalPostCnt})`}
               active={activeTagIdx === "total" ? "active" : ""}
             />
-            {Object.entries(tagData.tagList).map((data) => {
+            {Object.entries(tagList).map((data) => {
               const tagIdx = data[0] !== "total" ? Number(data[0]) : data[0];
               const { auth, name, postCnt } = data[1];
               const activeClass =
@@ -82,7 +85,7 @@ export default function Nav({ pageProps }) {
             {isLogin ? (
               <NavButton
                 path="/tag/private?page=1"
-                text={`Private (${tagData.privatePostCnt})`}
+                text={`Private (${privatePostCnt})`}
               />
             ) : null}
             {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
