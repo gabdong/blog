@@ -31,7 +31,7 @@ export const getServerSideProps = ssrRequireAuthentication(
         redirect: "/404",
       };
 
-    const postData = await getPost({ postIdx, ssr: true, user });
+    const postData = await getPost({ postIdx, user });
 
     //* error
     if (postData.status) {

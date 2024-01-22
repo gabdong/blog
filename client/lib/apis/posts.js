@@ -21,15 +21,14 @@ export async function getPostList(tagIdx, page, limit, paginationUsing) {
  * @param {Number} postIdx
  * @param {Boolean} ssr
  */
-export async function getPost({ postIdx, ssr = false, user = {} }) {
-  const path = ssr
-    ? `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}`
-    : `/apis/posts/${postIdx}`;
-
+export async function getPost({ postIdx, user = {} }) {
   try {
-    const getPostRes = await axios.get(path, {
-      params: { user },
-    });
+    const getPostRes = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/apis/posts/${postIdx}`,
+      {
+        params: { user },
+      }
+    );
 
     return getPostRes.data.postData;
   } catch (err) {

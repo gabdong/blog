@@ -21,21 +21,23 @@ instance.interceptors.request.use(
     if (checkAuth === true && isCheckToken === false) {
       //* check auth - 권한없을경우 throw error
       const checkAuthResult = await checkToken(ssr);
-
       const { newAccessToken } = checkAuthResult.data;
       const { user } = checkAuthResult.data;
 
       if (isFormData) {
         config.data.append("user", JSON.stringify(user));
       } else {
-        config.data.user = user;
+        if (config.method == "get") {
+          config.params.user = user;
+        } else {
+          config.data.user = user;
+        }
       }
 
-      if (newAccessToken) {
-        authCheckAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+      if (newAccessToken)
         instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-      }
     }
+
     return config;
   },
   (err) => {

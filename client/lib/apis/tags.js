@@ -23,9 +23,13 @@ export async function getSearchTag(searchWord) {
     try {
       const searchTagRes = await axios.get("/apis/tags/searchTag", {
         params: { searchWord },
-        data: { params: { test: "test" } },
+        data: { checkAuth: true },
       });
-    } catch (err) {}
+
+      return searchTagRes.data.searchTagData;
+    } catch (err) {
+      console.error(err.response.data.msg);
+    }
   }
 }
 
