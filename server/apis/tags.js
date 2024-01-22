@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const { throwError } = require("../utils/utils");
 
 //* 태그 리스트 요청
 router.get("/", async (req, res) => {
@@ -110,10 +111,7 @@ router.put("/:tagIdx", async (req, res) => {
     );
 
     if (duplicateTagRes.length > 0) {
-      const err = new Error("중복된 태그명이 존재합니다.");
-      err.status = 409;
-
-      throw err;
+      throwError(409, "중복된 태그명이 존재합니다.");
     } else {
       await db.query(
         `
@@ -128,7 +126,7 @@ router.put("/:tagIdx", async (req, res) => {
     }
   } catch (err) {
     if (err.status) {
-      res.status(err.status).json({ msg: "중복된 태그명이 존재합니다." });
+      res.status(err.status).json({ msg: err.message });
     } else {
       res.status(500).json({ msg: "태그 수정을 실패하였습니다." });
     }
@@ -157,9 +155,28 @@ router.delete("/:tagIdx", async (req, res) => {
 
 //* 태그검색
 router.get("/searchTag", async (req, res) => {
-  const { searchWord } = req.query;
+  const { user } = req.query;
+  let { searchWord } = req.query;
+  searchWord = `%${searchWord}%`;
 
-  res.json({ msg: "OK" });
+  try {
+    //TODO 태그 사용권한 적용하기
+    const searchTagRes = await db.query(
+      `
+      SELECT * 
+      FROM tags 
+      WHERE name LIKE ?
+    `,
+      [searchWord]
+    );
+    const searchTagData = searchTagRes[0];
+
+    if (searchTagData.length === 0) throwError(404, "검색결과가 없습니다.");
+
+    res.json({ msg: "OK", searchTagData });
+  } catch (err) {
+    res.status(err.status).json({ msg: err.message });
+  }
 });
 
 module.exports = router;
