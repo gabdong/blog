@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
@@ -10,6 +10,7 @@ import Editor from "@/components/Editor";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import SearchInput from "@/components/SearchInput";
+import { useRouter } from "next/router";
 
 /**
  * * 게시글 에디터
@@ -20,13 +21,24 @@ export default function PostEditor({ pageProps }) {
   const {
     gsspProps: { postData },
   } = pageProps;
+  const router = useRouter();
 
   const postIdx = postData?.idx ?? "";
-  const [subject, subjectHandler] = useInput(postData?.subject ?? "");
+  const [subject, subjectHandler, setSubject] = useInput(
+    postData?.subject ?? ""
+  );
   const [content, setContent] = useState(postData?.content ?? "");
-  const [selectedTag, setSelectedTag] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(postData?.tagData ?? []);
   const [searchTagData, setSearchTagData] = useState([]);
+
   const searchResultWrapRef = useRef(null);
+  const selectedTagWrapRef = useRef(null);
+
+  useEffect(() => {
+    setSubject(postData?.subject ?? "");
+    setContent(postData?.content ?? "");
+    setSelectedTag(postData?.tagData ?? []);
+  }, [router.query]);
 
   /**
    * * 태그 검색결과 표시해주는 함수
@@ -37,7 +49,6 @@ export default function PostEditor({ pageProps }) {
       const searchTagData = await getSearchTag(searchWord);
       if (Array.isArray(searchTagData)) {
         setSearchTagData(searchTagData);
-        console.log(searchTagData);
       } else {
         setSearchTagData([]);
       }
@@ -47,8 +58,30 @@ export default function PostEditor({ pageProps }) {
     }
   };
 
+  /**
+   * * 태그 검색결과 선택
+   * @param {Array} data
+   */
+  const clickSearchTagResult = (data) => {
+    setSelectedTag((prev) => {
+      prev.push(data);
+      return [...prev];
+    });
+  };
+
   return (
     <EditorWrapSt>
+      <SelectedTagWrapSt ref={selectedTagWrapRef}>
+        {selectedTag.length > 0
+          ? selectedTag.map((data) => {
+              return (
+                <SelectedTagItemSt key={data.idx}>
+                  <span className="caption">#{data.name}</span>
+                </SelectedTagItemSt>
+              );
+            })
+          : null}
+      </SelectedTagWrapSt>
       <Input
         defaultValue={subject}
         onChange={subjectHandler}
@@ -72,9 +105,14 @@ export default function PostEditor({ pageProps }) {
           {searchTagData.map((data) => {
             console.log(data);
             return (
-              <div key={data.idx}>
-                <p>{data.name}</p>
-              </div>
+              <>
+                <SearchResultItemSt
+                  key={data.idx}
+                  onClick={() => clickSearchTagResult(data)}
+                >
+                  <span className="normalText">{data.name}</span>
+                </SearchResultItemSt>
+              </>
             );
           })}
         </SearchResultWrapSt>
@@ -93,23 +131,56 @@ export default function PostEditor({ pageProps }) {
   );
 }
 
+const SelectedTagWrapSt = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+const SelectedTagItemSt = styled.div`
+  padding: var(--small-box-padding);
+  border-radius: var(--border-radius);
+  background: var(--dark-l-o);
+  transition: var(--transition);
+  cursor: pointer;
+
+  & > .caption {
+    color: var(--primary-color-d-text);
+  }
+  &:hover {
+    background: var(--dark-l);
+  }
+`;
 const SearchTagWrapSt = styled.div`
   width: 100%;
   position: relative;
 `;
 const SearchResultWrapSt = styled.div`
   display: none;
-  flex-direction: column;
   gap: 8px;
 
   width: 100%;
-  padding: 12px;
+  padding: var(--box-padding);
   background: var(--dark);
+  border: 1px solid var(--gray);
+  border-radius: var(--border-radius);
   position: absolute;
+  top: calc(100% + 10px);
 
   &.active {
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     z-index: 1;
+  }
+`;
+const SearchResultItemSt = styled.div`
+  cursor: pointer;
+
+  & > .normalText {
+    transition: var(--transition);
+  }
+  &:hover > .normalText {
+    color: var(--primary-color);
   }
 `;
 const EditorWrapSt = styled.article`

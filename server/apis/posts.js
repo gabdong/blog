@@ -80,11 +80,24 @@ router.get("/:postIdx", async (req, res) => {
     if (postDataRes.length === 0)
       throwError(404, "게시글 정보가 존재하지 않습니다.");
 
+    const postData = postDataRes[0];
+
     //* 비공개 게시글 권한조회
-    if (postDataRes[0].public === "N" && !user.isLogin)
+    if (postData.public === "N" && !user.isLogin)
       throwError(401, "게시글 권한이 없습니다.");
 
-    res.json({ msg: "OK", postData: postDataRes[0] });
+    //* 게시글 태그정보
+    const [tagDataRes] = await db.query(
+      `
+      SELECT * 
+      FROM tags 
+      WHERE idx IN (?)
+      `,
+      [postData.tags]
+    );
+    postData.tagData = tagDataRes ? tagDataRes : [];
+
+    res.json({ msg: "OK", postData });
   } catch (err) {
     if (err.status) {
       res.status(err.status).json({ msg: err.message });
@@ -166,7 +179,6 @@ router.put("/:postIdx", async (req, res) => {
 
     res.json({ msg: "OK" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ msg: "게시글 수정을 실패하였습니다." });
   }
 });

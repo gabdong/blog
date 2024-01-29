@@ -28,6 +28,7 @@ export async function getSearchTag(searchWord) {
 
       return searchTagRes.data.searchTagData;
     } catch (err) {
+      console.log(err);
       console.error(err.response.data.msg);
     }
   }

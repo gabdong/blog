@@ -161,7 +161,7 @@ router.get("/searchTag", async (req, res) => {
 
   try {
     //TODO 태그 사용권한 적용하기
-    const searchTagRes = await db.query(
+    const [searchTagRes] = await db.query(
       `
       SELECT * 
       FROM tags 

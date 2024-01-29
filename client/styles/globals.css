@@ -6,12 +6,17 @@
   --primary-color-d-text: #ffffff;
 
   --dark: #131313;
-  --dark-l: #2B2B2B;
+  --dark-l: #2b2b2b;
+  --dark-l-o: rgba(43, 43, 43, 0.5);
   --gray: #86868B;
   --gray-l: #dddddd;
+
+  --red: #C70000;
   
   --transition: 0.2s;
   --border-radius: 4px;
+  --box-padding: 8px 12px;
+  --small-box-padding: 4px 6px;
 }
 @font-face {
   font-family: "SUIT-Regular";

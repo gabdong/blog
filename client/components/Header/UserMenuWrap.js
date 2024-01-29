@@ -50,7 +50,7 @@ const UserMenuWrapSt = styled.ul`
   flex-direction: column;
   gap: 16px;
 
-  padding: 12px 10px;
+  padding: var(--box-padding);
   background: var(--dark-l);
   border-radius: var(--border-radius);
   position: absolute;
