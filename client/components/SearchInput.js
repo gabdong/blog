@@ -9,16 +9,17 @@ import Input from "./Input";
  * @param {String} props.placeholder
  * @param {Object} props.style
  * @param {String} props.border - 테두리방향 (all, top, bottom, left, right)
+ * @param {Function} props.onFocus - onFocus 이벤트
  * @param {Function} props.searchFunc
  * @returns {JSX.Element}
  */
 export default function SearchInput({ ...props }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(props.value ?? "");
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (typeof props.searchFunc === "function") props.searchFunc(value);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [value]);

@@ -156,8 +156,15 @@ router.delete("/:tagIdx", async (req, res) => {
 //* 태그검색
 router.get("/searchTag", async (req, res) => {
   const { user } = req.query;
-  let { searchWord } = req.query;
+  let { searchWord, selectedTags } = req.query;
+
   searchWord = `%${searchWord}%`;
+
+  // 이미 선택된 태그는 검색제외
+  const selectedTagsCond =
+    Array.isArray(selectedTags) && selectedTags.length > 0
+      ? `AND idx NOT IN (${selectedTags.join(",")})`
+      : "";
 
   try {
     //TODO 태그 사용권한 적용하기
@@ -166,14 +173,14 @@ router.get("/searchTag", async (req, res) => {
       SELECT * 
       FROM tags 
       WHERE name LIKE ?
+      ${selectedTagsCond}
     `,
       [searchWord]
     );
-    const searchTagData = searchTagRes[0];
 
-    if (searchTagData.length === 0) throwError(404, "검색결과가 없습니다.");
+    if (searchTagRes.length === 0) throwError(404, "검색결과가 없습니다.");
 
-    res.json({ msg: "OK", searchTagData });
+    res.json({ msg: "OK", searchTagData: searchTagRes });
   } catch (err) {
     res.status(err.status).json({ msg: err.message });
   }

@@ -5,12 +5,12 @@ import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
 import { getPost } from "@/lib/apis/posts";
 import { getSearchTag } from "@/lib/apis/tags";
 import useInput from "@/lib/hooks/useInput";
+import { elDisplayToggle } from "@/lib/utils/utils";
 
 import Editor from "@/components/Editor";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import SearchInput from "@/components/SearchInput";
-import { useRouter } from "next/router";
 
 /**
  * * 게시글 에디터
@@ -21,24 +21,35 @@ export default function PostEditor({ pageProps }) {
   const {
     gsspProps: { postData },
   } = pageProps;
-  const router = useRouter();
 
   const postIdx = postData?.idx ?? "";
   const [subject, subjectHandler, setSubject] = useInput(
     postData?.subject ?? ""
   );
   const [content, setContent] = useState(postData?.content ?? "");
-  const [selectedTag, setSelectedTag] = useState(postData?.tagData ?? []);
-  const [searchTagData, setSearchTagData] = useState([]);
+  const [selectedTagsData, setselectedTagsData] = useState(
+    postData?.tagData ?? []
+  ); // tag data
+  const [selectedTags, setselectedTags] = useState(postData?.tags ?? []); // tag idx list
+  const [searchTagsData, setSearchTagsData] = useState([]);
 
   const searchResultWrapRef = useRef(null);
-  const selectedTagWrapRef = useRef(null);
+  const selectedTagsWrapRef = useRef(null);
 
   useEffect(() => {
-    setSubject(postData?.subject ?? "");
-    setContent(postData?.content ?? "");
-    setSelectedTag(postData?.tagData ?? []);
-  }, [router.query]);
+    // 수정 -> 새글 / 새글 -> 수정 전환시 state 변경
+    if (pageProps.urlParams.type == "edit" && postData.subject != subject) {
+      setSubject(postData.subject);
+      setContent(postData.content);
+      setselectedTagsData(postData.tagData);
+      setselectedTags(postData.tags);
+    } else if (pageProps.urlParams.type == "new" && subject) {
+      setSubject("");
+      setContent();
+      setselectedTagsData([]);
+      setselectedTags([]);
+    }
+  }, [pageProps.urlParams]);
 
   /**
    * * 태그 검색결과 표시해주는 함수
@@ -46,42 +57,76 @@ export default function PostEditor({ pageProps }) {
    */
   const getSearchTagResult = async (searchWord) => {
     if (searchWord) {
-      const searchTagData = await getSearchTag(searchWord);
-      if (Array.isArray(searchTagData)) {
-        setSearchTagData(searchTagData);
+      const searchTagDataRes = await getSearchTag(searchWord, selectedTags);
+
+      if (Array.isArray(searchTagDataRes)) {
+        setSearchTagsData(searchTagDataRes);
       } else {
-        setSearchTagData([]);
+        setSearchTagsData([]);
       }
+
       searchResultWrapRef.current.classList.add("active");
+      elDisplayToggle(
+        ["searchTagResultWrap", "searchTagInput"],
+        "searchTagResultWrap",
+        "active",
+        true
+      );
     } else {
       searchResultWrapRef.current.classList.remove("active");
+      elDisplayToggle(null, null, null, false);
     }
   };
 
   /**
    * * 태그 검색결과 선택
+   * @param {Event} e
    * @param {Array} data
    */
-  const clickSearchTagResult = (data) => {
-    setSelectedTag((prev) => {
+  const clickSearchTagResult = (e, data) => {
+    // 선택한 태그리스트
+    setselectedTagsData((prev) => {
       prev.push(data);
+      return [...prev];
+    });
+    setselectedTags((prev) => {
+      prev.push(data.idx);
+      return [...prev];
+    });
+
+    // 태그 검색결과 리스트
+    setSearchTagsData((prev) => {
+      const clickTagIndex = prev.findIndex((el) => (el.idx = data.idx));
+      if (clickTagIndex !== -1) prev.splice(clickTagIndex, 1);
+
       return [...prev];
     });
   };
 
+  /**
+   * * 게시글 저장/수정
+   */
+  const savePost = async () => {
+    if (postIdx) {
+    }
+  };
+
   return (
     <EditorWrapSt>
-      <SelectedTagWrapSt ref={selectedTagWrapRef}>
-        {selectedTag.length > 0
-          ? selectedTag.map((data) => {
+      {/* //* 선택된 태그리스트 */}
+      <SelectedTagsWrapSt ref={selectedTagsWrapRef}>
+        {selectedTagsData.length > 0
+          ? selectedTagsData.map((data) => {
               return (
-                <SelectedTagItemSt key={data.idx}>
+                <SelectedTagsItemSt key={data.idx}>
                   <span className="caption">#{data.name}</span>
-                </SelectedTagItemSt>
+                </SelectedTagsItemSt>
               );
             })
           : null}
-      </SelectedTagWrapSt>
+      </SelectedTagsWrapSt>
+
+      {/* //* 제목인풋 */}
       <Input
         defaultValue={subject}
         onChange={subjectHandler}
@@ -91,6 +136,8 @@ export default function PostEditor({ pageProps }) {
         }}
         placeholder="제목"
       />
+
+      {/* //* 태그검색 */}
       <SearchTagWrapSt>
         <SearchInput
           searchFunc={(searchWord) => getSearchTagResult(searchWord)}
@@ -100,26 +147,31 @@ export default function PostEditor({ pageProps }) {
             color: "var(--gray-l)",
           }}
           placeholder="태그추가"
+          onFocus={(e) => getSearchTagResult(e.target.value)}
+          id="searchTagInput"
         />
-        <SearchResultWrapSt ref={searchResultWrapRef}>
-          {searchTagData.map((data) => {
-            console.log(data);
-            return (
-              <>
+        <SearchResultWrapSt ref={searchResultWrapRef} id="searchTagResultWrap">
+          {searchTagsData.length > 0 ? (
+            searchTagsData.map((data) => {
+              return (
                 <SearchResultItemSt
                   key={data.idx}
-                  onClick={() => clickSearchTagResult(data)}
+                  onClick={(e) => clickSearchTagResult(e, data)}
                 >
                   <span className="normalText">{data.name}</span>
                 </SearchResultItemSt>
-              </>
-            );
-          })}
+              );
+            })
+          ) : (
+            <span className="normalText">검색 결과가 없습니다.</span>
+          )}
         </SearchResultWrapSt>
       </SearchTagWrapSt>
 
+      {/* //* 게시글 에디터 */}
       <Editor value={content} onChange={setContent} height="500" />
 
+      {/* //* 저장, 취소버튼 */}
       <ButtonWrapSt>
         <Button text="취소" />
         <SaveButtonWrapSt>
@@ -131,12 +183,12 @@ export default function PostEditor({ pageProps }) {
   );
 }
 
-const SelectedTagWrapSt = styled.div`
+const SelectedTagsWrapSt = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
-const SelectedTagItemSt = styled.div`
+const SelectedTagsItemSt = styled.div`
   padding: var(--small-box-padding);
   border-radius: var(--border-radius);
   background: var(--dark-l-o);

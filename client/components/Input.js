@@ -17,7 +17,9 @@ const Input = forwardRef(
       style = {},
       onChange,
       onKeyUp,
+      onFocus,
       border = "all",
+      id,
     },
     ref
   ) => {
@@ -31,9 +33,11 @@ const Input = forwardRef(
         value={defaultValue}
         onChange={onChange}
         onKeyUp={onKeyUp}
+        onFocus={onFocus}
         autoComplete="false"
         ref={ref}
         border={border}
+        id={id}
       />
     );
   }

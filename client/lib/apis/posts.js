@@ -71,3 +71,9 @@ export async function getAllPosts(ssr = false) {
     console.error(err.response.data.msg);
   }
 }
+
+/**
+ * * 게시글 업로드
+ * @param {Object} postData
+ */
+export async function uploadPost(isPublic) {}

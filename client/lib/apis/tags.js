@@ -17,20 +17,18 @@ export async function getTagList() {
 /**
  * * 검색된 태그 요청
  * @param {String} searchWord
+ * @param {Array} selectedTags
  */
-export async function getSearchTag(searchWord) {
+export async function getSearchTag(searchWord, selectedTags = []) {
   if (searchWord) {
     try {
       const searchTagRes = await axios.get("/apis/tags/searchTag", {
-        params: { searchWord },
+        params: { searchWord, selectedTags },
         data: { checkAuth: true },
       });
 
       return searchTagRes.data.searchTagData;
-    } catch (err) {
-      console.log(err);
-      console.error(err.response.data.msg);
-    }
+    } catch (err) {}
   }
 }
 
