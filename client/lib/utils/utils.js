@@ -21,8 +21,6 @@ export function elDisplayToggle(
    * @param {Event} e
    */
   function _toggleFn(e) {
-    e.preventDefault();
-    e.stopPropagation();
     const target = document.getElementById(targetId);
     const current = e.target;
 
@@ -47,4 +45,32 @@ export function elDisplayToggle(
   } else {
     document.removeEventListener("click", _toggleFn);
   }
+}
+
+/**
+ * * textarea 중간에 문자 넣어주는 함수
+ * @param {String} id - textarea id
+ * @param {String} intsertString
+ * @returns {String}
+ */
+export function insertToTextArea(id, intsertString) {
+  const textarea = document.getElementById(id);
+  if (!textarea) {
+    return null;
+  }
+
+  let sentence = textarea.value;
+  const len = sentence.length;
+  const pos = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+
+  const front = sentence.slice(0, pos);
+  const back = sentence.slice(pos, len);
+
+  sentence = front + intsertString + back;
+
+  textarea.value = sentence;
+  textarea.selectionEnd = end + intsertString.length;
+
+  return sentence;
 }

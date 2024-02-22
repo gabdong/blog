@@ -58,8 +58,7 @@ export async function createTag(tagName) {
  * @param {Number} tagIdx
  */
 export async function updateTag(tagIdx, name) {
-  const body = { name, checkAuth: true };
-  await axios.put(`/apis/tags/${tagIdx}`, body);
+  await axios.put(`/apis/tags/${tagIdx}`, { name, checkAuth: true });
 }
 
 /**

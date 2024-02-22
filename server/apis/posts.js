@@ -109,7 +109,7 @@ router.get("/:postIdx", async (req, res) => {
 
 //* 게시글 업로드 요청
 router.post("/", async (req, res) => {
-  const { markDown, subject, tags, user, thumbnail, thumbnailAlt, publicPost } =
+  const { content, subject, tags, user, thumbnail, thumbnailAlt, isPublic } =
     req.body;
   const userIdx = user.idx;
 
@@ -129,11 +129,11 @@ router.post("/", async (req, res) => {
       [
         userIdx,
         subject,
-        markDown.replace(/'/g, "\\'"),
+        content.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
         thumbnailAlt,
-        publicPost,
+        isPublic,
       ]
     );
 

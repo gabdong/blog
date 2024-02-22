@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { ssrRequireAuthentication } from "@/lib/utils/ssrRequireAuthentication";
-import { getPost } from "@/lib/apis/posts";
+import { editPost, getPost, uploadPost } from "@/lib/apis/posts";
 import { getSearchTag } from "@/lib/apis/tags";
 import useInput from "@/lib/hooks/useInput";
 import { elDisplayToggle } from "@/lib/utils/utils";
@@ -22,6 +22,7 @@ export default function PostEditor({ pageProps }) {
     gsspProps: { postData },
   } = pageProps;
 
+  //* post data state
   const postIdx = postData?.idx ?? "";
   const [subject, subjectHandler, setSubject] = useInput(
     postData?.subject ?? ""
@@ -31,13 +32,18 @@ export default function PostEditor({ pageProps }) {
     postData?.tagData ?? []
   ); // tag data
   const [selectedTags, setselectedTags] = useState(postData?.tags ?? []); // tag idx list
-  const [searchTagsData, setSearchTagsData] = useState([]);
 
+  //* etc state
+  const [searchTagsData, setSearchTagsData] = useState([]);
+  const [searchTagsWord, setSearchTagsWord] = useState("");
+  const [uploadImagesData, setUploadImagesData] = useState([]);
+
+  //* ref
   const searchResultWrapRef = useRef(null);
   const selectedTagsWrapRef = useRef(null);
 
   useEffect(() => {
-    // 수정 -> 새글 / 새글 -> 수정 전환시 state 변경
+    //* 수정 -> 새글 / 새글 -> 수정 전환시 state 변경
     if (pageProps.urlParams.type == "edit" && postData.subject != subject) {
       setSubject(postData.subject);
       setContent(postData.content);
@@ -80,10 +86,9 @@ export default function PostEditor({ pageProps }) {
 
   /**
    * * 태그 검색결과 선택
-   * @param {Event} e
    * @param {Array} data
    */
-  const clickSearchTagResult = (e, data) => {
+  const clickSearchTagResult = (data) => {
     // 선택한 태그리스트
     setselectedTagsData((prev) => {
       prev.push(data);
@@ -105,9 +110,18 @@ export default function PostEditor({ pageProps }) {
 
   /**
    * * 게시글 저장/수정
+   * @param {String} isPublic - 게시글 임시저장(공개) 여부(Y/N)
    */
-  const savePost = async () => {
+  const savePost = async (isPublic = "N") => {
+    const data = { isPublic, subject, content, tags: selectedTags };
+
     if (postIdx) {
+      //* 수정
+      data.postIdx = postIdx;
+      editPost(data);
+    } else {
+      //* 저장
+      uploadPost(data);
     }
   };
 
@@ -139,6 +153,7 @@ export default function PostEditor({ pageProps }) {
 
       {/* //* 태그검색 */}
       <SearchTagWrapSt>
+        {/* //* 검색인풋 */}
         <SearchInput
           searchFunc={(searchWord) => getSearchTagResult(searchWord)}
           border="bottom"
@@ -149,14 +164,24 @@ export default function PostEditor({ pageProps }) {
           placeholder="태그추가"
           onFocus={(e) => getSearchTagResult(e.target.value)}
           id="searchTagInput"
+          defaultValue={searchTagsWord}
+          setDefaultValue={setSearchTagsWord}
         />
-        <SearchResultWrapSt ref={searchResultWrapRef} id="searchTagResultWrap">
+        {/* //* 검색결과 리스트 */}
+        <SearchResultWrapSt
+          ref={searchResultWrapRef}
+          id="searchTagResultWrap"
+          className={searchTagsWord ? "active" : "noActive"}
+        >
           {searchTagsData.length > 0 ? (
             searchTagsData.map((data) => {
               return (
                 <SearchResultItemSt
                   key={data.idx}
-                  onClick={(e) => clickSearchTagResult(e, data)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clickSearchTagResult(data);
+                  }}
                 >
                   <span className="normalText">{data.name}</span>
                 </SearchResultItemSt>
@@ -169,14 +194,23 @@ export default function PostEditor({ pageProps }) {
       </SearchTagWrapSt>
 
       {/* //* 게시글 에디터 */}
-      <Editor value={content} onChange={setContent} height="500" />
+      <Editor
+        value={content}
+        onChange={setContent}
+        height="500"
+        setUploadImageData={setUploadImagesData}
+      />
 
       {/* //* 저장, 취소버튼 */}
       <ButtonWrapSt>
         <Button text="취소" />
         <SaveButtonWrapSt>
-          <Button text="임시저장" />
-          <Button text="저장" style={{ background: "var(--primary-color)" }} />
+          <Button text="임시저장" onClick={() => savePost("Y")} />
+          <Button
+            text="저장"
+            style={{ background: "var(--primary-color)" }}
+            onClick={() => savePost("N")}
+          />
         </SaveButtonWrapSt>
       </ButtonWrapSt>
     </EditorWrapSt>

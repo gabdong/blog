@@ -76,4 +76,17 @@ export async function getAllPosts(ssr = false) {
  * * 게시글 업로드
  * @param {Object} postData
  */
-export async function uploadPost(isPublic) {}
+export async function uploadPost(postData) {
+  console.log(postData);
+  try {
+    const json = await axios.post("/apis/posts", { checkAuth: true, postData });
+  } catch (err) {}
+}
+
+/**
+ * * 게시글 수정
+ * @param {Object} postData
+ */
+export async function editPost(postData) {
+  const json = await axios.put("/apis/posts", { checkAuth: true, postData });
+}

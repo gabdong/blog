@@ -88,6 +88,10 @@ body {
 body.modalAcitve {
   overflow-y: hidden;
 }
+body .w-md-editor-text-pre > code,
+body .w-md-editor-text-input {
+  font-family: 'SUIT-Regular';
+}
 ol, ul {
   list-style: none;
 }
