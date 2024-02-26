@@ -25,9 +25,10 @@ export default function Editor({ ...props }) {
         previewOptions={{
           rehypePlugins: [[rehypeSanitize]],
         }}
-        onPaste={async (e) =>
-          await onImagePasted(e.clipboardData, props.onChange)
-        }
+        onPaste={async (e) => {
+          if (e.clipboardData.files.length > 0) e.preventDefault();
+          await onImagePasted(e.clipboardData, props.onChange);
+        }}
         onDrop={async (e) =>
           await onImagePasted(e.dataTransfer, props.onChange)
         }

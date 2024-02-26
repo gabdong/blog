@@ -10,7 +10,8 @@ router.get("/", async (req, res) => {
   try {
     const [duplicatedImgRes] = await db.query(
       `
-      SELECT url, alt FROM images 
+      SELECT url, alt 
+      FROM images 
       WHERE original_name=? 
       AND size=? 
     `,
@@ -38,6 +39,17 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
   const { originalname, size, mimetype, location, key } = req.file;
   const name = key.replace("images/", "");
 
+  let mimetypeNum;
+  switch (mimetype) {
+    case "image/png":
+      mimetypeNum = 2;
+      break;
+
+    case "image/jpeg":
+      mimetypeNum = 1;
+      break;
+  }
+
   try {
     await db.query(
       `
@@ -50,7 +62,7 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
       alt=?,
       mime_type=?
     `,
-      [userIdx, size, originalname, name, location, alt, mimetype]
+      [userIdx, size, originalname, name, location, alt, mimetypeNum]
     );
 
     res.json({ msg: "OK", url: location });

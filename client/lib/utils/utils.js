@@ -49,15 +49,13 @@ export function elDisplayToggle(
 
 /**
  * * textarea 중간에 문자 넣어주는 함수
- * @param {String} id - textarea id
+ * @param {String} target - textarea selector
  * @param {String} intsertString
  * @returns {String}
  */
-export function insertToTextArea(id, intsertString) {
-  const textarea = document.getElementById(id);
-  if (!textarea) {
-    return null;
-  }
+export function insertToTextArea(target, intsertString) {
+  const textarea = document.querySelector(target);
+  if (!textarea) return null;
 
   let sentence = textarea.value;
   const len = sentence.length;
