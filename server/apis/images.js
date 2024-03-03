@@ -41,12 +41,11 @@ router.post("/", imageUploader.single("image"), async (req, res) => {
 
   let mimetypeNum;
   switch (mimetype) {
-    case "image/png":
-      mimetypeNum = 2;
-      break;
-
     case "image/jpeg":
       mimetypeNum = 1;
+      break;
+    case "image/png":
+      mimetypeNum = 2;
       break;
   }
 

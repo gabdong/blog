@@ -65,10 +65,10 @@ export function insertToTextArea(target, intsertString) {
   const front = sentence.slice(0, pos);
   const back = sentence.slice(pos, len);
 
-  sentence = front + intsertString + back;
+  sentence = `${front} ${intsertString} ${back}`;
 
   textarea.value = sentence;
-  textarea.selectionEnd = end + intsertString.length;
+  textarea.selectionEnd = end + intsertString.length + 2;
 
   return sentence;
 }

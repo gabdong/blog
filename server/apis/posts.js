@@ -44,7 +44,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
 
     const [postListRes] = await db.query(
       `
-      SELECT idx, subject, content, thumbnail, thumbnail_alt AS thumbnailAlt, datetime, tags 
+      SELECT idx, subject, content, thumbnail, datetime, tags 
       FROM posts 
       WHERE delete_datetime IS NULL 
       ${tagCond}
@@ -68,7 +68,7 @@ router.get("/:postIdx", async (req, res) => {
   try {
     const [postDataRes] = await db.query(
       `
-      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.thumbnail_alt AS thumbnailAlt, posts.public, posts.idx 
+      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.public, posts.idx 
       FROM posts posts 
       INNER JOIN members members ON members.idx=posts.member
       WHERE posts.idx=? 
@@ -123,7 +123,6 @@ router.post("/", async (req, res) => {
       content=?,
       tags=?,
       thumbnail=?,
-      thumbnail_alt=?,
       public=?
     `,
       [
@@ -161,7 +160,6 @@ router.put("/:postIdx", async (req, res) => {
       content=?,
       tags=?,
       thumbnail=?,
-      thumbnail_alt=?, 
       public=?
       WHERE idx=?
     `,

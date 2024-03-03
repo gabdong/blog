@@ -11,8 +11,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
  * * 마크다운 에디터
  * @param {Object} props
  * @param {String} props.value
- * @param {Function} props.onChange
- * @param {Function} props.setUploadImagesData - 업로드할 이미지 정보 setState
+ * @param {Function} props.onChange - content setState
  * @returns {JSX.Element}
  */
 export default function Editor({ ...props }) {
@@ -29,9 +28,6 @@ export default function Editor({ ...props }) {
           if (e.clipboardData.files.length > 0) e.preventDefault();
           await onImagePasted(e.clipboardData, props.onChange);
         }}
-        onDrop={async (e) =>
-          await onImagePasted(e.dataTransfer, props.onChange)
-        }
       />
     </div>
   );

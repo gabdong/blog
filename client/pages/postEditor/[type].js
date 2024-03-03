@@ -24,6 +24,8 @@ export default function PostEditor({ pageProps }) {
 
   //* post data state
   const postIdx = postData?.idx ?? "";
+  const [thumbnail, setThumbnail] = useState(0);
+  const [thumbnailAlt, setThumbnailAlt] = useState("");
   const [subject, subjectHandler, setSubject] = useInput(
     postData?.subject ?? ""
   );
@@ -34,9 +36,8 @@ export default function PostEditor({ pageProps }) {
   const [selectedTags, setselectedTags] = useState(postData?.tags ?? []); // tag idx list
 
   //* etc state
-  const [searchTagsData, setSearchTagsData] = useState([]);
-  const [searchTagsWord, setSearchTagsWord] = useState("");
-  const [uploadImagesData, setUploadImagesData] = useState([]);
+  const [searchTagsData, setSearchTagsData] = useState([]); // 검색된 태그정보
+  const [searchTagsWord, setSearchTagsWord] = useState(""); // 검색할 태그
 
   //* ref
   const searchResultWrapRef = useRef(null);
@@ -110,9 +111,9 @@ export default function PostEditor({ pageProps }) {
 
   /**
    * * 게시글 저장/수정
-   * @param {String} isPublic - 게시글 임시저장(공개) 여부(Y/N)
+   * @param {String} isPublic - 게시글 공개여부(Y/N)
    */
-  const savePost = async (isPublic = "N") => {
+  const savePost = async (isPublic = "Y") => {
     const data = { isPublic, subject, content, tags: selectedTags };
 
     if (postIdx) {
@@ -139,6 +140,20 @@ export default function PostEditor({ pageProps }) {
             })
           : null}
       </SelectedTagsWrapSt>
+
+      {/* //* 썸네일 설정 */}
+      <ThumbnailWrapSt>
+        <Input type="file" border="bottom" />
+        <Input
+          defaultValue={thumbnailAlt}
+          onChange={setThumbnailAlt}
+          border="bottom"
+          style={{
+            color: "var(--gray-l)",
+          }}
+          placeholder="썸네일 설명"
+        />
+      </ThumbnailWrapSt>
 
       {/* //* 제목인풋 */}
       <Input
@@ -194,22 +209,17 @@ export default function PostEditor({ pageProps }) {
       </SearchTagWrapSt>
 
       {/* //* 게시글 에디터 */}
-      <Editor
-        value={content}
-        onChange={setContent}
-        height="500"
-        setUploadImageData={setUploadImagesData}
-      />
+      <Editor value={content} onChange={setContent} height="500" />
 
       {/* //* 저장, 취소버튼 */}
       <ButtonWrapSt>
         <Button text="취소" />
         <SaveButtonWrapSt>
-          <Button text="임시저장" onClick={() => savePost("Y")} />
+          <Button text="임시저장" onClick={() => savePost("N")} />
           <Button
             text="저장"
             style={{ background: "var(--primary-color)" }}
-            onClick={() => savePost("N")}
+            onClick={() => savePost()}
           />
         </SaveButtonWrapSt>
       </ButtonWrapSt>
@@ -235,6 +245,11 @@ const SelectedTagsItemSt = styled.div`
   &:hover {
     background: var(--dark-l);
   }
+`;
+const ThumbnailWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 const SearchTagWrapSt = styled.div`
   width: 100%;
