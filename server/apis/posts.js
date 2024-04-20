@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const { throwError } = require("../utils/utils.js");
 
 //* 게시글 리스트 요청
@@ -11,12 +10,12 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
   let tagCond = "";
   if (tagIdx !== "all") {
     if (tagIdx === "private") {
-      tagCond = "AND public='N'";
+      tagCond = "AND posts.public='N'";
     } else {
-      tagCond = "AND public='Y' ";
+      tagCond = "AND posts.public='Y' ";
 
       if (tagIdx && tagIdx !== "total")
-        tagCond += `AND JSON_CONTAINS(tags, '${tagIdx}') `;
+        tagCond += `AND JSON_CONTAINS(posts.tags, '${tagIdx}') `;
     }
   }
 
@@ -33,7 +32,7 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
     //* 페이지네이션 사용일때 전체갯수
     let totalCnt;
     if (paginationUsing) {
-      const [totalCntRes] = await db.query(`
+      const [totalCntRes] = await req.db.query(`
         SELECT COUNT(idx) as totalCnt 
         FROM posts 
         WHERE delete_datetime IS NULL 
@@ -42,20 +41,21 @@ router.get(["/list/:tagIdx", "/list"], async (req, res) => {
       totalCnt = totalCntRes[0].totalCnt;
     }
 
-    const [postListRes] = await db.query(
+    const [postListRes] = await req.db.query(
       `
-      SELECT idx, subject, content, thumbnail, datetime, tags 
-      FROM posts 
-      WHERE delete_datetime IS NULL 
+      SELECT posts.idx, posts.subject, posts.content, posts.datetime, posts.tags, images.url AS thumbnail, images.alt AS thumbnailAlt  
+      FROM posts posts 
+      LEFT JOIN images images 
+        ON images.idx=posts.thumbnail 
+      WHERE posts.delete_datetime IS NULL 
       ${tagCond}
-      ORDER BY datetime DESC, idx DESC 
+      ORDER BY posts.datetime DESC, posts.idx DESC 
       ${limitCond}
     `
     );
 
     res.json({ msg: "OK", postList: postListRes, totalCnt });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ msg: "게시글 리스트 불러오지 못했습니다." });
   }
 });
@@ -66,11 +66,20 @@ router.get("/:postIdx", async (req, res) => {
   const { user } = req.query;
 
   try {
-    const [postDataRes] = await db.query(
+    const [postDataRes] = await req.db.query(
       `
-      SELECT posts.subject, posts.content, posts.tags, posts.member AS memberIdx, posts.update_datetime AS updateDatetime, members.name AS memberName, posts.thumbnail, posts.public, posts.idx 
+      SELECT 
+        posts.subject, posts.content, posts.tags, posts.public, posts.idx, 
+        posts.member AS memberIdx, 
+        posts.update_datetime AS updateDatetime, 
+        members.name AS memberName, 
+        images.url AS thumbnail, 
+        images.alt AS thumbnailAlt
       FROM posts posts 
-      INNER JOIN members members ON members.idx=posts.member
+      INNER JOIN members members 
+        ON members.idx=posts.member
+      LEFT JOIN images images 
+        ON images.idx=posts.thumbnail 
       WHERE posts.idx=? 
       AND posts.delete_datetime IS NULL
     `,
@@ -87,7 +96,7 @@ router.get("/:postIdx", async (req, res) => {
       throwError(401, "게시글 권한이 없습니다.");
 
     //* 게시글 태그정보
-    const [tagDataRes] = await db.query(
+    const [tagDataRes] = await req.db.query(
       `
       SELECT * 
       FROM tags 
@@ -109,12 +118,14 @@ router.get("/:postIdx", async (req, res) => {
 
 //* 게시글 업로드 요청
 router.post("/", async (req, res) => {
-  const { content, subject, tags, user, thumbnail, thumbnailAlt, isPublic } =
-    req.body;
+  const {
+    postData: { content, subject, tags, thumbnail, isPublic },
+    user,
+  } = req.body;
   const userIdx = user.idx;
 
   try {
-    const [insertPostRes] = await db.query(
+    const [insertPostRes] = await req.db.query(
       `
       INSERT INTO posts SET
       member=?, 
@@ -131,7 +142,6 @@ router.post("/", async (req, res) => {
         content.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
-        thumbnailAlt,
         isPublic,
       ]
     );
@@ -145,13 +155,15 @@ router.post("/", async (req, res) => {
 //* 게시글 수정
 router.put("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
-  const { markDown, subject, tags, user, thumbnail, thumbnailAlt, publicPost } =
-    req.body;
+  const {
+    postData: { markDown, subject, tags, thumbnail, isPublic },
+    user,
+  } = req.body;
   const userIdx = user.idx;
 
   try {
     //TODO 권한수정
-    await db.query(
+    await req.db.query(
       `
       UPDATE posts SET
       member=?, 
@@ -169,8 +181,7 @@ router.put("/:postIdx", async (req, res) => {
         markDown.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
-        thumbnailAlt,
-        publicPost,
+        isPublic,
         postIdx,
       ]
     );
@@ -186,7 +197,7 @@ router.delete("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
 
   try {
-    await db.query(
+    await req.db.query(
       `
       UPDATE posts SET 
       delete_datetime=CURRENT_TIMESTAMP() 

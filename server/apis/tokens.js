@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const { getCookie } = require("../utils/utils");
 const token = require("../config/jwt");
 
@@ -8,7 +7,7 @@ const token = require("../config/jwt");
 router.delete("/", async (req, res) => {
   const hashIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
 
-  await db.query(
+  await req.db.query(
     `
     DELETE FROM tokens
     WHERE hash_idx=? 
@@ -43,7 +42,7 @@ router.get("/check-token", async (req, res) => {
         throw err;
       }
 
-      const [refreshTokenRes] = await db.query(
+      const [refreshTokenRes] = await req.db.query(
         `
         SELECT refresh_token AS refreshToken
         FROM tokens 
@@ -73,7 +72,7 @@ router.get("/check-token", async (req, res) => {
       const newAccessToken = token().access(memberIdx);
       const newRefreshToken = token().refresh(memberIdx);
 
-      const [userRes] = await db.query(
+      const [userRes] = await req.db.query(
         `
         SELECT idx, id, name, phone, email
         FROM members
@@ -90,7 +89,7 @@ router.get("/check-token", async (req, res) => {
 
       const user = userRes[0];
 
-      await db.query(
+      await req.db.query(
         `
         UPDATE tokens SET
         refresh_token=? 
@@ -99,7 +98,7 @@ router.get("/check-token", async (req, res) => {
         [newRefreshToken, memberIdx]
       );
 
-      const [hashIdxRes] = await db.query(
+      const [hashIdxRes] = await req.db.query(
         `
         SELECT hash_idx AS hashIdx 
         FROM tokens 
@@ -129,7 +128,7 @@ router.get("/check-token", async (req, res) => {
       });
     } else {
       const { idx: memberIdx } = checkAccessToken;
-      const [userRes] = await db.query(
+      const [userRes] = await req.db.query(
         `
         SELECT idx, id, name, phone, email
         FROM members

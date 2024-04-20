@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const { throwError } = require("../utils/utils");
 
 //* 태그 리스트 요청
 router.get("/", async (req, res) => {
   try {
-    const [selectTagListRes] = await db.query(
+    const [selectTagListRes] = await req.db.query(
       //* 태그리스트, 태그에 속한 게시글 갯수
       `
       SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
@@ -20,7 +19,7 @@ router.get("/", async (req, res) => {
       GROUP BY tags.idx, tags.auth, tags.name
     `
     );
-    const [postCntRes] = await db.query(
+    const [postCntRes] = await req.db.query(
       //* 전체 게시글, 비공개 게시글 갯수
       `
       SELECT 
@@ -53,7 +52,7 @@ router.post("/", async (req, res) => {
 
   for (const tagName of tags) {
     try {
-      const [selectTagNameRes] = await db.query(
+      const [selectTagNameRes] = await req.db.query(
         `
           SELECT idx, delete_datetime 
           FROM tags 
@@ -66,7 +65,7 @@ router.post("/", async (req, res) => {
         const { idx: duplicateIdx, delete_datetime } = selectTagNameRes[0];
 
         if (delete_datetime !== null) {
-          await db.query(
+          await req.db.query(
             `
             UPDATE tags SET
             delete_datetime=NULL
@@ -76,7 +75,7 @@ router.post("/", async (req, res) => {
           );
         }
       } else {
-        await db.query(
+        await req.db.query(
           `
             INSERT INTO tags SET 
             auth=0, 
@@ -100,7 +99,7 @@ router.put("/:tagIdx", async (req, res) => {
   const { name } = req.body;
 
   try {
-    const [duplicateTagRes] = await db.query(
+    const [duplicateTagRes] = await req.db.query(
       `
       SELECT idx 
       FROM tags 
@@ -113,7 +112,7 @@ router.put("/:tagIdx", async (req, res) => {
     if (duplicateTagRes.length > 0) {
       throwError(409, "중복된 태그명이 존재합니다.");
     } else {
-      await db.query(
+      await req.db.query(
         `
         UPDATE tags SET 
         name=? 
@@ -138,7 +137,7 @@ router.delete("/:tagIdx", async (req, res) => {
   const { tagIdx } = req.params;
 
   try {
-    await db.query(
+    await req.db.query(
       `
       UPDATE tags SET 
       delete_datetime=CURRENT_TIMESTAMP() 
@@ -168,7 +167,7 @@ router.get("/searchTag", async (req, res) => {
 
   try {
     //TODO 태그 사용권한 적용하기
-    const [searchTagRes] = await db.query(
+    const [searchTagRes] = await req.db.query(
       `
       SELECT * 
       FROM tags 

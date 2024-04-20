@@ -26,10 +26,12 @@ exports.getCookie = (str, target) => {
  * * Throw error
  * @param {Number} status
  * @param {String} message
+ * @param {Boolean} isReturn
  */
-exports.throwError = (status, message) => {
+exports.throwError = (status, message, isReturn = false) => {
   const err = new Error(message);
   err.status = status;
 
+  if (isReturn) return err;
   throw err;
 };

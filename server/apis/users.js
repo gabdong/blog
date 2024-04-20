@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const token = require("../config/jwt");
 const md5 = require("md5");
 
@@ -10,7 +9,7 @@ router.post("/login", async (req, res) => {
 
   try {
     //TODO 암호 암호화
-    const [userRes] = await db.query(
+    const [userRes] = await req.db.query(
       `
       SELECT idx, id, name, phone, email 
       FROM members 
@@ -34,7 +33,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = token().refresh(idx);
 
     //* refreshToken 저장
-    const [refreshTokenRes] = await db.query(
+    const [refreshTokenRes] = await req.db.query(
       `
       SELECT hash_idx AS hashIdx
       FROM tokens
@@ -49,7 +48,7 @@ router.post("/login", async (req, res) => {
       hashIdx = refreshTokenRes[0].hashIdx;
 
       //TODO error
-      await db.query(
+      await req.db.query(
         `
         UPDATE tokens SET 
         refresh_token=? 
@@ -60,7 +59,7 @@ router.post("/login", async (req, res) => {
     } else {
       //TODO error
       //*  refreshToken 정보 없을경우 insert
-      const [insertTokenRes] = await db.query(
+      const [insertTokenRes] = await req.db.query(
         `
         INSERT INTO tokens SET 
         refresh_token=?,
@@ -74,7 +73,7 @@ router.post("/login", async (req, res) => {
       hashIdx = md5(`${process.env.REFRESH_TOKEN_HASH_IDX_KEY}${insertId}`);
 
       //TODO error
-      await db.query(
+      await req.db.query(
         `
         UPDATE tokens SET
         hash_idx=?

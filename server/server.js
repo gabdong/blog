@@ -6,10 +6,11 @@ const cors = require("cors");
 const app = express();
 const apis = require("./apis/index.js");
 const bodyParser = require("body-parser");
-const limiter = require("./config/limiter.js");
+const { limiter, attachDB } = require("./utils/middleware.js");
 const PORT = process.env.port || 9411;
 
 app.use(cors());
+app.use(attachDB);
 app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
