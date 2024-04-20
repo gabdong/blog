@@ -40,6 +40,8 @@ export const getServerSideProps = ssrRequireAuthentication(
           return { redirect: `/${postData.status}` };
         case 401:
           return { redirect: `/${postData.status}` };
+        default:
+          return { redirect: `/404` };
       }
     }
 

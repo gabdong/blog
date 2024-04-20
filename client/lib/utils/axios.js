@@ -3,7 +3,7 @@ import axios from "axios";
 import { checkToken } from "../apis/tokens";
 
 const instance = axios.create({
-  timeout: 1000,
+  timeout: 3000,
   withCredentials: true,
 });
 

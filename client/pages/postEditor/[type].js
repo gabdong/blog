@@ -24,37 +24,44 @@ export default function PostEditor({ pageProps }) {
 
   //* post data state
   const postIdx = postData?.idx ?? "";
-  const [thumbnail, setThumbnail] = useState(0);
-  const [thumbnailAlt, setThumbnailAlt] = useState("");
+  const [thumbnail, setThumbnail] = useState(postData?.thumbnail ?? "");
+  const [thumbnailAlt, setThumbnailAlt] = useState(
+    postData?.thumbnailAlt ?? ""
+  );
   const [subject, subjectHandler, setSubject] = useInput(
     postData?.subject ?? ""
   );
   const [content, setContent] = useState(postData?.content ?? "");
   const [selectedTagsData, setselectedTagsData] = useState(
     postData?.tagData ?? []
-  ); // tag data
-  const [selectedTags, setselectedTags] = useState(postData?.tags ?? []); // tag idx list
+  ); // 선택한 tag data -> 출력용
+  const [selectedTags, setselectedTags] = useState(postData?.tags ?? []); // 선택한 tag idx list -> 저장용
 
   //* etc state
   const [searchTagsData, setSearchTagsData] = useState([]); // 검색된 태그정보
-  const [searchTagsWord, setSearchTagsWord] = useState(""); // 검색할 태그
+  const [searchTagWord, setSearchTagWord] = useState(""); // 검색할 태그
+  const [uploadThumbnail, setUploadThumbnail] = useState(null); // 업로드할 썸네일
 
   //* ref
   const searchResultWrapRef = useRef(null);
   const selectedTagsWrapRef = useRef(null);
 
   useEffect(() => {
-    //* 수정 -> 새글 / 새글 -> 수정 전환시 state 변경
+    //* 수정 -> 새글 || 새글 -> 수정 전환시 state 변경
     if (pageProps.urlParams.type == "edit" && postData.subject != subject) {
       setSubject(postData.subject);
       setContent(postData.content);
       setselectedTagsData(postData.tagData);
       setselectedTags(postData.tags);
+      setThumbnail(postData.thumbnail);
+      setThumbnailAlt(postData.thumbnailAlt);
     } else if (pageProps.urlParams.type == "new" && subject) {
       setSubject("");
       setContent();
       setselectedTagsData([]);
       setselectedTags([]);
+      setThumbnail("");
+      setThumbnailAlt("");
     }
   }, [pageProps.urlParams]);
 
@@ -87,7 +94,7 @@ export default function PostEditor({ pageProps }) {
 
   /**
    * * 태그 검색결과 선택
-   * @param {Array} data
+   * @param {Array} data 태그정보
    */
   const clickSearchTagResult = (data) => {
     // 선택한 태그리스트
@@ -111,10 +118,17 @@ export default function PostEditor({ pageProps }) {
 
   /**
    * * 게시글 저장/수정
-   * @param {String} isPublic - 게시글 공개여부(Y/N)
+   * @param {String} isPublic 게시글 공개여부(Y/N)
    */
   const savePost = async (isPublic = "Y") => {
-    const data = { isPublic, subject, content, tags: selectedTags };
+    const data = {
+      isPublic,
+      subject,
+      content,
+      tags: selectedTags,
+      uploadThumbnail,
+      thumbnailAlt,
+    };
 
     if (postIdx) {
       //* 수정
@@ -141,34 +155,10 @@ export default function PostEditor({ pageProps }) {
           : null}
       </SelectedTagsWrapSt>
 
-      {/* //* 썸네일 설정 */}
-      <ThumbnailWrapSt>
-        <Input type="file" border="bottom" />
-        <Input
-          defaultValue={thumbnailAlt}
-          onChange={setThumbnailAlt}
-          border="bottom"
-          style={{
-            color: "var(--gray-l)",
-          }}
-          placeholder="썸네일 설명"
-        />
-      </ThumbnailWrapSt>
-
-      {/* //* 제목인풋 */}
-      <Input
-        defaultValue={subject}
-        onChange={subjectHandler}
-        border="bottom"
-        style={{
-          color: "var(--gray-l)",
-        }}
-        placeholder="제목"
-      />
-
-      {/* //* 태그검색 */}
+      {/* //* 태그추가 */}
       <SearchTagWrapSt>
-        {/* //* 검색인풋 */}
+        <h3 className="smallTitle">태그</h3>
+        {/* //* 태그 검색인풋 */}
         <SearchInput
           searchFunc={(searchWord) => getSearchTagResult(searchWord)}
           border="bottom"
@@ -176,17 +166,17 @@ export default function PostEditor({ pageProps }) {
             width: "100%",
             color: "var(--gray-l)",
           }}
-          placeholder="태그추가"
+          placeholder="검색"
           onFocus={(e) => getSearchTagResult(e.target.value)}
           id="searchTagInput"
-          defaultValue={searchTagsWord}
-          setDefaultValue={setSearchTagsWord}
+          defaultValue={searchTagWord}
+          setDefaultValue={setSearchTagWord}
         />
-        {/* //* 검색결과 리스트 */}
-        <SearchResultWrapSt
+        {/* //* 태그 검색결과 리스트 */}
+        <SearchTagResultWrapSt
           ref={searchResultWrapRef}
           id="searchTagResultWrap"
-          className={searchTagsWord ? "active" : "noActive"}
+          className={searchTagWord ? "active" : "noActive"}
         >
           {searchTagsData.length > 0 ? (
             searchTagsData.map((data) => {
@@ -205,17 +195,78 @@ export default function PostEditor({ pageProps }) {
           ) : (
             <span className="normalText">검색 결과가 없습니다.</span>
           )}
-        </SearchResultWrapSt>
+        </SearchTagResultWrapSt>
       </SearchTagWrapSt>
 
+      {/* //* 썸네일 설정 */}
+      <ThumbnailSettingWrapSt>
+        <h3 className="smallTitle">썸네일</h3>
+        <Input
+          type="file"
+          border="bottom"
+          accept="image/jpeg, image/jpg, image/png, image/gif"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            const allowedExtensions = [
+              "image/png",
+              "image/jpg",
+              "image/jpeg",
+              "image/gif",
+            ];
+            if (!allowedExtensions.includes(file.type))
+              return alert("잘못된 확장자입니다.");
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+              //* 썸네일 미리보기
+              setThumbnail(reader.result);
+              setUploadThumbnail(file);
+            };
+          }}
+        />
+        <Input
+          defaultValue={thumbnailAlt}
+          onChange={(e) => setThumbnailAlt(e.target.value)}
+          border="bottom"
+          style={{
+            color: "var(--gray-l)",
+          }}
+          placeholder="썸네일 설명"
+        />
+        {/* //* 썸네일 미리보기 */}
+        <ThumbnailPreivewWrapSt>
+          {thumbnail ? (
+            <ThumbnailImgSt id="thumbnail" src={thumbnail} alt={thumbnailAlt} />
+          ) : null}
+        </ThumbnailPreivewWrapSt>
+      </ThumbnailSettingWrapSt>
+
+      {/* //* 제목설정 */}
+      <SubjectSettingWrapSt>
+        <h3 className="smallTitle">제목</h3>
+        <Input
+          defaultValue={subject}
+          onChange={subjectHandler}
+          border="bottom"
+          style={{
+            color: "var(--gray-l)",
+          }}
+          placeholder="입력"
+        />
+      </SubjectSettingWrapSt>
+
       {/* //* 게시글 에디터 */}
-      <Editor value={content} onChange={setContent} height="500" />
+      <ContentSettingWrapSt>
+        <h3 className="smallTitle">내용</h3>
+        <Editor value={content} onChange={setContent} height="500" />
+      </ContentSettingWrapSt>
 
       {/* //* 저장, 취소버튼 */}
       <ButtonWrapSt>
         <Button text="취소" />
         <SaveButtonWrapSt>
-          <Button text="임시저장" onClick={() => savePost("N")} />
+          <Button text="비공개" onClick={() => savePost("N")} />
           <Button
             text="저장"
             style={{ background: "var(--primary-color)" }}
@@ -227,6 +278,13 @@ export default function PostEditor({ pageProps }) {
   );
 }
 
+const EditorWrapSt = styled.article`
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  width: 100%;
+`;
 const SelectedTagsWrapSt = styled.div`
   display: flex;
   align-items: center;
@@ -246,16 +304,28 @@ const SelectedTagsItemSt = styled.div`
     background: var(--dark-l);
   }
 `;
-const ThumbnailWrapSt = styled.div`
+const ThumbnailSettingWrapSt = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
+const ThumbnailPreivewWrapSt = styled.div`
+  height: 120px;
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: var(--border-radius);
+`;
+const ThumbnailImgSt = styled.img`
+  height: 100%;
+`;
 const SearchTagWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
   position: relative;
 `;
-const SearchResultWrapSt = styled.div`
+const SearchTagResultWrapSt = styled.div`
   display: none;
   gap: 8px;
 
@@ -284,12 +354,15 @@ const SearchResultItemSt = styled.div`
     color: var(--primary-color);
   }
 `;
-const EditorWrapSt = styled.article`
+const SubjectSettingWrapSt = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
-  width: 100%;
+  gap: 10px;
+`;
+const ContentSettingWrapSt = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 const ButtonWrapSt = styled.div`
   display: flex;

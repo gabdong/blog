@@ -21,8 +21,11 @@ const navOpen = () => {
   background.classList.add("active");
 };
 
-export default function Header({ pageProps }) {
-  const { user } = pageProps;
+export default function Header(props) {
+  const {
+    pageProps: { user },
+    isNoNav,
+  } = props;
   const [loginModalView, setloginModalView] = useState(false);
   const [userMenuWrapView, setUserMenuWrapView] = useState(false);
 
@@ -76,7 +79,7 @@ export default function Header({ pageProps }) {
     <HeaderSt id="header">
       <HeaderInnerSt id="headerInner">
         {/* //* nav button */}
-        <NavIconSt className="mobileOnly" onClick={navOpen} />
+        {!isNoNav && <NavIconSt className="mobileOnly" onClick={navOpen} />}
 
         {/* //* logo */}
         <Link href="/?tabItem=latestPostList">
@@ -88,7 +91,7 @@ export default function Header({ pageProps }) {
           {/* //TODO 기능 완성 후 주석제거 */}
           {/* <SearchIcon className="serachIcon pcOnly"/> */}
 
-          {!user.isLogin ? null : (
+          {user?.isLogin && (
             <LinkButton
               classname="pcOnly"
               text="새 글 작성"
@@ -96,15 +99,15 @@ export default function Header({ pageProps }) {
             />
           )}
           <HeaderButtonSt
-            className={"buttonText" + user.isLogin ? "headerUserBtnWrap" : ""}
-            onClick={!user.isLogin ? loginModalHandler : userMenuWrapHandler}
+            className={"buttonText" + user?.isLogin && " headerUserBtnWrap"}
+            onClick={!user?.isLogin ? loginModalHandler : userMenuWrapHandler}
           >
-            {!user.isLogin ? "Login" : `${user.name} 님`}
-            {!user.isLogin ? null : <DownIconSt />}
+            {!user?.isLogin ? "Login" : `${user?.name} 님`}
+            {user?.isLogin && <DownIconSt />}
           </HeaderButtonSt>
-          {user.isLogin && userMenuWrapView ? (
+          {user?.isLogin && userMenuWrapView && (
             <UserMenuWrap closeUserMenuWrapFn={closeUserMenuWrap} />
-          ) : null}
+          )}
         </HeaderButtonWrapSt>
       </HeaderInnerSt>
 
@@ -120,14 +123,12 @@ export default function Header({ pageProps }) {
 }
 
 const HeaderSt = styled.header`
-  display: flex;
-
   width: 100%;
   height: 80px;
-  position: fixed;
+  position: sticky;
   left: 0;
   top: 0;
-  z-index: 21;
+  z-index: 1;
   transition: var(--transition);
 
   &.active {
@@ -136,7 +137,6 @@ const HeaderSt = styled.header`
   }
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
-    flex-direction: column;
     height: 56px;
 
     &.active {
@@ -150,15 +150,8 @@ const HeaderInnerSt = styled.div`
   align-items: center;
 
   width: 100%;
-  max-width: 1920px;
   height: 100%;
-  margin: 0 auto;
-  padding: 0px 40px;
   position: relative;
-
-  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
-    max-width: 90%;
-  }
 `;
 const NavIconSt = styled(NavIcon)`
   font-size: 20px;
@@ -196,16 +189,12 @@ const HeaderButtonSt = styled.button`
   display: flex;
   align-items: center;
 
-  font-size: 1rem;
+  font-size: 16px;
   color: var(--gray-l);
   transition: var(--transition);
 
   &:hover {
     color: #ffffff;
-  }
-
-  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
-    font-size: 0.9rem;
   }
 `;
 const DownIconSt = styled(DownIcon)`

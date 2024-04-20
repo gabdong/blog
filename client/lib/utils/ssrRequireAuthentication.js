@@ -10,15 +10,19 @@ import { loginUser } from "@/store/modules/user";
  */
 export function ssrRequireAuthentication(gssp = null) {
   return reduxWrapper.getServerSideProps((store) => async (ctx) => {
-    const {
+    let {
       query,
       req: { url },
     } = ctx;
     let user = await checkLogin(true, ctx.req.headers?.cookie);
     let prevUser = store.getState().user;
-    if (!user) user = { ...prevUser };
 
-    //* private page로 접근시 로그인 확인
+    if (!query) query = {};
+    if (!prevUser) prevUser = { isLogin: false };
+    if (!user) user = { ...prevUser };
+    if (!url) url = "";
+
+    //* 로그인 필요한 페이지 접근시 로그인 확인
     const privatePages = ["private", "settings", "postEditor"];
     for (const privateKey of privatePages) {
       if (url.includes(privateKey) && (!user || !user.isLogin)) {

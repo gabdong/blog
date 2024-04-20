@@ -131,6 +131,7 @@ const PostListUlSt = styled.ul`
 `;
 const PostListLiSt = styled.li`
   width: calc(100% / 3 - 14px);
+  border-radius: var(--border-radius);
   background: var(--dark-l);
   transition: var(--transition);
   cursor: pointer;
@@ -159,7 +160,7 @@ const PostLinkSt = styled(Link)`
 `;
 const PostThumbnailSt = styled.div`
   padding-top: 52%;
-  background: linear-gradient(310deg, var(--dark), #222222, #000000);
+  background: var(--dark-m);
   position: relative;
 
   & > svg {

@@ -17,12 +17,12 @@ export default function PostContent({ postData, postIdx, user }) {
   const router = useRouter();
 
   //* markdown 문법 제거 -> 메타태그용
-  postData.removeMdContent = removeMd(
-    postData.content.replace(/<\/?[^>]+(>|$)/g, "")
-  );
+  // postData.removeMdContent = removeMd(
+  //   postData.content.replace(/<\/?[^>]+(>|$)/g, "")
+  // );
 
-  if (postData.removeMdContent.length > 200)
-    postData.removeMdContent = postData.removeMdContent.substring(0, 200);
+  // if (postData.removeMdContent.length > 200)
+  //   postData.removeMdContent = postData.removeMdContent.substring(0, 200);
 
   return (
     <>
@@ -84,10 +84,9 @@ const PostWrapSt = styled.section`
   min-width: 0;
   max-width: 100%;
   height: 100%;
-  padding-right: 20px;
 
-  @media screen and (max-width: 479px) {
-    padding-right: 0px;
+  & img {
+    max-width: 100%;
   }
 `;
 const PostInfoWrapSt = styled.div`
@@ -116,7 +115,7 @@ const ThumbnailWrapSt = styled.div`
     max-width: 50%;
   }
 
-  @media all and (max-width: 479px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     & img {
       max-width: 90%;
     }

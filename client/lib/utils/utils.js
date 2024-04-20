@@ -49,7 +49,7 @@ export function elDisplayToggle(
 
 /**
  * * textarea 중간에 문자 넣어주는 함수
- * @param {String} target - textarea selector
+ * @param {String} target - target textarea selector
  * @param {String} intsertString
  * @returns {String}
  */

@@ -52,7 +52,7 @@ export default function Tab({ tabBtnList = {}, tabItemList = {}, tabCnt }) {
 const TabSt = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 `;
 const TabButtonWrapSt = styled.div`
   display: flex;

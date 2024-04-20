@@ -20,6 +20,7 @@ const Input = forwardRef(
       onFocus,
       border = "all",
       id,
+      accept,
     },
     ref
   ) => {
@@ -38,6 +39,7 @@ const Input = forwardRef(
         ref={ref}
         border={border}
         id={id}
+        accept={accept}
       />
     );
   }

@@ -1,4 +1,5 @@
 import axios from "@/lib/utils/axios";
+import { uploadImage } from "./images";
 
 /**
  * * 게시글 리스트 요청
@@ -77,10 +78,26 @@ export async function getAllPosts(ssr = false) {
  * @param {Object} postData
  */
 export async function uploadPost(postData) {
-  console.log(postData);
-  try {
-    const json = await axios.post("/apis/posts", { checkAuth: true, postData });
-  } catch (err) {}
+  if (postData.uploadThumbnail) {
+    // 썸네일 업로드
+    const { uploadThumbnail, thumbnailAlt } = postData;
+
+    try {
+      const uploadThumbnailRes = await uploadImage(
+        uploadThumbnail,
+        thumbnailAlt
+      );
+      const thumbnail = uploadThumbnailRes.idx;
+
+      postData.thumbnail = thumbnail;
+      const json = await axios.post("/apis/posts", {
+        checkAuth: true,
+        postData,
+      });
+    } catch (err) {
+      if (err.response?.data.msg) console.error(err.response.data.msg);
+    }
+  }
 }
 
 /**
@@ -88,5 +105,16 @@ export async function uploadPost(postData) {
  * @param {Object} postData
  */
 export async function editPost(postData) {
-  const json = await axios.put("/apis/posts", { checkAuth: true, postData });
+  try {
+    const uploadThumbnailRes = await uploadImage(uploadThumbnail, thumbnailAlt);
+    const thumbnail = uploadThumbnailRes.idx;
+
+    postData.thumbnail = thumbnail;
+    const json = await axios.post(`/apis/posts/${postData.postIdx}`, {
+      checkAuth: true,
+      postData,
+    });
+  } catch (err) {
+    if (err.response?.data.msg) console.error(err.response.data.msg);
+  }
 }

@@ -7,7 +7,6 @@ export default function TagSettings() {
     tagData: { tagList, tagLoading },
   } = useTagData();
 
-  console.log(tagList);
   return tagLoading ? (
     <></>
   ) : (

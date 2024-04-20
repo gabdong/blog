@@ -21,9 +21,8 @@ const navClose = () => {
  */
 export default function Nav({ pageProps }) {
   //* 로그인 정보
-  const {
+  let {
     user: { isLogin },
-    url,
   } = pageProps;
 
   //* 태그정보
@@ -36,12 +35,6 @@ export default function Nav({ pageProps }) {
       totalPostCnt,
     },
   } = useTagData();
-
-  //* 출력 안할 페이지 설정
-  const noNavPages = ["/postEditor", "/404", "/401"];
-  for (const noNavPage of noNavPages) {
-    if (url.includes(`${noNavPage}`)) return null;
-  }
 
   return (
     <>
@@ -56,10 +49,25 @@ export default function Nav({ pageProps }) {
           />
           <NavSt id="nav">
             <CloseBtnSt className="mobileOnly" onClick={navClose} />
+            <h2
+              className="subTitle"
+              style={{
+                borderBottom: "1px solid #dddddd",
+                paddingBottom: "8px",
+              }}
+            >
+              태그 목록
+            </h2>
             <NavButton
               path="/tag/total?page=1"
-              text={`Total (${totalPostCnt})`}
+              text={`Total`}
               active={activeTagIdx === "total" ? "active" : ""}
+              subText={`(${totalPostCnt})`}
+              subTextStyle={{
+                marginLeft: "10px",
+                opacity: 0.6,
+                fontSize: "14px",
+              }}
             />
             {Object.entries(tagList).map((data) => {
               const tagIdx = data[0] !== "total" ? Number(data[0]) : data[0];
@@ -70,25 +78,39 @@ export default function Nav({ pageProps }) {
                   : "";
 
               //TODO 로그인계정 권한도 확인하기
-              if (auth === 1 && !isLogin) return "";
+              // if (auth === 1 && !isLogin) return "";
 
               return (
                 <NavButton
                   key={tagIdx}
-                  text={`${name} (${postCnt})`}
+                  text={`${name}`}
                   path={`/tag/${tagIdx}?page=1`}
                   active={activeClass}
+                  subText={`(${postCnt})`}
+                  subTextStyle={{
+                    marginLeft: "10px",
+                    opacity: 0.6,
+                    fontSize: "14px",
+                  }}
                 />
               );
             })}
 
             {isLogin ? (
-              <NavButton
-                path="/tag/private?page=1"
-                text={`Private (${privatePostCnt})`}
-              />
+              <>
+                <NavButton
+                  path="/tag/private?page=1"
+                  text={`Private`}
+                  subText={`(${privatePostCnt})`}
+                  subTextStyle={{
+                    marginLeft: "10px",
+                    opacity: 0.6,
+                    fontSize: "14px",
+                  }}
+                />
+                <NavButton path="/settings" text="Settings" />
+              </>
             ) : null}
-            {isLogin ? <NavButton path="/settings" text="Settings" /> : null}
           </NavSt>
         </>
       )}
@@ -99,12 +121,11 @@ export default function Nav({ pageProps }) {
 const NavSt = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 
   width: 140px;
-  min-width: 140px;
 
-  @media all and (max-width: 767px) {
+  @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     width: 80%;
     height: 100%;
     padding: 20px;
@@ -133,7 +154,11 @@ const NavSt = styled.nav`
 `;
 const NavBackgroundSt = styled.div`
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    display: none;
+
     &.active {
+      display: block;
+
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.8);

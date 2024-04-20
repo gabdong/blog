@@ -1,28 +1,4 @@
 import axios from "../utils/axios";
-import { insertToTextArea } from "../utils/utils";
-
-/**
- * * 에디터 이미지 붙여넣기
- * @param {DataTransfer} dataTransfer
- * @param {Function} setContent - content setState
- */
-
-export async function onImagePasted(dataTransfer, setContent) {
-  const file_length = dataTransfer.files.length;
-  for (let i = 0; i < file_length; i++) {
-    const file = dataTransfer.files.item(i);
-
-    if (file) {
-      const { url, alt } = await uploadImage(file);
-      const insertedMarkdown = insertToTextArea(
-        ".w-md-editor-text-input",
-        `![${alt ?? file.name}](${url})`
-      );
-      if (!insertedMarkdown) continue;
-      setContent(insertedMarkdown);
-    }
-  }
-}
 
 /**
  * * 이미지 업로드
@@ -33,7 +9,7 @@ export async function onImagePasted(dataTransfer, setContent) {
 export async function uploadImage(blob = null, alt = null) {
   const { name, size } = blob;
 
-  let url;
+  let url, idx;
   //* 중복된 이미지 확인
   try {
     const duplicatedImgData = await axios.get("/apis/images/", {
@@ -44,6 +20,7 @@ export async function uploadImage(blob = null, alt = null) {
       //* 중복된 이미지 사용
       url = duplicatedImgData.data.url;
       alt = duplicatedImgData.data.alt;
+      idx = duplicatedImgData.data.idx;
       alert("중복된 이미지가 있어 정보를 불러옵니다.");
     } else {
       //* 이미지 업로드
@@ -51,11 +28,22 @@ export async function uploadImage(blob = null, alt = null) {
       formData.append("image", blob);
       formData.append("alt", alt ?? name);
       formData.append("checkAuth", true);
+
       const imageData = await axios.post("/apis/images", formData);
       url = imageData.data.url;
+      idx = imageData.data.idx;
+      alt = imageData.data.alt;
     }
-    return { url, alt };
+    return { url, alt, idx };
   } catch (err) {
-    alert(err.response.data.msg);
+    if (err.response.data.msg) {
+      alert(err.response.data.msg);
+    } else {
+      if (err.response.status == 415) {
+        alert("잘못된 확장자입니다.");
+      } else {
+        alert("이미지 업로드를 실패하였습니다.");
+      }
+    }
   }
 }

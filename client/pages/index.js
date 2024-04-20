@@ -13,7 +13,7 @@ export default function Index({}) {
         <Tab
           tabBtnList={{
             latestPostList: {
-              label: "최근게시물",
+              label: "최근 게시물",
               path: "/?tabItem=latestPostList",
             },
             introduce: {
