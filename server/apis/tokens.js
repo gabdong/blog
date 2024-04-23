@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db");
 const { getCookie } = require("../utils/utils");
 const token = require("../config/jwt");
 
 //* refresh token 삭제
 router.delete("/", async (req, res) => {
-  const hashIdx = getCookie(req.headers.cookie, "refreshToken");
+  const hashIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
 
-  await db.query(
+  await req.db.query(
     `
     DELETE FROM tokens
     WHERE hash_idx=? 
@@ -16,12 +15,12 @@ router.delete("/", async (req, res) => {
     [hashIdx]
   );
 
-  res.cookie("refreshToken", "", {
+  res.cookie("refreshTokenIdx", "", {
     httpOnly: true,
     maxAge: 0,
   });
 
-  res.json({ msg: "SUCCESS" });
+  res.json({ msg: "OK" });
 });
 
 //* token 유효성 검사, refreshToken만 있는경우 token 재발급
@@ -34,9 +33,16 @@ router.get("/check-token", async (req, res) => {
 
     if (!checkAccessToken) {
       //* accessToken false일경우 refreshToken 검증
-      const refreshTokenIdx = getCookie(req.headers.cookie, "refreshToken");
+      const refreshTokenIdx = getCookie(req.headers.cookie, "refreshTokenIdx");
 
-      const [refreshTokenRes] = await db.query(
+      if (!refreshTokenIdx) {
+        //* refreshToken 없을경우
+        const err = new Error("권한이 없습니다.");
+        err.status = 401;
+        throw err;
+      }
+
+      const [refreshTokenRes] = await req.db.query(
         `
         SELECT refresh_token AS refreshToken
         FROM tokens 
@@ -46,6 +52,7 @@ router.get("/check-token", async (req, res) => {
       );
 
       if (refreshTokenRes.length === 0) {
+        //* refreshToken 정보가 없을경우
         const err = new Error("권한이 없습니다.");
         err.status = 401;
         throw err;
@@ -55,22 +62,23 @@ router.get("/check-token", async (req, res) => {
       const checkRefreshToken = token().check(refreshToken, "refresh");
 
       if (!checkRefreshToken) {
+        //* refreshToken 권한이 없을경우
         const err = new Error("권한이 없습니다.");
         err.status = 401;
         throw err;
       }
 
-      const { idx } = checkRefreshToken;
-      const newAccessToken = token().access(idx);
-      const newRefreshToken = token().refresh(idx);
+      const { idx: memberIdx } = checkRefreshToken;
+      const newAccessToken = token().access(memberIdx);
+      const newRefreshToken = token().refresh(memberIdx);
 
-      const [userRes] = await db.query(
+      const [userRes] = await req.db.query(
         `
         SELECT idx, id, name, phone, email
         FROM members
         WHERE idx=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (userRes.length === 0) {
@@ -81,53 +89,52 @@ router.get("/check-token", async (req, res) => {
 
       const user = userRes[0];
 
-      await db.query(
+      await req.db.query(
         `
         UPDATE tokens SET
         refresh_token=? 
         WHERE member=?
       `,
-        [newRefreshToken, idx]
+        [newRefreshToken, memberIdx]
       );
 
-      const [hashIdxRes] = await db.query(
+      const [hashIdxRes] = await req.db.query(
         `
         SELECT hash_idx AS hashIdx 
         FROM tokens 
         WHERE member=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (hashIdxRes.length === 0) {
-        const err = new Error("토큰 hash idx요청을 실패하였습니다.");
-        err.status = 500;
+        const err = new Error("토큰 hash idx 정보가 없습니다.");
+        err.status = 404;
         throw err;
       }
 
       const hashIdx = hashIdxRes[0].hashIdx;
 
-      res.cookie("refreshToken", hashIdx, {
+      res.cookie("refreshTokenIdx", hashIdx, {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
       });
-
       res.json({
-        msg: "SUCCESS",
+        msg: "OK",
         status: 200,
         newAccessToken,
         auth: true,
         user,
       });
     } else {
-      const { idx } = checkAccessToken;
-      const [userRes] = await db.query(
+      const { idx: memberIdx } = checkAccessToken;
+      const [userRes] = await req.db.query(
         `
         SELECT idx, id, name, phone, email
         FROM members
         WHERE idx=?
       `,
-        [idx]
+        [memberIdx]
       );
 
       if (userRes.length === 0) {
@@ -137,7 +144,7 @@ router.get("/check-token", async (req, res) => {
       }
 
       const user = userRes[0];
-      res.json({ msg: "SUCCESS", status: 200, auth: true, user });
+      res.json({ msg: "OK", status: 200, auth: true, user });
     }
   } catch (err) {
     if (err.status) {

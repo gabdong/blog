@@ -4,17 +4,17 @@ const jwt = require("jsonwebtoken");
 
 const token = () => {
   return {
-    access(idx) {
+    access(idx) { // accessToken 발급
       return jwt.sign({ idx }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "15m",
       });
     },
-    refresh(idx) {
+    refresh(idx) { // refreshToken 발급
       return jwt.sign({ idx }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: "1d",
       });
     },
-    check(token, mode) {
+    check(token, mode) { // token 유효성 확인
       const secret_key =
         mode == "access"
           ? process.env.ACCESS_TOKEN_SECRET
