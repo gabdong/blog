@@ -1,0 +1,1 @@
+{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/401":"pages/401.html","/404":"pages/404.html","/tag/[tagIdx]":"pages/tag/[tagIdx].js","/post/[postIdx]":"pages/post/[postIdx].js","/settings":"pages/settings.js","/":"pages/index.js","/postEditor/[type]":"pages/postEditor/[type].js"}
