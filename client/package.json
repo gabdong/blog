@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "GENERATE_SOURCEMAP=false next build",
     "windowBuild": "set \"GENERATE_SOURCEMAP=false\" && next build",
-    "prestart": "npm run build",
     "start": "next start -p 80",
     "lint": "next lint"
   },
