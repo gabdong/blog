@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
@@ -6,3 +7,6 @@
   "/404": "pages/404.js",
   "/tag/[tagIdx]": "pages/tag/[tagIdx].js"
 }
+=======
+{"/_app":"pages/_app.js","/_document":"pages/_document.js","/401":"pages/401.html","/404":"pages/404.html","/_error":"pages/_error.js","/":"pages/index.js","/tag/[tagIdx]":"pages/tag/[tagIdx].js","/settings":"pages/settings.js","/post/[postIdx]":"pages/post/[postIdx].js","/postEditor/[type]":"pages/postEditor/[type].js"}
+>>>>>>> f9e9a87 (no message)
