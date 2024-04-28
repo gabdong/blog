@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/":{},"/postEditor/[type]":{},"/settings":{},"/post/[postIdx]":{},"/tag/[tagIdx]":{}}}
+{"version":1,"functions":{"/":{},"/post/[postIdx]":{},"/settings":{},"/tag/[tagIdx]":{},"/postEditor/[type]":{}}}
