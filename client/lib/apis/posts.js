@@ -114,6 +114,11 @@ export async function editPost(postData) {
     const thumbnail = uploadThumbnailRes.idx;
 
     postData.thumbnail = thumbnail;
+  } catch (err) {
+    if (err.response?.data.msg) console.error(err.response.data.msg);
+  }
+
+  try {
     const json = await axios.post(`/apis/posts/${postData.postIdx}`, {
       checkAuth: true,
       postData,
