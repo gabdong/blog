@@ -85,6 +85,7 @@ router.get("/:postIdx", async (req, res) => {
     `,
       [postIdx]
     );
+    console.log(postDataRes);
 
     if (postDataRes.length === 0)
       throwError(404, "게시글 정보가 존재하지 않습니다.");
@@ -96,15 +97,17 @@ router.get("/:postIdx", async (req, res) => {
       throwError(401, "게시글 권한이 없습니다.");
 
     //* 게시글 태그정보
-    const [tagDataRes] = await req.db.query(
-      `
-      SELECT * 
-      FROM tags 
-      WHERE idx IN (?)
-      `,
-      [postData.tags]
-    );
-    postData.tagData = tagDataRes ? tagDataRes : [];
+    if (postData.tags.length > 0) {
+      const [tagDataRes] = await req.db.query(
+        `
+        SELECT * 
+        FROM tags 
+        WHERE idx IN (?)
+        `,
+        [postData.tags]
+      );
+      postData.tagData = tagDataRes ? tagDataRes : [];
+    }
 
     res.json({ msg: "OK", postData });
   } catch (err) {
