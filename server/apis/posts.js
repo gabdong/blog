@@ -85,7 +85,6 @@ router.get("/:postIdx", async (req, res) => {
     `,
       [postIdx]
     );
-    console.log(postDataRes);
 
     if (postDataRes.length === 0)
       throwError(404, "게시글 정보가 존재하지 않습니다.");
@@ -159,14 +158,14 @@ router.post("/", async (req, res) => {
 router.put("/:postIdx", async (req, res) => {
   const { postIdx } = req.params;
   const {
-    postData: { markDown, subject, tags, thumbnail, isPublic },
+    postData: { content, subject, tags, thumbnail, isPublic },
     user,
   } = req.body;
   const userIdx = user.idx;
 
   try {
     //TODO 권한수정
-    await req.db.query(
+    const [editPostRes] = await req.db.query(
       `
       UPDATE posts SET
       member=?, 
@@ -181,7 +180,7 @@ router.put("/:postIdx", async (req, res) => {
       [
         userIdx,
         subject,
-        markDown.replace(/'/g, "\\'"),
+        content.replace(/'/g, "\\'"),
         JSON.stringify(tags).replace(/"/g, ""),
         thumbnail,
         isPublic,

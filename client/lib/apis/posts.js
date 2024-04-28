@@ -109,17 +109,25 @@ export async function uploadPost(postData) {
  * @param {Object} postData
  */
 export async function editPost(postData) {
-  try {
-    const uploadThumbnailRes = await uploadImage(uploadThumbnail, thumbnailAlt);
-    const thumbnail = uploadThumbnailRes.idx;
+  if (postData.uploadThumbnail) {
+    // 썸네일 업로드
+    const { uploadThumbnail, thumbnailAlt } = postData;
 
-    postData.thumbnail = thumbnail;
-  } catch (err) {
-    if (err.response?.data.msg) console.error(err.response.data.msg);
+    try {
+      const uploadThumbnailRes = await uploadImage(
+        uploadThumbnail,
+        thumbnailAlt
+      );
+      const thumbnail = uploadThumbnailRes.idx;
+
+      postData.thumbnail = thumbnail;
+    } catch (err) {
+      if (err.response?.data.msg) console.error(err.response.data.msg);
+    }
   }
 
   try {
-    const json = await axios.post(`/apis/posts/${postData.postIdx}`, {
+    const json = await axios.put(`/apis/posts/${postData.postIdx}`, {
       checkAuth: true,
       postData,
     });
