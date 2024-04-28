@@ -130,8 +130,6 @@ export default function PostEditor({ pageProps }) {
       thumbnailAlt,
     };
 
-    console.log(data);
-
     if (postIdx) {
       //* 수정
       data.postIdx = postIdx;
