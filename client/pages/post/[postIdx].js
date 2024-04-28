@@ -33,6 +33,7 @@ export const getServerSideProps = ssrRequireAuthentication(
 
     const postData = await getPost({ postIdx, user });
 
+    console.log(postData);
     //* error
     if (postData.status) {
       switch (postData.status) {

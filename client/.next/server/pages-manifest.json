@@ -1,1 +1,8 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/401":"pages/401.html","/404":"pages/404.html","/":"pages/index.js","/post/[postIdx]":"pages/post/[postIdx].js","/settings":"pages/settings.js","/tag/[tagIdx]":"pages/tag/[tagIdx].js","/postEditor/[type]":"pages/postEditor/[type].js"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/post/[postIdx]": "pages/post/[postIdx].js",
+  "/404": "pages/404.js",
+  "/tag/[tagIdx]": "pages/tag/[tagIdx].js"
+}

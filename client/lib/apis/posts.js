@@ -88,15 +88,19 @@ export async function uploadPost(postData) {
         thumbnailAlt
       );
       const thumbnail = uploadThumbnailRes.idx;
-
       postData.thumbnail = thumbnail;
-      const json = await axios.post("/apis/posts", {
-        checkAuth: true,
-        postData,
-      });
     } catch (err) {
       if (err.response?.data.msg) console.error(err.response.data.msg);
     }
+  }
+
+  try {
+    const json = await axios.post("/apis/posts", {
+      checkAuth: true,
+      postData,
+    });
+  } catch (err) {
+    if (err.response?.data.msg) console.error(err.response.data.msg);
   }
 }
 
