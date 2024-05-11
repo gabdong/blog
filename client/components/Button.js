@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+/**
+ * * 버튼
+ * @param {Object} props
+ * @param {String} props.text
+ * @param {String} props.classname
+ * @param {String} props.as
+ * @param {Object} props.style
+ * @param {Function} props.onClick
+ * @returns {JSX.Element}
+ */
 export default function Button({
   text,
   classname = "",
@@ -14,7 +24,7 @@ export default function Button({
       style={style}
       onClick={onClick}
     >
-      <span className='buttonText'>{text}</span>
+      <span className="buttonText">{text}</span>
     </ButtonSt>
   );
 }

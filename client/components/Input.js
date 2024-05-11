@@ -5,7 +5,15 @@ import styled from "styled-components";
  * * Input
  * @param {Object} props
  * @param {String} props.type
+ * @param {String} props.name
  * @param {String} props.placeholder
+ * @param {*} props.defaultValue
+ * @param {Object} props.style
+ * @param {Function} props.onChange
+ * @param {Function} props.onKeyUp
+ * @param {String} props.border all, top, bottom, left, right
+ * @param {String} props.id
+ * @param {String} props.accept 파일일경우 확장자
  */
 const Input = forwardRef(
   (

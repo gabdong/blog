@@ -35,19 +35,30 @@ export async function getSearchTag(searchWord, selectedTags = []) {
  * @param {String} tagName
  * @param {Function} setTagList
  */
-export async function createTag(tagName) {
+export async function saveTag(tagName, setTagList) {
   const tagNameArr = tagName
     .replace(/(<([^>]+)>)/gi, "")
-    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "") // eslint-disable-line
+    .replace(/[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\s]/gim, "")
     .split(",")
     .filter(Boolean);
 
   if (tagNameArr.length === 0) return alert("추가할 태그명을 입력해주세요.");
 
   try {
-    await axios.post("/apis/tags/", { tags: tagNameArr, checkAuth: true });
+    const saveTagRes = await axios.post("/apis/tags/", {
+      tags: tagNameArr,
+      checkAuth: true,
+    });
+
+    const { errorList, saveTagList } = saveTagRes.data;
+
+    //TODO 중복, 에러 구분메세지
+    if (errorList.length > 0)
+      console.error(`${errorList.length}개의 태그 저장을 실패하였습니다.`);
+
+    setTagList(saveTagList);
   } catch (err) {
-    alert(err.reponse.data.msg);
+    console.error(err.reponse.data.msg);
   }
 }
 

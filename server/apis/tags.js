@@ -5,8 +5,8 @@ const { throwError } = require("../utils/utils");
 //* 태그 리스트 요청
 router.get("/", async (req, res) => {
   try {
+    //* 태그리스트, 태그에 속한 게시글 갯수
     const [selectTagListRes] = await req.db.query(
-      //* 태그리스트, 태그에 속한 게시글 갯수
       `
       SELECT tags.idx, tags.auth, tags.name, COUNT(posts.idx) AS postCnt 
       FROM tags tags 
@@ -19,8 +19,9 @@ router.get("/", async (req, res) => {
       GROUP BY tags.idx, tags.auth, tags.name
     `
     );
+
+    //* 전체 게시글, 비공개 게시글 갯수
     const [postCntRes] = await req.db.query(
-      //* 전체 게시글, 비공개 게시글 갯수
       `
       SELECT 
         COUNT(CASE WHEN public='Y' THEN 1 END) AS totalPostCnt,
@@ -50,32 +51,50 @@ router.post("/", async (req, res) => {
   const { tags, user: userData } = req.body;
   const { idx: userIdx } = userData;
 
+  const saveTagList = {};
+  const errorList = []; // [{tagName, type}] - type 1: 중복, type 2: 쿼리에러
   for (const tagName of tags) {
     try {
       const [selectTagNameRes] = await req.db.query(
         `
-          SELECT idx, delete_datetime 
-          FROM tags 
-          WHERE name=?
+          SELECT tags.idx AS duplicateTagIdx, tags.delete_datetime AS deleteDatetime, COUNT(posts.idx) AS postCnt, tags.auth 
+          FROM tags tags
+          LEFT JOIN posts posts 
+            -- //* tag에 속하면서 삭제되지않고 공개인 게시글
+            ON JSON_CONTAINS(posts.tags, CAST(tags.idx AS char)) 
+            AND posts.delete_datetime IS NULL 
+            AND posts.public='Y'
+          WHERE UPPER(tags.name)=? 
+          GROUP BY tags.idx
       `,
-        [tagName]
+        [tagName.toUpperCase()]
       );
 
-      if (selectTagNameRes.length > 0) {
-        const { idx: duplicateIdx, delete_datetime } = selectTagNameRes[0];
+      // res.json({ msg: "ok" }); //TODO 지우기
 
-        if (delete_datetime !== null) {
+      if (selectTagNameRes.length > 0) {
+        //* 기존정보 있을경우
+        const { duplicateTagIdx, deleteDatetime, postCnt, auth } =
+          selectTagNameRes[0];
+
+        if (deleteDatetime !== null) {
+          //* 삭제된 태그정보 있을경우
           await req.db.query(
             `
             UPDATE tags SET
             delete_datetime=NULL
             WHERE idx=?
             `,
-            [duplicateIdx]
+            [duplicateTagIdx]
           );
+          saveTagList[duplicateTagIdx] = { name: tagName, auth, postCnt };
+        } else {
+          //* 중복일 경우
+          errorList.push({ tagName, type: 1 });
         }
       } else {
-        await req.db.query(
+        //* 기존정보 없을경우
+        const [insertTagRes] = await req.db.query(
           `
             INSERT INTO tags SET 
             auth=0, 
@@ -84,13 +103,16 @@ router.post("/", async (req, res) => {
         `,
           [userIdx, tagName]
         );
+
+        const insertTagIdx = insertTagRes.insertId;
+        saveTagList[insertTagIdx] = { name: tagName, auth: 0, postCnt: 0 };
       }
     } catch (err) {
-      res.status(500).json({ msg: "태그 추가를 실패하였습니다." });
+      errorList.push({ tagName, type: 2 });
     }
   }
 
-  res.json({ msg: "OK" });
+  res.json({ msg: "OK", saveTagList, errorList });
 });
 
 //* 태그 수정
@@ -182,7 +204,7 @@ router.get("/searchTag", async (req, res) => {
 
   try {
     //TODO 태그 사용권한 적용하기
-    const [searchTagRes, debug] = await req.db.query(sql, sqlParams);
+    const [searchTagRes] = await req.db.query(sql, sqlParams);
 
     if (searchTagRes.length === 0) throwError(404, "검색결과가 없습니다.");
 

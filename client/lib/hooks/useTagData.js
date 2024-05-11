@@ -27,5 +27,5 @@ export default function useTagData() {
     })();
   }, [query]);
 
-  return { tagData };
+  return { tagData, setTagData };
 }

@@ -137,6 +137,9 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, select, a {
 .disNone {
   display: none;
 }
+.disFlex {
+  display: flex;
+}
 .headline {
   font-family: 'SUIT-Medium';
   font-size: 34px;
