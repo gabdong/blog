@@ -20,16 +20,14 @@ export async function getTagList() {
  * @param {Array} selectedTags
  */
 export async function getSearchTag(searchWord, selectedTags = []) {
-  if (searchWord) {
-    try {
-      const searchTagRes = await axios.get("/apis/tags/searchTag", {
-        params: { searchWord, selectedTags },
-        data: { checkAuth: true },
-      });
+  try {
+    const searchTagRes = await axios.get("/apis/tags/searchTag", {
+      params: { searchWord, selectedTags },
+      data: { checkAuth: true },
+    });
 
-      return searchTagRes.data.searchTagData;
-    } catch (err) {}
-  }
+    return searchTagRes.data.searchTagData;
+  } catch (err) {}
 }
 
 /**

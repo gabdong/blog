@@ -156,8 +156,7 @@ router.delete("/:tagIdx", async (req, res) => {
 router.get("/searchTag", async (req, res) => {
   const { user } = req.query;
   let { searchWord, selectedTags } = req.query;
-
-  searchWord = `%${searchWord}%`;
+  searchWord = searchWord ? `%${searchWord}%` : searchWord;
 
   // 이미 선택된 태그는 검색제외
   const selectedTagsCond =
@@ -165,17 +164,25 @@ router.get("/searchTag", async (req, res) => {
       ? `AND idx NOT IN (${selectedTags.join(",")})`
       : "";
 
-  try {
-    //TODO 태그 사용권한 적용하기
-    const [searchTagRes] = await req.db.query(
-      `
+  const sql = searchWord
+    ? `
       SELECT * 
       FROM tags 
-      WHERE name LIKE ?
+      WHERE delete_datetime IS NULL 
+      AND name LIKE ?
       ${selectedTagsCond}
-    `,
-      [searchWord]
-    );
+    `
+    : `SELECT * 
+      FROM tags 
+      WHERE delete_datetime IS NULL 
+      ${selectedTagsCond}
+    `;
+
+  const sqlParams = searchWord ? [searchWord] : [];
+
+  try {
+    //TODO 태그 사용권한 적용하기
+    const [searchTagRes, debug] = await req.db.query(sql, sqlParams);
 
     if (searchTagRes.length === 0) throwError(404, "검색결과가 없습니다.");
 

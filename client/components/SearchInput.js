@@ -37,7 +37,6 @@ export default function SearchInput({ ...props }) {
       if (typeof props.searchFunc === "function" && !firstRender)
         props.searchFunc(value);
     }, 300);
-
     return () => clearTimeout(timer);
   }, [value]);
 

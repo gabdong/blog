@@ -70,31 +70,26 @@ export default function PostEditor({ pageProps }) {
    * @param {String} searchWord
    */
   const getSearchTagResult = async (searchWord) => {
-    if (searchWord) {
-      const searchTagDataRes = await getSearchTag(searchWord, selectedTags);
+    const searchTagDataRes = await getSearchTag(searchWord, selectedTags);
 
-      if (Array.isArray(searchTagDataRes)) {
-        setSearchTagsData(searchTagDataRes);
-      } else {
-        setSearchTagsData([]);
-      }
-
-      searchResultWrapRef.current.classList.add("active");
-      elDisplayToggle(
-        ["searchTagResultWrap", "searchTagInput"],
-        "searchTagResultWrap",
-        "active",
-        true
-      );
+    if (Array.isArray(searchTagDataRes)) {
+      setSearchTagsData(searchTagDataRes);
     } else {
-      searchResultWrapRef.current.classList.remove("active");
-      elDisplayToggle(null, null, null, false);
+      setSearchTagsData([]);
     }
+
+    searchResultWrapRef.current.classList.add("active");
+    elDisplayToggle(
+      ["searchTagResultWrap", "searchTagInput"],
+      "searchTagResultWrap",
+      "active",
+      true
+    );
   };
 
   /**
    * * 태그 검색결과 선택
-   * @param {Array} data 태그정보
+   * @param {Object} data 태그정보
    */
   const clickSearchTagResult = (data) => {
     // 선택한 태그리스트
@@ -109,10 +104,26 @@ export default function PostEditor({ pageProps }) {
 
     // 태그 검색결과 리스트
     setSearchTagsData((prev) => {
-      const clickTagIndex = prev.findIndex((el) => (el.idx = data.idx));
+      const clickTagIndex = prev.findIndex((el) => el.idx == data.idx);
       if (clickTagIndex !== -1) prev.splice(clickTagIndex, 1);
 
       return [...prev];
+    });
+  };
+
+  /**
+   * * 선택된태그 클릭시 제거
+   * @param {Number} tagIdx 태그 정보
+   */
+  const clickSelectedTag = (tagIdx) => {
+    // 선택한 태그리스트
+    setselectedTagsData((prev) => {
+      const result = prev.filter((el) => el.idx != tagIdx);
+      return [...result];
+    });
+    setselectedTags((prev) => {
+      const result = prev.filter((el) => el != tagIdx);
+      return [...result];
     });
   };
 
@@ -147,7 +158,10 @@ export default function PostEditor({ pageProps }) {
         {selectedTagsData.length > 0
           ? selectedTagsData.map((data) => {
               return (
-                <SelectedTagsItemSt key={data.idx}>
+                <SelectedTagsItemSt
+                  key={data.idx}
+                  onClick={() => clickSelectedTag(data.idx)}
+                >
                   <span className="caption">#{data.name}</span>
                 </SelectedTagsItemSt>
               );

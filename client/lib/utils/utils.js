@@ -1,9 +1,9 @@
 /**
  * * document 클릭시 상위에 id값을 가진 el이 없을경우 display 조절
- * @param {Array} idList
- * @param {String} targetId
- * @param {String} type
- * @param {Boolean} addEvent
+ * @param {Array} idList 상위에 있는지 확인할 id list
+ * @param {String} targetId display 조절할 el id
+ * @param {String} type element control type
+ * @param {Boolean} addEvent 이벤트 추가여부
  */
 export function elDisplayToggle(
   idList = [],
@@ -49,7 +49,7 @@ export function elDisplayToggle(
 
 /**
  * * textarea 중간에 문자 넣어주는 함수
- * @param {String} target - target textarea selector
+ * @param {String} target target textarea selector
  * @param {String} intsertString
  * @returns {String}
  */
