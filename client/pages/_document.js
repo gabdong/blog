@@ -30,6 +30,10 @@ export default class MyDocument extends Document {
             name="google-site-verification"
             content="OPfSIjuzB6P7RnrF88PqkLUV_ZNtzS-9EdiYdit7uGQ"
           />
+          <meta
+            name="naver-site-verification"
+            content="aa987b92c2771199b2c5421496010d8055a4cc4a"
+          />
         </Head>
         <body className="scroll">
           <Main />
