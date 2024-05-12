@@ -25,7 +25,12 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="ko">
-        <Head></Head>
+        <Head>
+          <meta
+            name="google-site-verification"
+            content="OPfSIjuzB6P7RnrF88PqkLUV_ZNtzS-9EdiYdit7uGQ"
+          />
+        </Head>
         <body className="scroll">
           <Main />
           <NextScript />
