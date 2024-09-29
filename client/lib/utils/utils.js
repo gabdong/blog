@@ -11,11 +11,6 @@ export function elDisplayToggle(
   type = "remove",
   addEvent = true
 ) {
-  idList = idList || [];
-  targetId = targetId || "";
-  type = type || "";
-  addEvent = addEvent ?? true;
-
   /**
    * * display 조절해주는 함수
    * @param {Event} e

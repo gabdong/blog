@@ -72,6 +72,8 @@ export default function Nav({ pageProps }) {
             {Object.entries(tagList).map((data) => {
               const tagIdx = data[0] !== "total" ? Number(data[0]) : data[0];
               const { auth, name, postCnt } = data[1];
+              if (postCnt == 0) return null;
+
               const activeClass =
                 Number(activeTagIdx) === tagIdx || activeTagIdx === name
                   ? "active"

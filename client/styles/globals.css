@@ -15,9 +15,10 @@
   --red: #C70000;
   
   --transition: 0.2s;
-  --border-radius: 4px;
+  --border-radius: 6px;
   --box-padding: 8px 12px;
   --small-box-padding: 4px 6px;
+  --modal-zIndex: 2;
 }
 @font-face {
   font-family: "SUIT-Regular";
@@ -79,6 +80,7 @@ html {
   min-height: 100%;
   background: var(--dark);
   color: var(--gray-l);
+  font-size: 16px;
 }
 html, body {
   width: 100%;

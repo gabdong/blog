@@ -60,19 +60,15 @@ export default function Header(props) {
   useEffect(() => {
     const header = document.getElementById("header");
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        const { scrollY } = window;
+    window.addEventListener("scroll", () => {
+      const { scrollY } = window;
 
-        if (scrollY > 0) {
-          header.classList.add("active");
-        } else {
-          header.classList.remove("active");
-        }
-      },
-      { passive: true }
-    );
+      if (scrollY > 0) {
+        header.classList.add("active");
+      } else {
+        header.classList.remove("active");
+      }
+    });
   }, []);
 
   return (
@@ -83,7 +79,7 @@ export default function Header(props) {
 
         {/* //* logo */}
         <Link href="/?tabItem=latestPostList">
-          <LogoSt id="logo">&lt;Gabdong /&gt;</LogoSt>
+          <LogoSt id="logo" />
         </Link>
 
         {/* //* button wrap */}
@@ -98,13 +94,13 @@ export default function Header(props) {
               href="/postEditor/new"
             />
           )}
-          <HeaderButtonSt
+          <LoginButtonSt
             className={"buttonText" + user?.isLogin && " headerUserBtnWrap"}
             onClick={!user?.isLogin ? loginModalHandler : userMenuWrapHandler}
           >
             {!user?.isLogin ? "Login" : `${user?.name} 님`}
             {user?.isLogin && <DownIconSt />}
-          </HeaderButtonSt>
+          </LoginButtonSt>
           {user?.isLogin && userMenuWrapView && (
             <UserMenuWrap closeUserMenuWrapFn={closeUserMenuWrap} />
           )}
@@ -122,9 +118,11 @@ export default function Header(props) {
   );
 }
 
+//* 헤더 영역
 const HeaderSt = styled.header`
   width: 100%;
-  height: 80px;
+  height: 60px;
+
   position: sticky;
   left: 0;
   top: 0;
@@ -132,18 +130,14 @@ const HeaderSt = styled.header`
   transition: var(--transition);
 
   &.active {
-    height: 60px;
     backdrop-filter: blur(5px);
   }
 
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
     height: 56px;
-
-    &.active {
-      height: 56px;
-    }
   }
 `;
+//* 헤더 내부
 const HeaderInnerSt = styled.div`
   display: flex;
   justify-content: space-between;
@@ -171,11 +165,19 @@ const LogoSt = styled.h1`
   color: var(--primary-color);
   cursor: pointer;
 
+  &:after {
+    content: "<Gabdong/>";
+  }
   @media all and (max-width: ${process.env.NEXT_PUBLIC_MOBILE_WIDTH}) {
+    font-size: 16px;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+
+    &:after {
+      content: "<G/>";
+    }
   }
 `;
 const HeaderButtonWrapSt = styled.div`
@@ -185,16 +187,23 @@ const HeaderButtonWrapSt = styled.div`
 
   position: relative;
 `;
-const HeaderButtonSt = styled.button`
+const LoginButtonSt = styled.button`
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  font-size: 16px;
-  color: var(--gray-l);
+  height: 2rem;
+  padding: 0 1rem;
+  /* padding: 8px 12px; */
+  background: var(--gray);
+  color: #ffffff;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
   transition: var(--transition);
+  cursor: pointer;
 
   &:hover {
-    color: #ffffff;
+    background: var(--primary-color);
   }
 `;
 const DownIconSt = styled(DownIcon)`
